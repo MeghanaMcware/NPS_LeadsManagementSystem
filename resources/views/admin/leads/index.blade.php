@@ -269,7 +269,7 @@
         {{-- Selection bar --}}
         <div class="ls-selbar" id="lsSelbar">
             <span class="ls-count" id="lsCount">0 leads selected</span>
-            <button type="button" class="ls-btn ls-btn-primary" id="lsSendMsg">Send automatic message</button>
+            <a href="{{ url('/sendmessage/index') }}" class="ls-btn ls-btn-primary d-flex align-items-center justify-content-center">Send automatic message</a>
             <div class="ls-menu-wrap">
                 <button type="button" class="ls-btn" id="lsChangeBtn" aria-haspopup="true" aria-expanded="false">Change status</button>
                 <div class="ls-menu" id="lsChangeMenu" role="menu">
@@ -581,11 +581,6 @@
     $('lsClear').addEventListener('click', function () { selected = {}; render(); });
 
     /* ---------------- Bulk actions ---------------- */
-    $('lsSendMsg').addEventListener('click', function () {
-        var n = selectedCount();
-        toast('Automatic message queued for ' + n + (n === 1 ? ' lead' : ' leads'));
-    });
-
     $('lsChangeBtn').addEventListener('click', function (e) {
         e.stopPropagation();
         var menu = $('lsChangeMenu');
