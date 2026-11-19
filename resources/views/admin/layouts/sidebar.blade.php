@@ -30,21 +30,21 @@
                         </a>
                     </li>
                     <li class="sidebar-list">
-                        <a class="sidebar-link link-nav" href="{{ url('/leads/index') }}">
+                        <a class="sidebar-link link-nav {{ request()->is('leads/*') ? 'active' : '' }}" href="{{ url('/leads/index') }}">
                             <i class="bi bi-person-lines-fill"></i>
                             <span>Leads</span>
                         </a>
                     </li>
 
                     <li class="sidebar-list">
-                        <a class="sidebar-link link-nav" href="{{ url('/leadsimport/index') }}">
+                        <a class="sidebar-link link-nav {{ request()->is('leadsimport/*') ? 'active' : '' }}" href="{{ url('/leadsimport/index') }}">
                             <i class="bi bi-person-plus-fill"></i>
                             <span>Add / Import</span>
                         </a>
                     </li>
 
                     <li class="sidebar-list">
-                        <a class="sidebar-link link-nav" href="{{ url('/sendmessage/index') }}">
+                        <a class="sidebar-link link-nav {{ request()->is('sendmessage/*') ? 'active' : '' }}" href="{{ url('/sendmessage/index') }}">
                             <i class="bi bi-chat-dots-fill"></i>
                             <span>Send Message</span>
                         </a>

@@ -285,15 +285,12 @@ $("#left-arrow").click(function () {
 
 // page active
 if ($('#pageWrapper').hasClass('compact-wrapper')) {
-    $(".sidebar-wrapper nav #sidebar-menu .simplebar-wrapper .simplebar-content-wrapper .simplebar-content").find("a").removeClass("active");
-    $(".sidebar-wrapper nav #sidebar-menu .simplebar-wrapper .simplebar-content-wrapper .simplebar-content").find("li").removeClass("active");
-
-    var current = window.location.pathname
+    var current = window.location.pathname.replace(/\/+$/, '');
     $(".sidebar-wrapper nav #sidebar-menu ul .simplebar-mask li a").filter(function () {
-
         var link = $(this).attr("href");
         if (link) {
-            if (current.indexOf(link) != -1) {
+            var linkPath = new URL(link, window.location.origin).pathname.replace(/\/+$/, '');
+            if (current === linkPath || current.indexOf(linkPath + '/') === 0) {
                 $(this).parents().children('a').addClass('active');
                 $(this).parents().parents().children('ul').css('display', 'block');
                 $(this).addClass('active');
