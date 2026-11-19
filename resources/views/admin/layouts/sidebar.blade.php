@@ -24,7 +24,7 @@
                         </div>
                     </li>
                     <li class="sidebar-list">
-                        <a class="sidebar-link link-nav " href="{{ url('/dashboard') }}">
+                        <a class="sidebar-link link-nav {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ url('/dashboard') }}">
                             <i class="bi bi-speedometer2"></i>
                             <span>Dashboard</span>
                         </a>
@@ -130,7 +130,7 @@
 }
 
 .sidebar-list .sidebar-link.active {
-    background: #008d54 !important;
+    background: #62667a !important;
     color: #fff !important;
 }
 

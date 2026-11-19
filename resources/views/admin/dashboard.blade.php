@@ -381,7 +381,7 @@
                     <p>You have <span id="ldHeroNew">12</span> new leads today and <span id="ldHeroFollow">8</span>
                         follow-ups due. Let's get started.</p>
                 </div>
-                <button type="button" class="ld-btn" id="ldMessageLeads">Message new leads</button>
+                <a href="{{ url('/sendmessage/index') }}" class="ld-btn" id="ldMessageLeads">Message new leads</a>
             </div>
         </div>
     </div>
