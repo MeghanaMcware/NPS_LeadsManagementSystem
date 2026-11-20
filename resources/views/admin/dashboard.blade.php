@@ -526,7 +526,7 @@
         <div class="col-12 col-lg-6">
             <div class="ld-card ld-chart">
                 <div class="ld-chart-head">
-                    <h6>Recent 7 days</h6>
+                    <h6>Last 7 days</h6>
                     <span class="ld-chart-note">Daily new leads</span>
                 </div>
                 <div class="ld-bars is-alt" id="ldDays" role="list"></div>
