@@ -40,6 +40,36 @@
     .ai-card h4 { margin: 0 0 4px; font-size: 19px; font-weight: 700; }
     .ai-sub { margin: 0 0 22px; font-size: 13px; color: var(--ai-muted); }
 
+    /* Card header row (title left, sample button right) */
+    .ai-head-row {
+        display: flex; align-items: flex-start; justify-content: space-between;
+        flex-wrap: wrap; gap: 14px; margin-bottom: 22px;
+    }
+    .ai-head-row .ai-sub { margin: 0; }
+
+    /* Highlighted "Download sample file" button */
+    .ai-sample-btn {
+        display: inline-flex; align-items: center; gap: 10px;
+        height: 46px; padding: 0 20px 0 12px; cursor: pointer; white-space: nowrap;
+        background: var(--ai-blue-tint); color: var(--ai-blue);
+        border: 1.5px solid #c4d3ee; border-radius: 12px;
+        font-size: 14px; font-weight: 700;
+        transition: background .18s, color .18s, border-color .18s, box-shadow .18s, transform .1s;
+    }
+    .ai-sample-btn .ai-sample-ico {
+        width: 28px; height: 28px; border-radius: 8px; flex: none;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: var(--ai-blue); color: #fff; font-size: 14px;
+        transition: background .18s, color .18s;
+    }
+    .ai-sample-btn:hover {
+        background: var(--ai-blue); color: #fff; border-color: var(--ai-blue);
+        box-shadow: 0 8px 18px rgba(2,27,69,.22);
+    }
+    .ai-sample-btn:hover .ai-sample-ico { background: #fff; color: var(--ai-blue); }
+    .ai-sample-btn:active { transform: translateY(1px); }
+    .ai-sample-btn:focus-visible { outline: 3px solid rgba(2,27,69,.28); outline-offset: 2px; }
+
     /* Form */
     .ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
     .ai-full { grid-column: 1 / -1; }
@@ -102,11 +132,6 @@
     .ai-btn:disabled { opacity: .5; cursor: not-allowed; }
     .ai-btn-primary { background: var(--ai-blue); border-color: var(--ai-blue); color: #fff; }
     .ai-btn-primary:hover:not(:disabled) { background: #0a2d68; }
-    .ai-link {
-        border: 0; background: transparent; padding: 6px 2px; cursor: pointer;
-        font-size: 13px; font-weight: 700; color: var(--ai-dash);
-    }
-    .ai-link:hover { text-decoration: underline; }
 
     /* Stepper */
     .ai-steps { display: flex; flex-wrap: wrap; gap: 14px 34px; margin-bottom: 22px; }
@@ -152,7 +177,7 @@
     .ai-dup { margin: 18px 0 12px; font-size: 13.5px; font-weight: 700; color: var(--ai-orange); }
     .ai-dup[hidden] { display: none; }
     .ai-dup-opts { display: flex; flex-wrap: wrap; gap: 14px 32px; }
-    .ai-import-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-top: 24px; }
+    .ai-import-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 24px; }
     .ai-import-row .ai-btn-primary { min-width: 220px; }
 
     /* Toast */
@@ -168,9 +193,11 @@
         .ai-card { padding: 20px 16px 22px; }
         .ai-map-head, .ai-map-row { grid-template-columns: 1fr; gap: 6px; }
         .ai-map-head span:last-child { display: none; }
-        .ai-import-row { justify-content: flex-start; }
+        .ai-sample-btn { width: 100%; justify-content: center; }
     }
-    @media (prefers-reduced-motion: reduce) { .ai-toast, .ai-opt span { transition: none; } }
+    @media (prefers-reduced-motion: reduce) {
+        .ai-toast, .ai-opt span, .ai-sample-btn, .ai-sample-ico { transition: none; }
+    }
 </style>
 @endsection
 
@@ -263,7 +290,7 @@
                         </select>
                     </div>
 
-                    <div class="ai-field">
+                    <div class="ai-field ">
                         <label class="ai-label" for="aiStatus">Status</label>
                         <select class="ai-select" id="aiStatus">
                             <option>New</option>
@@ -273,16 +300,7 @@
                         </select>
                     </div>
 
-                    <div class="ai-field">
-                        <label class="ai-label" for="aiAssign">Assign to</label>
-                        <select class="ai-select" id="aiAssign">
-                            <option>Priya</option>
-                            <option>Arun</option>
-                            <option>Unassigned</option>
-                        </select>
-                    </div>
-
-                    <div class="ai-field ai-full">
+                    <div class="ai-field ">
                         <label class="ai-label" for="aiNotes">Notes</label>
                         <textarea class="ai-textarea" id="aiNotes" placeholder="Add any notes about this lead..."></textarea>
                     </div>
@@ -304,8 +322,19 @@
 
         {{-- ============ IMPORT LEADS IN BULK ============ --}}
         <section class="ai-card" id="aiImportPanel" hidden>
-            <h4>Import leads in bulk</h4>
-            <p class="ai-sub">Upload an Excel or CSV file</p>
+
+            {{-- Header: title left, highlighted sample button right --}}
+            <div class="ai-head-row">
+                <div>
+                    <h4>Import leads in bulk</h4>
+                    <p class="ai-sub">Upload an Excel or CSV file</p>
+                </div>
+
+                <button type="button" class="ai-sample-btn" id="aiSample">
+                    <span class="ai-sample-ico"><i class="bi bi-download"></i></span>
+                    Download sample file
+                </button>
+            </div>
 
             <ol class="ai-steps" id="aiSteps" style="list-style:none;padding:0;">
                 <li class="ai-step is-active" data-step="1"><b>1</b> Upload</li>
@@ -352,13 +381,7 @@
 
                 <div class="ai-import-row">
                     <button type="button" class="ai-btn ai-btn-primary" id="aiImport" disabled>Import leads</button>
-                    <button type="button" class="ai-link" id="aiSample">Download sample file</button>
                 </div>
-            </div>
-
-            <div class="ai-import-row" id="aiSampleOnly">
-                <span></span>
-                <button type="button" class="ai-link" id="aiSample2">Download sample file</button>
             </div>
         </section>
     </div>
@@ -457,7 +480,6 @@
         { v: 'source',   t: 'Source' },
         { v: 'interest', t: 'Interested in' },
         { v: 'status',   t: 'Status' },
-        { v: 'assign',   t: 'Assign to' },
         { v: 'notes',    t: 'Notes' },
         { v: 'skip',     t: "Don't import" }
     ];
@@ -480,7 +502,6 @@
         if (/source|enquiry|inquiry|channel/.test(s)) return 'source';
         if (/interest|course|service/.test(s)) return 'interest';
         if (/status|stage/.test(s)) return 'status';
-        if (/owner|assign/.test(s)) return 'assign';
         if (/note|remark|comment/.test(s)) return 'notes';
         return 'skip';
     }
@@ -573,7 +594,6 @@
         dup.textContent = 'Duplicates detected: ' + imp.dups + ' (phone numbers already exist)';
 
         $('aiAfter').classList.add('is-on');
-        $('aiSampleOnly').style.display = 'none';
         refreshImport();
     }
 
@@ -582,7 +602,6 @@
         $('aiFile').value = '';
         $('aiDrop').classList.remove('has-file');
         $('aiAfter').classList.remove('is-on');
-        $('aiSampleOnly').style.display = '';
         $('aiMapRows').innerHTML = '';
         showDropError('');
         setStep(1);
@@ -681,7 +700,6 @@
         toast('Sample file downloaded');
     }
     $('aiSample').addEventListener('click', downloadSample);
-    $('aiSample2').addEventListener('click', downloadSample);
 })();
 </script>
 @endpush

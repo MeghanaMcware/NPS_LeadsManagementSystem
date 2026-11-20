@@ -311,7 +311,7 @@
                             <th>Status</th>
                             <th>Last Contact</th>
                             <th>Owner</th>
-                            <th class="ls-actions-col"><span class="visually-hidden">Actions</span></th>
+                            <th class="ls-actions-col"><span class="">Actions</span></th>
                         </tr>
                     </thead>
                     <tbody id="lsBody"></tbody>

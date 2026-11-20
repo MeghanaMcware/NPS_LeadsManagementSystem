@@ -8,13 +8,12 @@
     .ld {
         --ld-blue: #001c45;
         --ld-blue-dark: #001c45;
+        --ld-blue-soft: #e6ecf7;
         --ld-ink: #1b2233;
         --ld-muted: #7b8497;
         --ld-line: #e3e7ef;
         --ld-bg: #f1f4f9;
         --ld-card: #ffffff;
-        --ld-green-bg: #d4f5c8;
-        --ld-grey-bg: #eef1f6;
         --ld-radius: 14px;
         color: var(--ld-ink);
     }
@@ -44,7 +43,7 @@
         padding: 10px 22px;
         border-radius: 10px;
         cursor: pointer;
-        transition: background .15s, border-color .15s;
+        transition: background .15s, border-color .15s, transform .1s;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
@@ -52,11 +51,11 @@
         gap: 6px;
     }
     .ld .ld-btn:hover { background: var(--ld-bg); }
+    .ld .ld-btn:active { transform: translateY(1px); }
     .ld .ld-btn:focus-visible,
-    .ld .ld-input:focus-visible,
-    .ld .ld-select:focus-visible { outline: 3px solid rgba(11,111,240,.35); outline-offset: 1px; }
+    .ld .ld-input:focus-visible { outline: 3px solid rgba(11,111,240,.35); outline-offset: 1px; }
     .ld .ld-btn-primary { background: var(--ld-blue); border-color: var(--ld-blue); color: #fff; }
-    .ld .ld-btn-primary:hover { background: var(--ld-blue-dark); border-color: var(--ld-blue-dark); }
+    .ld .ld-btn-primary:hover { background: var(--ld-blue-dark); border-color: var(--ld-blue-dark); color: #fff; }
     .ld .ld-btn-sm { padding: 8px 16px; font-size: 13px; }
 
     /* Profile header */
@@ -72,7 +71,6 @@
     .ld .ld-name-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
     .ld .ld-name { font-size: 24px; font-weight: 700; margin: 0; }
     .ld .ld-meta { color: var(--ld-muted); font-size: 14px; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
-    .ld .ld-meta span + span { padding-left: 0; }
     .ld .ld-meta-sep { display: inline-block; width: 1px; height: 14px; background: var(--ld-line); align-self: center; }
     .ld .ld-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -89,24 +87,6 @@
     .ld .ld-pill[data-status="Lost"]      { background: #fde3e3; color: #c93434; }
 
     /* Status stepper */
-    .ld .ld-status-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
-    .ld .ld-status-head h5 { margin: 0; }
-    .ld .ld-select-wrap { position: relative; }
-    .ld .ld-select {
-        appearance: none; -webkit-appearance: none;
-        border: 1px solid var(--ld-line); background: #fff;
-        font-weight: 600; font-size: 14px; color: var(--ld-ink);
-        padding: 10px 38px 10px 16px; border-radius: 10px; cursor: pointer;
-    }
-    .ld .ld-select-wrap::after {
-        content: "";
-        position: absolute; right: 16px; top: 50%;
-        width: 7px; height: 7px;
-        border-right: 2px solid var(--ld-ink); border-bottom: 2px solid var(--ld-ink);
-        transform: translateY(-70%) rotate(45deg);
-        pointer-events: none;
-    }
-
     .ld .ld-steps { list-style: none; margin: 0; padding: 0; display: flex; }
     .ld .ld-step { flex: 1 1 0; position: relative; text-align: center; padding-top: 0; }
     .ld .ld-step::before {
@@ -131,94 +111,115 @@
     .ld .ld-step-label { font-size: 13px; color: var(--ld-muted); }
     .ld .ld-step.is-current .ld-step-label { color: var(--ld-ink); font-weight: 700; }
     .ld .ld-step.is-done .ld-step-label { color: var(--ld-ink); }
-    .ld .ld-steps.is-lost .ld-step::before { background: var(--ld-line); }
-    .ld .ld-steps.is-lost .ld-dot { background: #fff; border-color: #b9c0d0; color: #6b7388; }
 
-    /* Message history */
-    .ld .ld-chat { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
-    .ld .ld-chat h5 { padding: 22px 24px 0; }
-    .ld .ld-chat-body {
-        padding: 4px 24px 16px;
-        height: 420px; overflow-y: auto;
-        display: flex; flex-direction: column; gap: 18px;
-        scroll-behavior: smooth;
+    /* ---------- Card header (Notes / Timeline) ---------- */
+    .ld .ld-panel-head {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; margin-bottom: 18px;
     }
-    .ld .ld-msg { max-width: 76%; padding: 12px 18px; border-radius: 12px; font-size: 14.5px; line-height: 1.45; word-wrap: break-word; }
-    .ld .ld-msg-out { align-self: flex-end; background: var(--ld-green-bg); }
-    .ld .ld-msg-in  { align-self: flex-start; background: var(--ld-grey-bg); }
-    .ld .ld-msg-label { display: block; font-size: 12.5px; font-weight: 700; color: var(--ld-muted); margin-bottom: 3px; }
-    .ld .ld-msg-time { display: block; font-size: 11px; color: var(--ld-muted); margin-top: 6px; }
-    .ld .ld-composer {
-        display: flex; gap: 12px; align-items: center;
-        padding: 14px 24px 20px; border-top: 1px solid var(--ld-line);
+    .ld .ld-panel-title { display: flex; align-items: center; gap: 10px; }
+    .ld .ld-panel-title h5 { margin: 0; }
+    .ld .ld-panel-icon {
+        width: 34px; height: 34px; border-radius: 10px;
+        background: var(--ld-blue-soft); color: var(--ld-blue);
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 16px; flex: none;
+    }
+    .ld .ld-count {
+        font-size: 12px; font-weight: 700;
+        background: var(--ld-bg); color: var(--ld-muted);
+        padding: 3px 10px; border-radius: 999px;
+    }
+
+    /* ---------- Notes ---------- */
+    .ld .ld-notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+    .ld .ld-note {
         position: relative;
+        background: #fffbee;
+        border: 1px solid #f6e8b8;
+        border-left: 4px solid #f0b429;
+        border-radius: 10px;
+        padding: 12px 44px 12px 14px;
+        animation: ld-pop .25s ease;
     }
-    .ld .ld-input {
-        flex: 1; border: 1px solid transparent; background: var(--ld-grey-bg);
-        border-radius: 999px; padding: 12px 20px; font-size: 14px; color: var(--ld-ink);
-        min-width: 0;
-    }
-    .ld .ld-input::placeholder { color: var(--ld-muted); }
-    .ld .ld-tpl-btn { padding: 10px 14px; border-radius: 999px; }
-    .ld .ld-tpl-menu {
-        position: absolute; bottom: 70px; left: 24px;
-        background: #fff; border: 1px solid var(--ld-line); border-radius: 12px;
-        box-shadow: 0 12px 30px rgba(20,33,61,.14);
-        min-width: 260px; padding: 6px; display: none; z-index: 20;
-    }
-    .ld .ld-tpl-menu.is-open { display: block; }
-    .ld .ld-tpl-menu button {
-        display: block; width: 100%; text-align: left;
-        border: 0; background: transparent; padding: 10px 12px;
-        border-radius: 8px; font-size: 14px; color: var(--ld-ink); cursor: pointer;
-    }
-    .ld .ld-tpl-menu button:hover { background: var(--ld-bg); }
-    .ld .ld-tpl-menu small { display: block; color: var(--ld-muted); font-size: 12px; }
-
-    /* Notes */
-    .ld .ld-notes { list-style: none; margin: 0 0 18px; padding: 0; }
-    .ld .ld-notes li {
-        display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
-        font-size: 14.5px; padding: 7px 0;
+    .ld .ld-note:nth-child(3n+2) { background: #f1f7ff; border-color: #d3e3fb; border-left-color: #4a8df0; }
+    .ld .ld-note:nth-child(3n+3) { background: #f2fbf5; border-color: #d0eedb; border-left-color: #2fae67; }
+    .ld .ld-note-text { font-size: 14.5px; line-height: 1.45; margin: 0; word-wrap: break-word; }
+    .ld .ld-note-meta {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 12px; color: var(--ld-muted); margin-top: 6px;
     }
     .ld .ld-note-del {
-        border: 0; background: transparent; color: var(--ld-muted);
-        font-size: 16px; line-height: 1; cursor: pointer; padding: 2px 6px; border-radius: 6px;
+        position: absolute; top: 8px; right: 8px;
+        width: 28px; height: 28px; border: 0; border-radius: 8px;
+        background: transparent; color: var(--ld-muted);
+        cursor: pointer; font-size: 14px;
+        display: inline-flex; align-items: center; justify-content: center;
+        opacity: 0; transition: opacity .15s, background .15s, color .15s;
     }
-    .ld .ld-note-del:hover { background: var(--ld-bg); color: #c93434; }
-    .ld .ld-note-form { display: none; gap: 8px; margin-bottom: 14px; }
-    .ld .ld-note-form.is-open { display: flex; }
-    .ld .ld-note-form .ld-input { border-radius: 10px; background: #fff; border-color: var(--ld-line); }
-    .ld .ld-empty { color: var(--ld-muted); font-size: 14px; padding: 4px 0 12px; }
+    .ld .ld-note:hover .ld-note-del,
+    .ld .ld-note-del:focus-visible { opacity: 1; }
+    .ld .ld-note-del:hover { background: rgba(201,52,52,.1); color: #c93434; }
+    @media (hover: none) { .ld .ld-note-del { opacity: 1; } }
 
-    /* Timeline */
-    .ld .ld-timeline { list-style: none; margin: 0; padding: 0; }
-    .ld .ld-timeline li {
-        display: flex; align-items: center; gap: 14px;
-        padding: 9px 0; font-size: 14.5px;
+    .ld .ld-note-form {
+        display: none; flex-direction: column; gap: 10px;
+        background: var(--ld-bg); border-radius: 12px;
+        padding: 12px; margin-bottom: 14px;
     }
-    .ld .ld-timeline .ld-tl-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--ld-blue); flex: none; }
-    .ld .ld-timeline .ld-tl-text { flex: 1; }
-    .ld .ld-timeline .ld-tl-date { color: var(--ld-muted); font-size: 13px; }
+    .ld .ld-note-form.is-open { display: flex; animation: ld-pop .2s ease; }
+    .ld .ld-input {
+        width: 100%; border: 1px solid var(--ld-line); background: #fff;
+        border-radius: 10px; padding: 10px 14px; font-size: 14px;
+        color: var(--ld-ink); resize: none; font-family: inherit;
+    }
+    .ld .ld-input::placeholder { color: var(--ld-muted); }
+    .ld .ld-form-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .ld .ld-form-hint { font-size: 12px; color: var(--ld-muted); }
+    .ld .ld-form-btns { display: flex; gap: 8px; }
 
-    /* Edit modal */
-    .ld-modal-backdrop {
-        position: fixed; inset: 0; background: rgba(15,23,42,.45);
-        display: none; align-items: center; justify-content: center; z-index: 1080; padding: 16px;
+    .ld .ld-empty {
+        text-align: center; color: var(--ld-muted); font-size: 14px;
+        padding: 26px 10px; border: 1.5px dashed var(--ld-line); border-radius: 12px;
     }
-    .ld-modal-backdrop.is-open { display: flex; }
-    .ld-modal {
-        background: #fff; border-radius: 14px; width: 100%; max-width: 480px;
-        padding: 26px; box-shadow: 0 24px 60px rgba(15,23,42,.3);
+    .ld .ld-empty i { display: block; font-size: 26px; margin-bottom: 6px; opacity: .6; }
+
+    /* ---------- Activity timeline ---------- */
+    .ld .ld-timeline {
+        list-style: none; margin: 0; padding: 0;
+        position: relative;
     }
-    .ld-modal h5 { font-size: 18px; font-weight: 700; margin-bottom: 18px; }
-    .ld-modal label { display: block; font-size: 13px; font-weight: 600; color: #7b8497; margin: 12px 0 5px; }
-    .ld-modal input {
-        width: 100%; border: 1px solid #e3e7ef; border-radius: 10px;
-        padding: 10px 14px; font-size: 14px; color: #1b2233;
+    .ld .ld-timeline::before {
+        content: ""; position: absolute;
+        left: 17px; top: 8px; bottom: 8px; width: 2px;
+        background: var(--ld-line);
     }
-    .ld-modal input:focus-visible { outline: 3px solid rgba(11,111,240,.35); outline-offset: 1px; }
-    .ld-modal-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+    .ld .ld-tl-item {
+        position: relative;
+        display: flex; align-items: flex-start; gap: 14px;
+        padding: 8px 0;
+        animation: ld-pop .25s ease;
+    }
+    .ld .ld-tl-icon {
+        position: relative; z-index: 1; flex: none;
+        width: 36px; height: 36px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 15px;
+        border: 3px solid #fff;
+        box-shadow: 0 0 0 1px var(--ld-line);
+    }
+    .ld .ld-tl-icon.t-status  { background: #ffefd3; color: #e08700; }
+    .ld .ld-tl-icon.t-message { background: #e0ecff; color: #1a5fd0; }
+    .ld .ld-tl-icon.t-auto    { background: #ece4ff; color: #6d3fd1; }
+    .ld .ld-tl-icon.t-import  { background: #d8f3e3; color: #15894a; }
+    .ld .ld-tl-icon.t-note    { background: #fff3c9; color: #b98200; }
+    .ld .ld-tl-body {
+        flex: 1; min-width: 0;
+        background: var(--ld-bg); border-radius: 10px;
+        padding: 9px 14px;
+    }
+    .ld .ld-tl-text { font-size: 14.5px; font-weight: 600; margin: 0; }
+    .ld .ld-tl-sub { font-size: 12.5px; color: var(--ld-muted); margin-top: 2px; }
 
     /* Toast */
     .ld-toast {
@@ -232,18 +233,21 @@
     }
     .ld-toast.is-show { opacity: 1; transform: translateY(0); }
 
+    @keyframes ld-pop {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: none; }
+    }
+
     @media (max-width: 575.98px) {
         .ld .ld-card { padding: 18px; }
         .ld .ld-actions { width: 100%; }
         .ld .ld-actions .ld-btn { flex: 1; }
-        .ld .ld-msg { max-width: 90%; }
-        .ld .ld-chat-body { padding-left: 16px; padding-right: 16px; }
-        .ld .ld-composer { padding-left: 16px; padding-right: 16px; }
-        .ld .ld-status-head { flex-direction: column; }
+        .ld .ld-form-foot { flex-direction: column; align-items: stretch; }
+        .ld .ld-form-btns { justify-content: flex-end; }
     }
     @media (prefers-reduced-motion: reduce) {
-        .ld .ld-chat-body { scroll-behavior: auto; }
         .ld .ld-step::before, .ld .ld-dot, .ld-toast { transition: none; }
+        .ld .ld-note, .ld .ld-tl-item, .ld .ld-note-form.is-open { animation: none; }
     }
 </style>
 @endsection
@@ -267,7 +271,7 @@
         </div>
     </div>
 
-    <div class="ld  mt-3" id="leadPage">
+    <div class="ld mt-3" id="leadPage">
 
         {{-- ============ Profile header ============ --}}
         <div class="ld-card">
@@ -294,28 +298,14 @@
                 </div>
 
                 <div class="ld-actions">
-                    <button type="button" class="ld-btn ld-btn-primary" id="btnSendMessage">Send message</button>
-                    <a class="ld-btn" id="btnCall" href="tel:+919900155678">Call</a>
-                    <button type="button" class="ld-btn" id="btnEdit">Edit</button>
+                    <a href="{{ url('/sendmessage/index') }}" class="ld-btn ld-btn-primary" id="btnSendMessage">Send message</a>
                 </div>
             </div>
         </div>
 
         {{-- ============ Lead status ============ --}}
         <div class="ld-card">
-            <div class="ld-status-head">
-                <h5>Lead status</h5>
-                <div class="ld-select-wrap">
-                    <select class="ld-select" id="statusSelect" aria-label="Update status">
-                        <option value="" selected disabled>Update status</option>
-                        <option value="New">New</option>
-                        <option value="Contacted">Contacted</option>
-                        <option value="Follow-up">Follow-up</option>
-                        <option value="Converted">Converted</option>
-                        <option value="Lost">Lost</option>
-                    </select>
-                </div>
-            </div>
+            <h5>Lead status</h5>
 
             <ol class="ld-steps" id="statusSteps">
                 <li class="ld-step" data-step="New">
@@ -333,111 +323,101 @@
             </ol>
         </div>
 
-        {{-- ============ Messages + side cards ============ --}}
-        <div class="row g-4">
-            <div class="col-12 col-lg-8">
-                <div class="ld-card ld-chat">
-                    <h5>Message history</h5>
+        {{-- ============ Notes + Activity timeline ============ --}}
+        <div class="row g-4  pb-3">
 
-                    <div class="ld-chat-body" id="chatBody" aria-live="polite">
-                        <div class="ld-msg ld-msg-out">
-                            <span class="ld-msg-label">Greeting sent</span>
-                            Hi Anita, thank you for your interest in NPS Digital!
-                            <span class="ld-msg-time">12 Nov, 10:42</span>
+            {{-- Notes --}}
+            <div class="col-12 col-lg-6">
+                <div class="ld-card h-100">
+                    <div class="ld-panel-head">
+                        <div class="ld-panel-title">
+                            <span class="ld-panel-icon"><i class="bi bi-journal-text"></i></span>
+                            <h5>Notes</h5>
+                            <span class="ld-count" id="notesCount">3</span>
                         </div>
-                        <div class="ld-msg ld-msg-in">
-                            <span class="ld-msg-label">Anita</span>
-                            Hi, I want to know more about the programme.
-                            <span class="ld-msg-time">12 Nov, 11:05</span>
-                        </div>
-                        <div class="ld-msg ld-msg-out">
-                            <span class="ld-msg-label">Follow-up sent</span>
-                            Hi Anita, sharing the brochure as discussed.
-                            <span class="ld-msg-time">14 Nov, 09:30</span>
-                        </div>
-                        <div class="ld-msg ld-msg-in">
-                            <span class="ld-msg-label">Anita</span>
-                            Thanks, will check and revert.
-                            <span class="ld-msg-time">14 Nov, 09:48</span>
-                        </div>
-                    </div>
-
-                    <div class="ld-composer">
-                        <div class="ld-tpl-menu" id="tplMenu" role="menu">
-                            <button type="button" role="menuitem" data-label="Greeting sent"
-                                data-text="Hi {name}, thank you for your interest in NPS Digital! How can I help you today?">
-                                Welcome Greeting<small>Greeting</small>
-                            </button>
-                            <button type="button" role="menuitem" data-label="Follow-up sent"
-                                data-text="Hi {name}, just checking in. Did you get a chance to go through the brochure?">
-                                Follow-up Reminder<small>Follow-up</small>
-                            </button>
-                            <button type="button" role="menuitem" data-label="Message sent"
-                                data-text="Hi {name}, your appointment is confirmed. See you soon!">
-                                Appointment Confirm<small>Reminder</small>
-                            </button>
-                            <button type="button" role="menuitem" data-label="Message sent"
-                                data-text="Hi {name}, thank you for choosing NPS Digital. We look forward to working with you.">
-                                Thank You<small>Closing</small>
-                            </button>
-                        </div>
-
-                        <button type="button" class="ld-btn ld-tpl-btn" id="btnTemplates" aria-haspopup="true" aria-expanded="false" title="Pick a template">
-                            <i class="bi bi-chat-square-text"></i>
+                        <button type="button" class="ld-btn ld-btn-sm" id="btnAddNote">
+                            <i class="bi bi-plus-lg"></i> Add note
                         </button>
-                        <input type="text" class="ld-input" id="chatInput" placeholder="Type a message or pick a template..." autocomplete="off">
-                        <button type="button" class="ld-btn ld-btn-primary" id="btnSend">Send</button>
                     </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-4">
-                {{-- Notes --}}
-                <div class="ld-card">
-                    <h5>Notes</h5>
-                    <ul class="ld-notes" id="notesList">
-                        <li><span>- Interested in weekend batch.</span><button type="button" class="ld-note-del" aria-label="Delete note">&times;</button></li>
-                        <li><span>- Call back on Friday 4 PM.</span><button type="button" class="ld-note-del" aria-label="Delete note">&times;</button></li>
-                        <li><span>- Budget confirmed.</span><button type="button" class="ld-note-del" aria-label="Delete note">&times;</button></li>
-                    </ul>
-                    <div class="ld-empty" id="notesEmpty" hidden>No notes yet. Add the first note.</div>
 
                     <div class="ld-note-form" id="noteForm">
-                        <input type="text" class="ld-input" id="noteInput" placeholder="Write a note..." maxlength="200">
-                        <button type="button" class="ld-btn ld-btn-primary ld-btn-sm" id="btnNoteSave">Save</button>
+                        <textarea class="ld-input" id="noteInput" rows="3" maxlength="200"
+                            placeholder="Write a note about this lead..."></textarea>
+                        <div class="ld-form-foot">
+                            <span class="ld-form-hint"><span id="noteChars">0</span>/200 &middot; Ctrl + Enter to save</span>
+                            <div class="ld-form-btns">
+                                <button type="button" class="ld-btn ld-btn-sm" id="btnNoteCancel">Cancel</button>
+                                <button type="button" class="ld-btn ld-btn-primary ld-btn-sm" id="btnNoteSave">Save note</button>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="ld-btn" id="btnAddNote">+ Add note</button>
-                </div>
 
-                {{-- Activity timeline --}}
-                <div class="ld-card">
-                    <h5>Activity timeline</h5>
-                    <ul class="ld-timeline" id="timelineList">
-                        <li><span class="ld-tl-dot"></span><span class="ld-tl-text">Status changed to Contacted</span><span class="ld-tl-date">14 Nov</span></li>
-                        <li><span class="ld-tl-dot"></span><span class="ld-tl-text">Follow-up message sent</span><span class="ld-tl-date">14 Nov</span></li>
-                        <li><span class="ld-tl-dot"></span><span class="ld-tl-text">Greeting sent automatically</span><span class="ld-tl-date">12 Nov</span></li>
-                        <li><span class="ld-tl-dot"></span><span class="ld-tl-text">Lead imported</span><span class="ld-tl-date">12 Nov</span></li>
+                    <ul class="ld-notes" id="notesList">
+                        <li class="ld-note">
+                            <p class="ld-note-text">Interested in weekend batch.</p>
+                            <div class="ld-note-meta"><i class="bi bi-person-circle"></i> Priya &middot; 14 Nov</div>
+                            <button type="button" class="ld-note-del" aria-label="Delete note"><i class="bi bi-trash3"></i></button>
+                        </li>
+                        <li class="ld-note">
+                            <p class="ld-note-text">Call back on Friday 4 PM.</p>
+                            <div class="ld-note-meta"><i class="bi bi-person-circle"></i> Priya &middot; 14 Nov</div>
+                            <button type="button" class="ld-note-del" aria-label="Delete note"><i class="bi bi-trash3"></i></button>
+                        </li>
+                        <li class="ld-note">
+                            <p class="ld-note-text">Budget confirmed.</p>
+                            <div class="ld-note-meta"><i class="bi bi-person-circle"></i> Priya &middot; 12 Nov</div>
+                            <button type="button" class="ld-note-del" aria-label="Delete note"><i class="bi bi-trash3"></i></button>
+                        </li>
                     </ul>
+
+                    <div class="ld-empty" id="notesEmpty" hidden>
+                        <i class="bi bi-journal-plus"></i>
+                        No notes yet. Add the first note.
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    {{-- ============ Edit lead modal ============ --}}
-    <div class="ld-modal-backdrop" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
-        <div class="ld-modal">
-            <h5 id="editTitle">Edit lead</h5>
-            <label for="editName">Full name</label>
-            <input type="text" id="editName">
-            <label for="editPhone">Phone</label>
-            <input type="text" id="editPhone">
-            <label for="editEmail">Email</label>
-            <input type="email" id="editEmail">
-            <label for="editCity">City</label>
-            <input type="text" id="editCity">
-            <div class="ld-modal-foot">
-                <button type="button" class="ld-btn ld-btn-sm" id="btnEditCancel" style="border:1px solid #e3e7ef;background:#fff;border-radius:10px;padding:8px 16px;font-weight:600;cursor:pointer">Cancel</button>
-                <button type="button" class="ld-btn ld-btn-primary ld-btn-sm" id="btnEditSave" style="background:#0b6ff0;color:#fff;border:1px solid #0b6ff0;border-radius:10px;padding:8px 16px;font-weight:600;cursor:pointer">Save changes</button>
+            {{-- Activity timeline --}}
+            <div class="col-12 col-lg-6">
+                <div class="ld-card h-100">
+                    <div class="ld-panel-head">
+                        <div class="ld-panel-title">
+                            <span class="ld-panel-icon"><i class="bi bi-clock-history"></i></span>
+                            <h5>Activity timeline</h5>
+                        </div>
+                    </div>
+
+                    <ul class="ld-timeline" id="timelineList">
+                        <li class="ld-tl-item">
+                            <span class="ld-tl-icon t-status"><i class="bi bi-arrow-repeat"></i></span>
+                            <div class="ld-tl-body">
+                                <p class="ld-tl-text">Status changed to Contacted</p>
+                                <div class="ld-tl-sub">14 Nov</div>
+                            </div>
+                        </li>
+                        <li class="ld-tl-item">
+                            <span class="ld-tl-icon t-message"><i class="bi bi-chat-dots"></i></span>
+                            <div class="ld-tl-body">
+                                <p class="ld-tl-text">Follow-up message sent</p>
+                                <div class="ld-tl-sub">14 Nov</div>
+                            </div>
+                        </li>
+                        <li class="ld-tl-item">
+                            <span class="ld-tl-icon t-auto"><i class="bi bi-robot"></i></span>
+                            <div class="ld-tl-body">
+                                <p class="ld-tl-text">Greeting sent automatically</p>
+                                <div class="ld-tl-sub">12 Nov</div>
+                            </div>
+                        </li>
+                        <li class="ld-tl-item">
+                            <span class="ld-tl-icon t-import"><i class="bi bi-box-arrow-in-down"></i></span>
+                            <div class="ld-tl-body">
+                                <p class="ld-tl-text">Lead imported</p>
+                                <div class="ld-tl-sub">12 Nov</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -454,32 +434,23 @@
     var $ = function (id) { return document.getElementById(id); };
 
     // ---------- Elements ----------
-    var chatBody   = $('chatBody');
-    var chatInput  = $('chatInput');
-    var btnSend    = $('btnSend');
-    var btnTpl     = $('btnTemplates');
-    var tplMenu    = $('tplMenu');
-    var statusSel  = $('statusSelect');
     var steps      = $('statusSteps');
-    var pill       = $('leadStatusPill');
     var timeline   = $('timelineList');
     var notesList  = $('notesList');
     var notesEmpty = $('notesEmpty');
+    var notesCount = $('notesCount');
     var noteForm   = $('noteForm');
     var noteInput  = $('noteInput');
+    var noteChars  = $('noteChars');
     var toastEl    = $('ldToast');
-    var editModal  = $('editModal');
 
     var ORDER = ['New', 'Contacted', 'Follow-up', 'Converted'];
     var currentStatus = 'Contacted';
     var toastTimer = null;
 
     // ---------- Helpers ----------
-    function pad(n) { return n < 10 ? '0' + n : '' + n; }
     var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
     function shortDate(d) { return d.getDate() + ' ' + MONTHS[d.getMonth()]; }
-    function dateTime(d)  { return shortDate(d) + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
 
     function toast(message) {
         toastEl.textContent = message;
@@ -495,30 +466,19 @@
         return node;
     }
 
-    function scrollChatToBottom() { chatBody.scrollTop = chatBody.scrollHeight; }
-
-    // ---------- Timeline ----------
-    function addTimeline(text) {
-        var li = el('li');
-        li.appendChild(el('span', 'ld-tl-dot'));
-        li.appendChild(el('span', 'ld-tl-text', text));
-        li.appendChild(el('span', 'ld-tl-date', shortDate(new Date())));
-        timeline.insertBefore(li, timeline.firstChild);
+    function icon(name) {
+        var i = document.createElement('i');
+        i.className = 'bi ' + name;
+        return i;
     }
 
-    // ---------- Status stepper ----------
+    // ---------- Status stepper (display only) ----------
     function renderStatus(status) {
         var idx = ORDER.indexOf(status);
-        var isLost = status === 'Lost';
-
-        steps.classList.toggle('is-lost', isLost);
-
         Array.prototype.forEach.call(steps.children, function (li, i) {
             var dot = li.querySelector('.ld-dot');
             li.classList.remove('is-done', 'is-current');
             dot.textContent = String(i + 1);
-
-            if (isLost) return;
             if (i < idx) {
                 li.classList.add('is-done');
                 dot.textContent = '\u2713';
@@ -527,186 +487,112 @@
                 dot.textContent = '\u2713';
             }
         });
-
+        var pill = $('leadStatusPill');
         pill.textContent = status;
         pill.setAttribute('data-status', status);
     }
 
-    statusSel.addEventListener('change', function () {
-        var next = statusSel.value;
-        if (!next || next === currentStatus) {
-            statusSel.selectedIndex = 0;
-            return;
-        }
-        currentStatus = next;
-        renderStatus(next);
-        addTimeline('Status changed to ' + next);
-        toast('Status updated to ' + next);
-        statusSel.selectedIndex = 0;
-    });
+    // ---------- Timeline ----------
+    // type: status | message | auto | import | note
+    var TL_ICONS = {
+        status:  'bi-arrow-repeat',
+        message: 'bi-chat-dots',
+        auto:    'bi-robot',
+        import:  'bi-box-arrow-in-down',
+        note:    'bi-sticky'
+    };
 
-    // ---------- Chat ----------
-    function firstName() {
-        return $('leadName').textContent.trim().split(' ')[0] || 'there';
+    function addTimeline(type, text) {
+        var li = el('li', 'ld-tl-item');
+
+        var ic = el('span', 'ld-tl-icon t-' + type);
+        ic.appendChild(icon(TL_ICONS[type] || 'bi-dot'));
+
+        var body = el('div', 'ld-tl-body');
+        body.appendChild(el('p', 'ld-tl-text', text));
+        body.appendChild(el('div', 'ld-tl-sub', shortDate(new Date())));
+
+        li.appendChild(ic);
+        li.appendChild(body);
+        timeline.insertBefore(li, timeline.firstChild);
     }
-
-    function addMessage(label, text) {
-        var wrap = el('div', 'ld-msg ld-msg-out');
-        wrap.appendChild(el('span', 'ld-msg-label', label));
-        wrap.appendChild(document.createTextNode(text));
-        wrap.appendChild(el('span', 'ld-msg-time', dateTime(new Date())));
-        chatBody.appendChild(wrap);
-        scrollChatToBottom();
-    }
-
-    function sendMessage(label, text) {
-        var message = (text || chatInput.value).trim();
-        if (!message) {
-            chatInput.focus();
-            toast('Type a message first');
-            return;
-        }
-        label = label || chatInput.dataset.label || 'Message sent';
-        addMessage(label, message);
-        addTimeline(label === 'Greeting sent' ? 'Greeting sent' : 'Message sent');
-        chatInput.value = '';
-        delete chatInput.dataset.label;
-        closeTemplates();
-    }
-
-    btnSend.addEventListener('click', function () { sendMessage(); });
-    chatInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    // Header "Send message" jumps to composer
-    $('btnSendMessage').addEventListener('click', function () {
-        document.querySelector('.ld-chat').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        chatInput.focus();
-    });
-
-    // ---------- Templates ----------
-    function openTemplates() {
-        tplMenu.classList.add('is-open');
-        btnTpl.setAttribute('aria-expanded', 'true');
-    }
-    function closeTemplates() {
-        tplMenu.classList.remove('is-open');
-        btnTpl.setAttribute('aria-expanded', 'false');
-    }
-
-    btnTpl.addEventListener('click', function (e) {
-        e.stopPropagation();
-        tplMenu.classList.contains('is-open') ? closeTemplates() : openTemplates();
-    });
-
-    tplMenu.addEventListener('click', function (e) {
-        var item = e.target.closest('button[data-text]');
-        if (!item) return;
-        chatInput.value = item.getAttribute('data-text').replace('{name}', firstName());
-        chatInput.dataset.label = item.getAttribute('data-label') || 'Message sent';
-        closeTemplates();
-        chatInput.focus();
-    });
-
-    document.addEventListener('click', function (e) {
-        if (!tplMenu.contains(e.target) && e.target !== btnTpl) closeTemplates();
-    });
 
     // ---------- Notes ----------
-    function syncNotesEmpty() {
-        notesEmpty.hidden = notesList.children.length > 0;
+    function syncNotes() {
+        var n = notesList.children.length;
+        notesCount.textContent = n;
+        notesEmpty.hidden = n > 0;
+        notesList.hidden = n === 0;
     }
 
     function addNote(text) {
-        var li = el('li');
-        li.appendChild(el('span', '', '- ' + text));
-        var del = el('button', 'ld-note-del', '\u00d7');
+        var li = el('li', 'ld-note');
+        li.appendChild(el('p', 'ld-note-text', text));
+
+        var meta = el('div', 'ld-note-meta');
+        meta.appendChild(icon('bi-person-circle'));
+        meta.appendChild(document.createTextNode(' Priya \u00b7 ' + shortDate(new Date())));
+        li.appendChild(meta);
+
+        var del = el('button', 'ld-note-del');
         del.type = 'button';
         del.setAttribute('aria-label', 'Delete note');
+        del.appendChild(icon('bi-trash3'));
         li.appendChild(del);
-        notesList.appendChild(li);
-        syncNotesEmpty();
+
+        notesList.insertBefore(li, notesList.firstChild);
+        syncNotes();
+    }
+
+    function openForm() {
+        noteForm.classList.add('is-open');
+        noteInput.focus();
+    }
+    function closeForm() {
+        noteForm.classList.remove('is-open');
+        noteInput.value = '';
+        noteChars.textContent = '0';
     }
 
     $('btnAddNote').addEventListener('click', function () {
-        noteForm.classList.toggle('is-open');
-        if (noteForm.classList.contains('is-open')) noteInput.focus();
+        noteForm.classList.contains('is-open') ? closeForm() : openForm();
     });
+    $('btnNoteCancel').addEventListener('click', closeForm);
 
     function saveNote() {
         var value = noteInput.value.trim();
         if (!value) {
             noteInput.focus();
+            toast('Write something first');
             return;
         }
         addNote(value);
-        addTimeline('Note added');
-        noteInput.value = '';
-        noteForm.classList.remove('is-open');
+        addTimeline('note', 'Note added');
+        closeForm();
         toast('Note added');
     }
 
     $('btnNoteSave').addEventListener('click', saveNote);
+
+    noteInput.addEventListener('input', function () {
+        noteChars.textContent = noteInput.value.length;
+    });
     noteInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') { e.preventDefault(); saveNote(); }
-        if (e.key === 'Escape') { noteForm.classList.remove('is-open'); }
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); saveNote(); }
+        if (e.key === 'Escape') { closeForm(); }
     });
 
     notesList.addEventListener('click', function (e) {
         var btn = e.target.closest('.ld-note-del');
         if (!btn) return;
-        btn.parentNode.remove();
-        syncNotesEmpty();
+        btn.closest('.ld-note').remove();
+        syncNotes();
         toast('Note deleted');
-    });
-
-    // ---------- Edit lead modal ----------
-    function openEdit() {
-        $('editName').value  = $('leadName').textContent.trim();
-        $('editPhone').value = $('leadPhone').textContent.trim();
-        $('editEmail').value = $('leadEmail').textContent.trim();
-        $('editCity').value  = $('leadCity').textContent.trim();
-        editModal.classList.add('is-open');
-        $('editName').focus();
-    }
-    function closeEdit() { editModal.classList.remove('is-open'); }
-
-    $('btnEdit').addEventListener('click', openEdit);
-    $('btnEditCancel').addEventListener('click', closeEdit);
-    editModal.addEventListener('click', function (e) { if (e.target === editModal) closeEdit(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeEdit(); });
-
-    $('btnEditSave').addEventListener('click', function () {
-        var name  = $('editName').value.trim();
-        var phone = $('editPhone').value.trim();
-        if (!name || !phone) {
-            toast('Name and phone are required');
-            return;
-        }
-        $('leadName').textContent  = name;
-        $('leadPhone').textContent = phone;
-        $('leadEmail').textContent = $('editEmail').value.trim();
-        $('leadCity').textContent  = $('editCity').value.trim();
-        $('leadAvatar').textContent = name.charAt(0).toUpperCase();
-        $('btnCall').setAttribute('href', 'tel:' + phone.replace(/[^\d+]/g, ''));
-        addTimeline('Lead details edited');
-        closeEdit();
-        toast('Lead details saved');
-    });
-
-    // ---------- Call ----------
-    $('btnCall').addEventListener('click', function () {
-        addTimeline('Call started');
     });
 
     // ---------- Init ----------
     renderStatus(currentStatus);
-    syncNotesEmpty();
-    scrollChatToBottom();
+    syncNotes();
 })();
 </script>
 @endpush
