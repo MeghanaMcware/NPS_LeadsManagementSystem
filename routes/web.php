@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FrontendEnquiryController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\LeadImportController;
 use App\Models\Lead;
@@ -45,10 +46,11 @@ Route::middleware('auth')->group(function () {
     })->name('sendmessage.index');
 });
 
-
 Route::get('/', function () {
     return view('frontend.first');
 })->name('home');
+
+Route::post('/enquiry', [FrontendEnquiryController::class, 'submit'])->name('frontend.enquiry.submit');
 
 Route::get('/life-at-npskgl', function () {
     return view('frontend.life_at_npskgl');
