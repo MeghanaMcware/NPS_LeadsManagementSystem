@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\LeadImportController;
 use App\Models\Lead;
 use Illuminate\Support\Facades\Route;
 
@@ -32,9 +33,12 @@ Route::middleware('auth')->group(function () {
         return view('admin.leads.view', compact('lead'));
     })->name('leads.view');
 
-    Route::get('/leadsimport/index', function () {
-        return view('admin.leadsimport.index');
-    })->name('leadsimport.index');
+    // Add & Bulk Import routes
+    Route::get('/leadsimport/index', [LeadImportController::class, 'index'])->name('leadsimport.index');
+    Route::get('/leadsimport/sample', [LeadImportController::class, 'downloadSample'])->name('leadsimport.sample');
+    Route::post('/leadsimport/preview', [LeadImportController::class, 'preview'])->name('leadsimport.preview');
+    Route::post('/leadsimport/process', [LeadImportController::class, 'process'])->name('leadsimport.process');
+    Route::post('/leadsimport/single', [LeadImportController::class, 'storeSingle'])->name('leadsimport.single');
 
     Route::get('/sendmessage/index', function () {
         return view('admin.sendmessage.index');

@@ -222,9 +222,10 @@
 
             <select class="ls-control ls-select" id="lsSource" aria-label="Filter by source">
                 <option value="all">Source: All</option>
+                <option value="Google Form">Source: Google Form</option>
+                <option value="WhatsApp">Source: WhatsApp</option>
                 <option value="Website">Source: Website</option>
                 <option value="Facebook">Source: Facebook</option>
-                <option value="Referral">Source: Referral</option>
                 <option value="Walk-in">Source: Walk-in</option>
             </select>
 
@@ -235,9 +236,7 @@
                 <option value="all">Date: All time</option>
             </select>
 
-
-            <button type="button" class="ls-btn" id="lsImportBtn">Import</button>
-            <input type="file" id="lsImportFile" accept=".csv,.xlsx,.xls" hidden>
+            <a href="{{ route('leadsimport.index', ['mode' => 'import']) }}" class="ls-btn d-inline-flex align-items-center justify-content-center" style="text-decoration:none;" id="lsImportBtn">Import</a>
         </div>
 
         {{-- Selection bar --}}
@@ -356,7 +355,7 @@
         var q = state.q.trim().toLowerCase();
         return leads.filter(function (l) {
             if (state.status !== 'all' && l.status !== state.status) return false;
-            if (state.source !== 'all' && l.source !== state.source) return false;
+            if (state.source !== 'all' && (l.source || '').toLowerCase() !== state.source.toLowerCase()) return false;
             if (state.date !== 'all' && l.created > parseInt(state.date, 10)) return false;
             if (q && (l.name + ' ' + l.phone).toLowerCase().indexOf(q) === -1) return false;
             return true;
@@ -567,14 +566,6 @@
     $('lsStatus').addEventListener('change', function () { state.status = this.value; state.page = 1; render(); });
     $('lsSource').addEventListener('change', function () { state.source = this.value; state.page = 1; render(); });
     $('lsDate').addEventListener('change', function () { state.date = this.value; state.page = 1; render(); });
-
-    /* ---------------- Import ---------------- */
-    $('lsImportBtn').addEventListener('click', function () { $('lsImportFile').click(); });
-    $('lsImportFile').addEventListener('change', function () {
-        if (!this.files.length) return;
-        toast('Selected "' + this.files[0].name + '" for import');
-        this.value = '';
-    });
 
     /* ---------------- Init ---------------- */
     render();

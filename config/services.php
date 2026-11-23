@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'aisensy' => [
+        'api_key' => env('AISENSY_API_KEY', ''),
+        'url' => env('AISENSY_URL', 'https://backend.api-wa.co/campaign/mcware/api/v2'),
+        'user_name' => env('AISENSY_USER_NAME', 'National public school  kempegowda layout'),
+        'source' => env('AISENSY_SOURCE', 'new-landing-page form'),
+    ],
+
 ];

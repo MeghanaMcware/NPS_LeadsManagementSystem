@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Add / Import')
+@section('title', 'Add / Import Leads')
 
 @section('style')
 <style>
@@ -40,7 +40,7 @@
     .ai-card h4 { margin: 0 0 4px; font-size: 19px; font-weight: 700; }
     .ai-sub { margin: 0 0 22px; font-size: 13px; color: var(--ai-muted); }
 
-    /* Card header row (title left, sample button right) */
+    /* Card header row */
     .ai-head-row {
         display: flex; align-items: flex-start; justify-content: space-between;
         flex-wrap: wrap; gap: 14px; margin-bottom: 22px;
@@ -54,6 +54,7 @@
         background: var(--ai-blue-tint); color: var(--ai-blue);
         border: 1.5px solid #c4d3ee; border-radius: 12px;
         font-size: 14px; font-weight: 700;
+        text-decoration: none;
         transition: background .18s, color .18s, border-color .18s, box-shadow .18s, transform .1s;
     }
     .ai-sample-btn .ai-sample-ico {
@@ -161,16 +162,16 @@
     .ai-drop-err { display: none; margin-top: 8px; font-size: 12.5px; color: var(--ai-red); }
     .ai-drop-err.is-on { display: block; }
 
-    /* Mapping + review (visible once a file is chosen) */
+    /* Mapping + review */
     .ai-after { display: none; }
     .ai-after.is-on { display: block; }
     .ai-h { margin: 26px 0 12px; font-size: 14.5px; font-weight: 700; }
     .ai-map { border: 1px solid var(--ai-line); border-radius: 12px; background: var(--ai-head); padding: 6px 14px 14px; }
-    .ai-map-head, .ai-map-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; }
+    .ai-map-head, .ai-map-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; align-items: center; }
     .ai-map-head { padding: 12px 0 8px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ai-muted); }
     .ai-map-row { padding: 5px 0; font-size: 13.5px; }
     .ai-map-row .ai-select { height: 38px; font-size: 13px; }
-    .ai-map-row .ai-col { word-break: break-word; }
+    .ai-map-row .ai-col { word-break: break-word; font-weight: 600; }
     .ai-map-msg { display: none; margin: 10px 0 0; font-size: 12.5px; color: var(--ai-red); }
     .ai-map-msg.is-on { display: block; }
 
@@ -178,25 +179,18 @@
     .ai-dup[hidden] { display: none; }
     .ai-dup-opts { display: flex; flex-wrap: wrap; gap: 14px 32px; }
     .ai-import-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 24px; }
-    .ai-import-row .ai-btn-primary { min-width: 220px; }
 
     /* Toast */
     .ai-toast {
-        position: fixed; right: 20px; bottom: 20px; z-index: 2100; max-width: 320px;
+        position: fixed; right: 20px; bottom: 20px; z-index: 2100;
         background: var(--ai-ink); color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 14px;
         opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s; pointer-events: none;
     }
     .ai-toast.is-show { opacity: 1; transform: none; }
 
-    @media (max-width: 575.98px) {
+    @media (max-width: 767.98px) {
         .ai-grid { grid-template-columns: 1fr; }
-        .ai-card { padding: 20px 16px 22px; }
         .ai-map-head, .ai-map-row { grid-template-columns: 1fr; gap: 6px; }
-        .ai-map-head span:last-child { display: none; }
-        .ai-sample-btn { width: 100%; justify-content: center; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-        .ai-toast, .ai-opt span, .ai-sample-btn, .ai-sample-ico { transition: none; }
     }
 </style>
 @endsection
@@ -207,115 +201,107 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-sm-6">
-                    <h3>Add / Import</h3>
+                    <h3>Add / Import Leads</h3>
                 </div>
                 <div class="col-12 col-sm-6">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href=""><i class="bi bi-house"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="bi bi-house"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('leads.index') }}">Leads</a></li>
                         <li class="breadcrumb-item active">Add / Import</li>
                     </ol>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="mb-3 pb-3">
     <div class="ai">
 
-        {{-- Radio switch --}}
-        <div class="ai-switch" role="radiogroup" aria-label="Add or import leads">
+        {{-- Radio-style switch: Add single lead vs Import leads in bulk --}}
+        <div class="ai-switch" role="radiogroup" aria-label="Mode">
             <label class="ai-opt">
                 <input type="radio" name="aiMode" value="add" checked>
-                <span>Add lead</span>
+                <span>Add single lead</span>
             </label>
             <label class="ai-opt">
                 <input type="radio" name="aiMode" value="import">
-                <span>Import leads</span>
+                <span>Import leads in bulk</span>
             </label>
         </div>
 
         {{-- ============ ADD A SINGLE LEAD ============ --}}
         <section class="ai-card" id="aiAddPanel">
             <h4>Add a single lead</h4>
-            <p class="ai-sub">Fill in the details and save</p>
+            <p class="ai-sub">Fill in the student or parent inquiry details and save</p>
 
             <form id="aiForm" novalidate>
                 <div class="ai-grid">
                     <div class="ai-field" id="aiNameField">
-                        <label class="ai-label" for="aiName">Full name <i>*</i></label>
-                        <input type="text" class="ai-input" id="aiName" placeholder="Enter name" autocomplete="off">
-                        <div class="ai-err">Enter the lead's full name.</div>
+                        <label class="ai-label" for="aiName">Full Name <i>*</i></label>
+                        <input type="text" class="ai-input" id="aiName" placeholder="e.g. Anand Kumar" autocomplete="off" required>
+                        <div class="ai-err">Enter the student or parent's name.</div>
                     </div>
 
                     <div class="ai-field" id="aiPhoneField">
-                        <label class="ai-label" for="aiPhone">Phone <i>*</i></label>
+                        <label class="ai-label" for="aiPhone">Phone Number <i>*</i></label>
                         <div class="ai-prefix">
                             <span>+91</span>
-                            <input type="tel" class="ai-input" id="aiPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric">
+                            <input type="tel" class="ai-input" id="aiPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" required>
                         </div>
                         <div class="ai-err">Enter a valid 10-digit mobile number.</div>
                     </div>
 
                     <div class="ai-field" id="aiEmailField">
                         <label class="ai-label" for="aiEmail">Email</label>
-                        <input type="email" class="ai-input" id="aiEmail" placeholder="name@email.com">
+                        <input type="email" class="ai-input" id="aiEmail" placeholder="parent@example.com">
                         <div class="ai-err">Enter a valid email address.</div>
                     </div>
 
                     <div class="ai-field">
-                        <label class="ai-label" for="aiCity">City</label>
-                        <input type="text" class="ai-input" id="aiCity" placeholder="Bengaluru">
+                        <label class="ai-label" for="aiCity">City / Location</label>
+                        <input type="text" class="ai-input" id="aiCity" placeholder="e.g. Anchepalya, Bengaluru">
+                    </div>
+
+                    <div class="ai-field">
+                        <label class="ai-label" for="aiInterest">Admission for which grade?</label>
+                        <input type="text" class="ai-input" id="aiInterest" placeholder="e.g. Grade 1, UKG, PP1">
+                    </div>
+
+                    <div class="ai-field">
+                        <label class="ai-label" for="aiTime">Preferred time to call</label>
+                        <input type="text" class="ai-input" id="aiTime" placeholder="e.g. Morning 10 AM - 12 PM">
                     </div>
 
                     <div class="ai-field">
                         <label class="ai-label" for="aiSource">Source</label>
                         <select class="ai-select" id="aiSource">
-                            <option>Website</option>
-                            <option>Facebook</option>
-                            <option>Instagram</option>
-                            <option>Referral</option>
-                            <option>Walk-in</option>
-                            <option>Other</option>
+                            <option value="Google Form" selected>Google Form</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Website">Website</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Walk-in">Walk-in</option>
                         </select>
                     </div>
 
                     <div class="ai-field">
-                        <label class="ai-label" for="aiInterest">Interested in</label>
-                        <select class="ai-select" id="aiInterest">
-                            <option>Course / Service</option>
-                            <option>Product</option>
-                            <option>Consultation</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-
-                    <div class="ai-field ">
                         <label class="ai-label" for="aiStatus">Status</label>
                         <select class="ai-select" id="aiStatus">
-                            <option>New</option>
-                            <option>Contacted</option>
-                            <option>Follow-up</option>
-                            <option>Converted</option>
+                            <option value="new" selected>New</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="followup">Follow-up</option>
+                            <option value="converted">Converted</option>
+                            <option value="lost">Lost</option>
                         </select>
-                    </div>
-
-                    <div class="ai-field ">
-                        <label class="ai-label" for="aiNotes">Notes</label>
-                        <textarea class="ai-textarea" id="aiNotes" placeholder="Add any notes about this lead..."></textarea>
                     </div>
 
                     <div class="ai-full">
-                        <label class="ai-check">
-                            <input type="checkbox" class="ai-chk" id="aiGreet" checked>
-                            Send greeting message automatically after saving
-                        </label>
+                        <label class="ai-label" for="aiRemarks">Remarks / Inquiry Notes</label>
+                        <textarea class="ai-textarea" id="aiRemarks" placeholder="Add any initial remarks or enquiry details..."></textarea>
                     </div>
                 </div>
 
                 <div class="ai-actions">
-                    <button type="submit" class="ai-btn ai-btn-primary">Save Lead</button>
-                    <button type="button" class="ai-btn" id="aiCancel">Cancel</button>
+                    <button type="submit" class="ai-btn ai-btn-primary" id="aiSaveBtn">Save Lead</button>
+                    <button type="button" class="ai-btn" id="aiCancel">Reset Form</button>
                 </div>
             </form>
         </section>
@@ -323,29 +309,28 @@
         {{-- ============ IMPORT LEADS IN BULK ============ --}}
         <section class="ai-card" id="aiImportPanel" hidden>
 
-            {{-- Header: title left, highlighted sample button right --}}
             <div class="ai-head-row">
                 <div>
                     <h4>Import leads in bulk</h4>
-                    <p class="ai-sub">Upload an Excel or CSV file</p>
+                    <p class="ai-sub">Upload an Excel (.xlsx) or CSV spreadsheet from Google Forms or WhatsApp</p>
                 </div>
 
-                <button type="button" class="ai-sample-btn" id="aiSample">
+                <a href="{{ route('leadsimport.sample') }}" class="ai-sample-btn" id="aiSample">
                     <span class="ai-sample-ico"><i class="bi bi-download"></i></span>
                     Download sample file
-                </button>
+                </a>
             </div>
 
             <ol class="ai-steps" id="aiSteps" style="list-style:none;padding:0;">
-                <li class="ai-step is-active" data-step="1"><b>1</b> Upload</li>
-                <li class="ai-step" data-step="2"><b>2</b> Map columns</li>
-                <li class="ai-step" data-step="3"><b>3</b> Review</li>
+                <li class="ai-step is-active" data-step="1"><b>1</b> Upload file</li>
+                <li class="ai-step" data-step="2"><b>2</b> Column mapping</li>
+                <li class="ai-step" data-step="3"><b>3</b> Review &amp; Import</li>
             </ol>
 
             {{-- Dropzone --}}
             <div class="ai-drop" id="aiDrop">
                 <div class="ai-empty">
-                    <h6>Drag &amp; drop your file here</h6>
+                    <h6>Drag &amp; drop your spreadsheet here</h6>
                     <p>.xlsx &nbsp; .csv &nbsp; (max 5 MB)</p>
                     <button type="button" class="ai-btn" id="aiBrowse">Browse files</button>
                 </div>
@@ -362,21 +347,35 @@
 
             {{-- Mapping + review (shown after a file is chosen) --}}
             <div class="ai-after" id="aiAfter">
-                <h6 class="ai-h">Column mapping preview</h6>
+                <h6 class="ai-h">Column Mapping &amp; Normalization</h6>
                 <div class="ai-map">
-                    <div class="ai-map-head"><span>File column</span><span>Maps to</span></div>
+                    <div class="ai-map-head"><span>Spreadsheet Column Header</span><span>Maps to Lead Field</span></div>
                     <div id="aiMapRows"></div>
                 </div>
                 <p class="ai-map-msg" id="aiMapMsg" role="alert"></p>
 
-                <p class="ai-dup" id="aiDup" hidden></p>
-                <div class="ai-dup-opts">
-                    <label class="ai-check">
-                        <input type="radio" class="ai-chk" name="aiDupMode" value="skip" checked> Skip duplicates
-                    </label>
-                    <label class="ai-check">
-                        <input type="radio" class="ai-chk" name="aiDupMode" value="update"> Update existing
-                    </label>
+                <div class="row g-3 mt-2 align-items-center">
+                    <div class="col-12 col-md-6">
+                        <label class="ai-label" for="aiBatchSource">Assign Lead Source</label>
+                        <select class="ai-select" id="aiBatchSource">
+                            <option value="Google Form" selected>Google Form</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Website">Website</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Walk-in">Walk-in</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <p class="ai-dup mb-1" id="aiDup" hidden></p>
+                        <div class="ai-dup-opts">
+                            <label class="ai-check">
+                                <input type="radio" class="ai-chk" name="aiDupMode" value="skip" checked> Skip duplicates
+                            </label>
+                            <label class="ai-check">
+                                <input type="radio" class="ai-chk" name="aiDupMode" value="update"> Update existing leads
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="ai-import-row">
@@ -402,24 +401,32 @@
         });
     }
 
+    var csrfToken = document.querySelector('meta[name="csrf-token"]') ?
+                    document.querySelector('meta[name="csrf-token"]').content : '{{ csrf_token() }}';
+
     var toastTimer;
     function toast(msg) {
         var t = $('aiToast');
         t.textContent = msg;
         t.classList.add('is-show');
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(function () { t.classList.remove('is-show'); }, 2800);
+        toastTimer = setTimeout(function () { t.classList.remove('is-show'); }, 3000);
     }
-    // SweetAlert2 if the layout loads it, otherwise a simple toast
-    function notify(title, text) {
+
+    function notify(title, text, isSuccess) {
         if (window.Swal) {
-            Swal.fire({ icon: 'success', title: title, text: text, confirmButtonColor: '#021b45' });
+            Swal.fire({
+                icon: isSuccess !== false ? 'success' : 'error',
+                title: title,
+                text: text,
+                confirmButtonColor: '#021b45'
+            });
         } else {
             toast(title + ' - ' + text);
         }
     }
 
-    /* =============== Radio switch =============== */
+    /* =============== Tab Switch =============== */
     var panels = { add: $('aiAddPanel'), 'import': $('aiImportPanel') };
     document.querySelectorAll('input[name="aiMode"]').forEach(function (r) {
         r.addEventListener('change', function () {
@@ -427,9 +434,18 @@
         });
     });
 
-    /* =============== Add a single lead =============== */
-    var form = $('aiForm');
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') === 'import' || window.location.hash === '#import') {
+        var importRadio = document.querySelector('input[name="aiMode"][value="import"]');
+        if (importRadio) {
+            importRadio.checked = true;
+            panels.add.hidden = true;
+            panels.import.hidden = false;
+        }
+    }
 
+    /* =============== Add Single Lead =============== */
+    var form = $('aiForm');
     function setError(fieldId, on) { $(fieldId).classList.toggle('has-error', on); }
 
     $('aiPhone').addEventListener('input', function () { this.value = this.value.replace(/\D/g, ''); });
@@ -450,7 +466,7 @@
         var phone = $('aiPhone').value.trim();
         var email = $('aiEmail').value.trim();
 
-        var okName = name.length > 1;
+        var okName = name.length >= 2;
         var okPhone = /^[6-9]\d{9}$/.test(phone);
         var okEmail = email === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -462,48 +478,66 @@
         if (!okPhone) { $('aiPhone').focus(); return; }
         if (!okEmail) { $('aiEmail').focus(); return; }
 
-        var msg = name + ' was added to leads.' + ($('aiGreet').checked ? ' Greeting message queued.' : '');
-        notify('Lead saved', msg);
-        resetForm();
-        $('aiName').focus();
+        var saveBtn = $('aiSaveBtn');
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+
+        fetch('{{ route("leadsimport.single") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                phone: phone,
+                email: email,
+                city: $('aiCity').value.trim(),
+                interested_in: $('aiInterest').value.trim(),
+                preferred_time_to_call: $('aiTime').value.trim(),
+                source: $('aiSource').value,
+                status: $('aiStatus').value,
+                remarks: $('aiRemarks').value.trim()
+            })
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save Lead';
+            if (data.success) {
+                notify('Lead saved', data.message || (name + ' was saved successfully.'));
+                resetForm();
+            } else {
+                notify('Error', data.message || 'Could not save lead.', false);
+            }
+        })
+        .catch(function () {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save Lead';
+            notify('Error', 'An unexpected network error occurred.', false);
+        });
     });
 
     $('aiCancel').addEventListener('click', resetForm);
 
-    /* =============== Bulk import =============== */
+    /* =============== Bulk Import =============== */
     var MAX_BYTES = 5 * 1024 * 1024;
     var TARGETS = [
-        { v: 'name',     t: 'Full Name' },
-        { v: 'phone',    t: 'Phone' },
-        { v: 'email',    t: 'Email' },
-        { v: 'city',     t: 'City' },
-        { v: 'source',   t: 'Source' },
-        { v: 'interest', t: 'Interested in' },
-        { v: 'status',   t: 'Status' },
-        { v: 'notes',    t: 'Notes' },
-        { v: 'skip',     t: "Don't import" }
+        { v: 'name',                   t: 'Name' },
+        { v: 'phone',                  t: 'Phone Number' },
+        { v: 'interested_in',          t: 'Admission for which grade?' },
+        { v: 'remarks',                t: 'Remarks' },
+        { v: 'city',                   t: 'City' },
+        { v: 'preferred_time_to_call', t: 'Preferred time to call' },
+        { v: 'email',                  t: 'Email' },
+        { v: 'skip',                   t: "Don't import (Skip)" }
     ];
-    var DEFAULT_HEADERS = ['Customer Name', 'Mobile', 'Email ID', 'Enquiry Source'];
-    var DEMO_ROWS = 248;        // used for .xlsx files (not parsed in this static design)
-    var DEMO_DUPLICATES = 3;
 
-    var imp = { file: null, headers: [], rows: 0, dups: 0 };
+    var imp = { file: null, file_token: null, headers: [], rows: 0, dups: 0, mapping: {} };
 
     function fmtSize(b) {
         return b < 1024 * 1024 ? Math.max(1, Math.round(b / 1024)) + ' KB' : (b / 1024 / 1024).toFixed(1) + ' MB';
-    }
-
-    function guessTarget(h) {
-        var s = h.toLowerCase();
-        if (/name/.test(s)) return 'name';
-        if (/phone|mobile|contact|cell/.test(s)) return 'phone';
-        if (/mail/.test(s)) return 'email';
-        if (/city|location/.test(s)) return 'city';
-        if (/source|enquiry|inquiry|channel/.test(s)) return 'source';
-        if (/interest|course|service/.test(s)) return 'interest';
-        if (/status|stage/.test(s)) return 'status';
-        if (/note|remark|comment/.test(s)) return 'notes';
-        return 'skip';
     }
 
     function setStep(n) {
@@ -522,13 +556,12 @@
         $('aiDrop').classList.toggle('has-error', !!msg);
     }
 
-    /* ---- file handling ---- */
     function handleFile(file) {
         showDropError('');
         if (!file) return;
 
         if (!/\.(xlsx|csv)$/i.test(file.name)) {
-            showDropError('Unsupported file type. Upload a .xlsx or .csv file.');
+            showDropError('Unsupported file type. Please upload a .xlsx or .csv file.');
             return;
         }
         if (file.size > MAX_BYTES) {
@@ -537,68 +570,63 @@
         }
 
         imp.file = file;
-
-        if (/\.csv$/i.test(file.name)) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var lines = String(reader.result).split(/\r?\n/).filter(function (l) { return l.trim() !== ''; });
-                if (lines.length < 2) {
-                    imp.file = null;
-                    showDropError('This file has no data rows.');
-                    return;
-                }
-                imp.headers = splitCsv(lines[0]);
-                imp.rows = lines.length - 1;
-                imp.dups = Math.min(DEMO_DUPLICATES, imp.rows);
-                afterFile();
-            };
-            reader.readAsText(file);
-        } else {
-            imp.headers = DEFAULT_HEADERS.slice();
-            imp.rows = DEMO_ROWS;
-            imp.dups = DEMO_DUPLICATES;
-            afterFile();
-        }
-    }
-
-    function splitCsv(line) {
-        var out = [], cur = '', q = false;
-        for (var i = 0; i < line.length; i++) {
-            var c = line[i];
-            if (c === '"') { q = !q; }
-            else if (c === ',' && !q) { out.push(cur.trim()); cur = ''; }
-            else { cur += c; }
-        }
-        out.push(cur.trim());
-        return out.map(function (h) { return h || 'Column'; });
-    }
-
-    function afterFile() {
-        $('aiFileName').textContent = imp.file.name;
-        $('aiFileMeta').textContent = fmtSize(imp.file.size) + ' \u00b7 ' + imp.rows + ' rows';
+        $('aiFileName').textContent = file.name;
+        $('aiFileMeta').textContent = fmtSize(file.size) + ' · Reading spreadsheet...';
         $('aiDrop').classList.add('has-file');
 
-        // mapping rows
-        $('aiMapRows').innerHTML = imp.headers.map(function (h, i) {
-            var guess = guessTarget(h);
-            var opts = TARGETS.map(function (t) {
-                return '<option value="' + t.v + '"' + (t.v === guess ? ' selected' : '') + '>' + t.t + '</option>';
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('_token', csrfToken);
+
+        fetch('{{ route("leadsimport.preview") }}', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: formData
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (!data.success) {
+                resetImport();
+                showDropError(data.message || 'Failed to parse file.');
+                return;
+            }
+
+            imp.file_token = data.file_token;
+            imp.headers = data.headers;
+            imp.rows = data.total_rows;
+            imp.dups = data.duplicate_count;
+            imp.mapping = data.suggested_mapping || {};
+
+            $('aiFileMeta').textContent = fmtSize(file.size) + ' · ' + data.total_rows + ' rows detected';
+
+            // Render mapping rows
+            $('aiMapRows').innerHTML = data.headers.map(function (h, i) {
+                var suggested = imp.mapping[i] || 'skip';
+                var opts = TARGETS.map(function (t) {
+                    return '<option value="' + t.v + '"' + (t.v === suggested ? ' selected' : '') + '>' + t.t + '</option>';
+                }).join('');
+                return '<div class="ai-map-row">' +
+                    '<span class="ai-col">' + esc(h) + '</span>' +
+                    '<select class="ai-select" data-col="' + i + '" aria-label="Map ' + esc(h) + ' to">' + opts + '</select>' +
+                    '</div>';
             }).join('');
-            return '<div class="ai-map-row"><span class="ai-col">' + esc(h) + '</span>' +
-                '<select class="ai-select" data-col="' + i + '" aria-label="Map ' + esc(h) + ' to">' + opts + '</select></div>';
-        }).join('');
 
-        // duplicates
-        var dup = $('aiDup');
-        dup.hidden = imp.dups === 0;
-        dup.textContent = 'Duplicates detected: ' + imp.dups + ' (phone numbers already exist)';
+            // Duplicates
+            var dup = $('aiDup');
+            dup.hidden = imp.dups === 0;
+            dup.textContent = 'Duplicates detected: ' + imp.dups + ' (phone numbers already in system)';
 
-        $('aiAfter').classList.add('is-on');
-        refreshImport();
+            $('aiAfter').classList.add('is-on');
+            refreshImport();
+        })
+        .catch(function () {
+            resetImport();
+            showDropError('Failed to upload and parse file. Please check file format.');
+        });
     }
 
     function resetImport() {
-        imp = { file: null, headers: [], rows: 0, dups: 0 };
+        imp = { file: null, file_token: null, headers: [], rows: 0, dups: 0, mapping: {} };
         $('aiFile').value = '';
         $('aiDrop').classList.remove('has-file');
         $('aiAfter').classList.remove('is-on');
@@ -607,23 +635,32 @@
         setStep(1);
     }
 
-    /* ---- mapping validation + import button ---- */
     function currentMapping() {
-        return Array.prototype.map.call(document.querySelectorAll('#aiMapRows select'), function (s) { return s.value; });
+        var map = {};
+        document.querySelectorAll('#aiMapRows select').forEach(function (s) {
+            map[s.dataset.col] = s.value;
+        });
+        return map;
     }
 
     function refreshImport() {
         var map = currentMapping();
-        var used = map.filter(function (v) { return v !== 'skip'; });
+        var vals = Object.values(map);
+        var used = vals.filter(function (v) { return v !== 'skip'; });
         var seen = {}, dupTarget = null;
-        used.forEach(function (v) { if (seen[v]) dupTarget = v; seen[v] = true; });
+        used.forEach(function (v) {
+            if (seen[v] && v !== 'remarks') {
+                dupTarget = v;
+            }
+            seen[v] = true;
+        });
 
         var msg = '';
         if (dupTarget) {
             var label = TARGETS.filter(function (t) { return t.v === dupTarget; })[0].t;
-            msg = '"' + label + '" is mapped more than once. Map each field to one column.';
+            msg = '"' + label + '" is mapped to multiple columns. Map each field once.';
         } else if (!seen.name || !seen.phone) {
-            msg = 'Map one column to Full Name and one to Phone to continue.';
+            msg = 'Map at least one column to Name and one column to Phone Number to proceed.';
         }
 
         var m = $('aiMapMsg');
@@ -649,20 +686,63 @@
     $('aiImport').addEventListener('click', function () {
         var btn = this;
         var mode = document.querySelector('input[name="aiDupMode"]:checked').value;
-        var count = mode === 'skip' ? Math.max(0, imp.rows - imp.dups) : imp.rows;
-        var dups = imp.dups;
+        var defaultSource = $('aiBatchSource').value;
 
         btn.disabled = true;
-        btn.textContent = 'Importing...';
-        setTimeout(function () {
-            var detail = count + ' leads imported.' +
-                (dups ? (mode === 'skip' ? ' ' + dups + ' duplicates skipped.' : ' ' + dups + ' existing leads updated.') : '');
-            notify('Import complete', detail);
-            resetImport();
-        }, 1200);
+        btn.textContent = 'Importing leads...';
+
+        fetch('{{ route("leadsimport.process") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                file_token: imp.file_token,
+                mapping: currentMapping(),
+                dup_mode: mode,
+                default_source: defaultSource
+            })
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            btn.disabled = false;
+            btn.textContent = 'Import leads';
+
+            if (data.success) {
+                if (window.Swal) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Import Successful',
+                        text: data.message,
+                        showCancelButton: true,
+                        confirmButtonText: 'View Leads List',
+                        cancelButtonText: 'Import Another File',
+                        confirmButtonColor: '#021b45'
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            window.location.href = '{{ route("leads.index") }}';
+                        } else {
+                            resetImport();
+                        }
+                    });
+                } else {
+                    notify('Import Complete', data.message);
+                    resetImport();
+                }
+            } else {
+                notify('Import Error', data.message || 'Failed to process import.', false);
+            }
+        })
+        .catch(function () {
+            btn.disabled = false;
+            btn.textContent = 'Import leads';
+            notify('Error', 'An error occurred during import processing.', false);
+        });
     });
 
-    /* ---- dropzone events ---- */
+    /* ---- Dropzone Events ---- */
     var drop = $('aiDrop');
     $('aiBrowse').addEventListener('click', function () { $('aiFile').click(); });
     $('aiFile').addEventListener('change', function () { handleFile(this.files[0]); });
@@ -675,31 +755,16 @@
         drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('is-over'); });
     });
     drop.addEventListener('drop', function (e) {
-        if (imp.file) return;
-        handleFile(e.dataTransfer.files[0]);
+        e.preventDefault();
+        drop.classList.remove('is-over');
+        if (e.dataTransfer.files.length) {
+            handleFile(e.dataTransfer.files[0]);
+        }
     });
-    // stop the browser from opening a file dropped outside the zone
+
     ['dragover', 'drop'].forEach(function (ev) {
         window.addEventListener(ev, function (e) { e.preventDefault(); });
     });
-
-    /* ---- sample file ---- */
-    function downloadSample() {
-        var csv = 'Customer Name,Mobile,Email ID,Enquiry Source,City\r\n' +
-                  'Rahul Verma,9845011223,rahul@example.com,Website,Bengaluru\r\n' +
-                  'Anita Desai,9900155678,anita@example.com,Facebook,Mysuru\r\n';
-        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'leads-sample.csv';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function () { URL.revokeObjectURL(url); }, 500);
-        toast('Sample file downloaded');
-    }
-    $('aiSample').addEventListener('click', downloadSample);
 })();
 </script>
 @endpush
