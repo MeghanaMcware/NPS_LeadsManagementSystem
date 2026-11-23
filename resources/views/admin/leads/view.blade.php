@@ -262,8 +262,8 @@
                 </div>
                 <div class="col-12 col-sm-6">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href=""><i class="bi bi-house"></i></a></li>
-                        <li class="breadcrumb-item"><a href="">List</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="bi bi-house"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('leads.index') }}">List</a></li>
                         <li class="breadcrumb-item active">Lead Details</li>
                     </ol>
                 </div>
@@ -276,29 +276,35 @@
         {{-- ============ Profile header ============ --}}
         <div class="ld-card">
             <div class="ld-profile">
-                <div class="ld-avatar" id="leadAvatar">A</div>
+                <div class="ld-avatar" id="leadAvatar">{{ strtoupper(substr($lead->name, 0, 1)) }}</div>
 
                 <div class="ld-profile-info">
                     <div class="ld-name-row">
-                        <h2 class="ld-name" id="leadName">Anita Desai</h2>
-                        <span class="ld-pill" id="leadStatusPill" data-status="Contacted">Contacted</span>
+                        <h2 class="ld-name" id="leadName">{{ $lead->name }}</h2>
+                        <span class="ld-pill" id="leadStatusPill" data-status="{{ ucfirst($lead->status) }}">{{ ucfirst($lead->status) }}</span>
                     </div>
                     <div class="ld-meta">
-                        <span id="leadPhone">+91 99001 55678</span>
+                        <span id="leadPhone"><i class="bi bi-telephone me-1"></i>{{ $lead->phone }}</span>
+                        @if($lead->email)
                         <i class="ld-meta-sep"></i>
-                        <span id="leadEmail">anita.d@email.com</span>
+                        <span id="leadEmail"><i class="bi bi-envelope me-1"></i>{{ $lead->email }}</span>
+                        @endif
+                        @if($lead->city)
                         <i class="ld-meta-sep"></i>
-                        <span id="leadCity">Bengaluru</span>
+                        <span id="leadCity"><i class="bi bi-geo-alt me-1"></i>{{ $lead->city }}</span>
+                        @endif
                     </div>
                     <div class="ld-meta">
-                        <span>Source: Facebook</span>
-                        <span>Owner: Priya</span>
-                        <span>Created: 12 Nov 2026</span>
+                        <span>Source: {{ $lead->source }}</span>
+                        @if($lead->interested_in)
+                        <span>Grade / Course: {{ $lead->interested_in }}</span>
+                        @endif
+                        <span>Created: {{ $lead->created_at->format('d M Y') }}</span>
                     </div>
                 </div>
 
                 <div class="ld-actions">
-                    <a href="{{ url('/sendmessage/index') }}" class="ld-btn ld-btn-primary" id="btnSendMessage">Send message</a>
+                    <a href="{{ route('sendmessage.index', ['lead_id' => $lead->id]) }}" class="ld-btn ld-btn-primary" id="btnSendMessage">Send message</a>
                 </div>
             </div>
         </div>

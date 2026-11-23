@@ -45,7 +45,7 @@
                 </li>
             </ul>
         </div>
-        <form id="logout-form" action="" method="POST" class="d-none">
+        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
             @csrf
         </form>
         <script class="result-template" type="text/x-handlebars-template">

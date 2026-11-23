@@ -33,16 +33,6 @@
     .ls-control:focus { outline: 3px solid rgba(2,27,69,.18); border-color: var(--ls-blue); }
     .ls-select { flex: 0 0 auto; width: auto; min-width: 150px; cursor: pointer; }
 
-    .ls-toggle {
-        display: inline-flex; padding: 4px; gap: 2px;
-        background: var(--ls-bg); border: 1px solid var(--ls-line); border-radius: 12px;
-    }
-    .ls-toggle button {
-        border: 0; background: transparent; color: var(--ls-muted);
-        font-size: 14px; font-weight: 600; padding: 8px 26px; border-radius: 9px; cursor: pointer;
-    }
-    .ls-toggle button.is-on { background: var(--ls-blue); color: #fff; }
-    .ls-toggle button:focus-visible { outline: 2px solid var(--ls-blue); outline-offset: 1px; }
 
     .ls-btn {
         height: 44px;
@@ -178,18 +168,6 @@
     .ls-page.is-gap { cursor: default; color: var(--ls-muted); }
     .ls-page:focus-visible { outline: 2px solid var(--ls-blue); outline-offset: -2px; }
 
-    /* Board view */
-    .ls-board { display: none; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: 14px; overflow-x: auto; padding-bottom: 6px; }
-    .ls-col { background: var(--ls-head); border-radius: 14px; padding: 12px; min-height: 160px; }
-    .ls-col-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
-    .ls-col-head span.n { color: var(--ls-muted); font-weight: 600; }
-    .ls-lead-card {
-        background: #fff; border: 1px solid var(--ls-line); border-radius: 10px;
-        padding: 12px; margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start;
-    }
-    .ls-lead-card.is-selected { background: var(--ls-blue-tint); border-color: #b9c9e8; }
-    .ls-lead-card .ls-name { font-size: 14px; }
-    .ls-lead-card small { display: block; color: var(--ls-muted); font-size: 12px; margin-top: 2px; }
 
     /* Toast */
     .ls-toast {
@@ -257,10 +235,6 @@
                 <option value="all">Date: All time</option>
             </select>
 
-            <div class="ls-toggle" role="group" aria-label="View">
-                <button type="button" class="is-on" id="lsListBtn" aria-pressed="true">List</button>
-                <button type="button" id="lsBoardBtn" aria-pressed="false">Board</button>
-            </div>
 
             <button type="button" class="ls-btn" id="lsImportBtn">Import</button>
             <input type="file" id="lsImportFile" accept=".csv,.xlsx,.xls" hidden>
@@ -269,7 +243,7 @@
         {{-- Selection bar --}}
         <div class="ls-selbar" id="lsSelbar">
             <span class="ls-count" id="lsCount">0 leads selected</span>
-            <a href="{{ url('/sendmessage/index') }}" class="ls-btn ls-btn-primary d-flex align-items-center justify-content-center">Send automatic message</a>
+            <a href="{{ route('sendmessage.index') }}" class="ls-btn ls-btn-primary d-flex align-items-center justify-content-center">Send automatic message</a>
             <div class="ls-menu-wrap">
                 <button type="button" class="ls-btn" id="lsChangeBtn" aria-haspopup="true" aria-expanded="false">Change status</button>
                 <div class="ls-menu" id="lsChangeMenu" role="menu">
@@ -310,7 +284,6 @@
                             <th>Source</th>
                             <th>Status</th>
                             <th>Last Contact</th>
-                            <th>Owner</th>
                             <th class="ls-actions-col"><span class="">Actions</span></th>
                         </tr>
                     </thead>
@@ -329,8 +302,6 @@
             </div>
         </div>
 
-        {{-- Board view --}}
-        <div class="ls-board" id="lsBoard"></div>
     </div>
 </div>
 
@@ -342,43 +313,18 @@
 (function () {
     'use strict';
 
-    /* ---------------- Static data ---------------- */
-    // created / last = days ago ( last: null = never contacted )
-    var leads = [
-        { id: 1,  name: 'Rahul Verma',    phone: '+91 98450 11223', source: 'Website',  status: 'new',       last: null, owner: 'Priya', created: 0  },
-        { id: 2,  name: 'Anita Desai',    phone: '+91 99001 55678', source: 'Facebook', status: 'contacted', last: 0,    owner: 'Priya', created: 3  },
-        { id: 3,  name: 'Karthik R',      phone: '+91 97420 33410', source: 'Referral', status: 'followup',  last: 2,    owner: 'Arun',  created: 6  },
-        { id: 4,  name: 'Sneha Iyer',     phone: '+91 98860 77123', source: 'Website',  status: 'converted', last: 7,    owner: 'Priya', created: 18 },
-        { id: 5,  name: 'Mohammed Faiz',  phone: '+91 98800 20931', source: 'Walk-in',  status: 'new',       last: null, owner: 'Arun',  created: 0  },
-        { id: 6,  name: 'Divya Nair',     phone: '+91 90350 66412', source: 'Facebook', status: 'contacted', last: 1,    owner: 'Arun',  created: 9  },
-        { id: 7,  name: 'Suresh Babu',    phone: '+91 99720 18854', source: 'Referral', status: 'followup',  last: 4,    owner: 'Priya', created: 12 },
-        { id: 8,  name: 'Lakshmi Rao',    phone: '+91 98450 90017', source: 'Website',  status: 'new',       last: null, owner: 'Priya', created: 1  },
-        { id: 9,  name: 'Imran Pasha',    phone: '+91 96320 44705', source: 'Walk-in',  status: 'converted', last: 14,   owner: 'Arun',  created: 27 },
-        { id: 10, name: 'Meera Joshi',    phone: '+91 91080 53329', source: 'Facebook', status: 'contacted', last: 10,   owner: 'Priya', created: 45 },
-        { id: 11, name: 'Vikram Shetty',  phone: '+91 98440 71290', source: 'Referral', status: 'new',       last: null, owner: 'Arun',  created: 2  },
-        { id: 12, name: 'Pooja Kulkarni', phone: '+91 99860 30517', source: 'Website',  status: 'followup',  last: 3,    owner: 'Priya', created: 5  },
-        { id: 13, name: 'Arjun Menon',    phone: '+91 94480 25631', source: 'Facebook', status: 'contacted', last: 2,    owner: 'Arun',  created: 8  },
-        { id: 14, name: 'Fatima Sheikh',  phone: '+91 98450 66782', source: 'Walk-in',  status: 'converted', last: 9,    owner: 'Priya', created: 21 },
-        { id: 15, name: 'Ravi Teja',      phone: '+91 97390 18045', source: 'Website',  status: 'new',       last: null, owner: 'Arun',  created: 0  },
-        { id: 16, name: 'Nandini Hegde',  phone: '+91 99000 41376', source: 'Referral', status: 'followup',  last: 5,    owner: 'Priya', created: 11 },
-        { id: 17, name: 'Sanjay Gowda',   phone: '+91 98800 53219', source: 'Facebook', status: 'contacted', last: 0,    owner: 'Arun',  created: 4  },
-        { id: 18, name: 'Kavya Reddy',    phone: '+91 90190 72864', source: 'Website',  status: 'converted', last: 12,   owner: 'Priya', created: 24 },
-        { id: 19, name: 'Rohit Bhat',     phone: '+91 96060 37428', source: 'Walk-in',  status: 'new',       last: null, owner: 'Priya', created: 1  },
-        { id: 20, name: 'Deepa Murthy',   phone: '+91 98860 90153', source: 'Referral', status: 'contacted', last: 6,    owner: 'Arun',  created: 15 },
-        { id: 21, name: 'Harish Kumar',   phone: '+91 97410 28607', source: 'Facebook', status: 'followup',  last: 1,    owner: 'Priya', created: 7  },
-        { id: 22, name: 'Swati Patil',    phone: '+91 99720 64491', source: 'Website',  status: 'new',       last: null, owner: 'Arun',  created: 2  },
-        { id: 23, name: 'Naveen Raj',     phone: '+91 98450 15936', source: 'Walk-in',  status: 'contacted', last: 8,    owner: 'Priya', created: 19 },
-        { id: 24, name: 'Ayesha Khan',    phone: '+91 91080 82570', source: 'Referral', status: 'converted', last: 20,   owner: 'Arun',  created: 38 }
-    ];
+    /* ---------------- Leads Data from Database ---------------- */
+    var leads = {!! json_encode($leads) !!};
 
     var STATUS = {
         new:       'New',
         contacted: 'Contacted',
         followup:  'Follow-up',
-        converted: 'Converted'
+        converted: 'Converted',
+        lost:      'Lost'
     };
 
-    var state = { q: '', status: 'all', source: 'all', date: '30', view: 'list', page: 1, size: 10 };
+    var state = { q: '', status: 'all', source: 'all', date: '30', page: 1, size: 10 };
     var selected = {};   // id -> true
 
     var $ = function (id) { return document.getElementById(id); };
@@ -431,7 +377,6 @@
 
         var current = pageRows(rows);
         renderTable(current);
-        renderBoard(rows);
         renderSelection(current);
         renderPager(rows.length, pages, current.length);
     }
@@ -447,13 +392,11 @@
                 '<td>' + esc(l.source) + '</td>' +
                 '<td><span class="ls-badge ' + l.status + '">' + STATUS[l.status] + '</span></td>' +
                 '<td class="ls-last">' + lastText(l.last) + '</td>' +
-                '<td>' + esc(l.owner) + '</td>' +
                 '<td class="ls-actions-col"><div class="ls-menu-wrap">' +
                     '<button type="button" class="ls-kebab" aria-label="Actions for ' + esc(l.name) + '" aria-haspopup="true">&hellip;</button>' +
                     '<div class="ls-menu ls-row-menu" role="menu">' +
-                        '<button type="button" role="menuitem" data-act="view" data-url="{{ url('/leads/view') }}">View lead</button>' +
-                        '<button type="button" role="menuitem" data-act="message" data-url="{{ url('/sendmessage/index') }}">Send message</button>' +
-                        '<button type="button" role="menuitem" data-act="delete" class="is-danger">Delete</button>' +
+                        '<button type="button" role="menuitem" data-act="view" data-url="{{ url('/leads/view') }}/' + l.id + '">View lead</button>' +
+                        '<button type="button" role="menuitem" data-act="message" data-url="{{ route('sendmessage.index') }}?lead_id=' + l.id + '">Send message</button>' +
                     '</div></div></td>' +
             '</tr>';
         }).join('');
@@ -462,24 +405,6 @@
         $('lsTable').style.display = rows.length ? '' : 'none';
     }
 
-    function renderBoard(rows) {
-        $('lsBoard').innerHTML = Object.keys(STATUS).map(function (key) {
-            var items = rows.filter(function (l) { return l.status === key; });
-            var cards = items.map(function (l) {
-                var on = !!selected[l.id];
-                return '<div class="ls-lead-card ' + (on ? 'is-selected' : '') + '" data-id="' + l.id + '">' +
-                    '<input type="checkbox" class="ls-chk ls-card-chk" ' + (on ? 'checked' : '') +
-                        ' aria-label="Select ' + esc(l.name) + '">' +
-                    '<div><div class="ls-name">' + esc(l.name) + '</div>' +
-                    '<small>' + esc(l.phone) + '</small>' +
-                    '<small>' + esc(l.source) + ' &middot; ' + esc(l.owner) + '</small>' +
-                    '<small>Last contact: ' + lastText(l.last) + '</small></div></div>';
-            }).join('');
-            return '<div class="ls-col"><div class="ls-col-head"><span class="ls-badge ' + key + '">' + STATUS[key] +
-                '</span><span class="n">' + items.length + '</span></div>' +
-                (cards || '<small style="color:#6b7a90">No leads</small>') + '</div>';
-        }).join('');
-    }
 
     function renderSelection(current) {
         var n = selectedCount();
@@ -573,10 +498,6 @@
         if (!e.target.classList.contains('ls-row-chk')) return;
         toggle(parseInt(e.target.closest('tr').dataset.id, 10), e.target.checked);
     });
-    $('lsBoard').addEventListener('change', function (e) {
-        if (!e.target.classList.contains('ls-card-chk')) return;
-        toggle(parseInt(e.target.closest('.ls-lead-card').dataset.id, 10), e.target.checked);
-    });
 
     $('lsClear').addEventListener('click', function () { selected = {}; render(); });
 
@@ -630,49 +551,7 @@
 
         if (act.dataset.act === 'view') window.location.href = act.dataset.url;
         if (act.dataset.act === 'message') window.location.href = act.dataset.url;
-        if (act.dataset.act === 'delete') confirmDelete(lead);
     });
-
-    /* ---------------- Delete with SweetAlert2 ---------------- */
-    function removeLead(lead) {
-        leads = leads.filter(function (l) { return l.id !== lead.id; });
-        delete selected[lead.id];
-        render();
-    }
-
-    function confirmDelete(lead) {
-        // Fallback if SweetAlert2 is not loaded by the layout
-        if (!window.Swal) {
-            if (window.confirm('Delete ' + lead.name + '?')) {
-                removeLead(lead);
-                toast(lead.name + ' deleted');
-            }
-            return;
-        }
-
-        Swal.fire({
-            title: 'Delete this lead?',
-            html: 'You are about to delete <b>' + esc(lead.name) + '</b>. This cannot be undone.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#c62828',
-            cancelButtonColor: '#6b7a90',
-            reverseButtons: true,
-            focusCancel: true
-        }).then(function (result) {
-            if (!result.isConfirmed) return;
-            removeLead(lead);
-            Swal.fire({
-                icon: 'success',
-                title: 'Deleted',
-                text: lead.name + ' was removed from leads.',
-                timer: 1600,
-                showConfirmButton: false
-            });
-        });
-    }
 
     function closeMenus() {
         document.querySelectorAll('.ls-menu.is-open').forEach(function (m) { m.classList.remove('is-open'); });
@@ -689,20 +568,6 @@
     $('lsSource').addEventListener('change', function () { state.source = this.value; state.page = 1; render(); });
     $('lsDate').addEventListener('change', function () { state.date = this.value; state.page = 1; render(); });
 
-    /* ---------------- List / Board toggle ---------------- */
-    function setView(view) {
-        state.view = view;
-        var isList = view === 'list';
-        $('lsList').style.display = isList ? '' : 'none';
-        $('lsBoard').style.display = isList ? 'none' : 'grid';
-        $('lsListBtn').classList.toggle('is-on', isList);
-        $('lsBoardBtn').classList.toggle('is-on', !isList);
-        $('lsListBtn').setAttribute('aria-pressed', String(isList));
-        $('lsBoardBtn').setAttribute('aria-pressed', String(!isList));
-    }
-    $('lsListBtn').addEventListener('click', function () { setView('list'); });
-    $('lsBoardBtn').addEventListener('click', function () { setView('board'); });
-
     /* ---------------- Import ---------------- */
     $('lsImportBtn').addEventListener('click', function () { $('lsImportFile').click(); });
     $('lsImportFile').addEventListener('change', function () {
@@ -712,7 +577,6 @@
     });
 
     /* ---------------- Init ---------------- */
-    setView('list');
     render();
 })();
 </script>

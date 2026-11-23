@@ -1,24 +1,42 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LeadController;
+use App\Models\Lead;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('admin.auth.login');
-});
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-});
-Route::get('/leads/index', function () {
-    return view('admin.leads.index');
-});
-Route::get('/leads/view', function () {
-    return view('admin.leads.view');
+    return redirect()->route('admin.login');
 });
 
-Route::get('/leadsimport/index', function () {
-    return view('admin.leadsimport.index');
+Route::middleware('guest')->group(function () {
+    Route::get('admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('admin/login', [AuthController::class, 'login'])->name('admin.login.submit');
 });
 
-Route::get('/sendmessage/index', function () {
-    return view('admin.sendmessage.index');
+Route::middleware('auth')->group(function () {
+    Route::post('admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::get('/leads/index', [LeadController::class, 'index'])->name('leads.index');
+
+    Route::get('/leads/view/{lead?}', function (?Lead $lead = null) {
+        $lead = $lead ?? Lead::query()->latest('id')->first();
+        if (! $lead) {
+            return redirect()->route('leads.index');
+        }
+
+        return view('admin.leads.view', compact('lead'));
+    })->name('leads.view');
+
+    Route::get('/leadsimport/index', function () {
+        return view('admin.leadsimport.index');
+    })->name('leadsimport.index');
+
+    Route::get('/sendmessage/index', function () {
+        return view('admin.sendmessage.index');
+    })->name('sendmessage.index');
 });

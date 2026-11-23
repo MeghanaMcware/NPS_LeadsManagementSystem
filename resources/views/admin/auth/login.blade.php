@@ -484,7 +484,7 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="" class="needs-validation" id="loginForm" novalidate>
+                        <form method="POST" action="{{ route('admin.login.submit') }}" class="needs-validation" id="loginForm" novalidate>
                             @csrf
 
                             {{-- Email --}}
