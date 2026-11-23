@@ -5,7 +5,7 @@ use App\Http\Controllers\LeadController;
 use App\Models\Lead;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/admin/login', function () {
     return redirect()->route('admin.login');
 });
 
@@ -40,3 +40,20 @@ Route::middleware('auth')->group(function () {
         return view('admin.sendmessage.index');
     })->name('sendmessage.index');
 });
+
+
+Route::get('/', function () {
+    return view('frontend.first');
+})->name('home');
+
+Route::get('/life-at-npskgl', function () {
+    return view('frontend.life_at_npskgl');
+})->name('life_at_npskgl');
+
+Route::get('/life_at_npskgl', function () {
+    return redirect()->route('life_at_npskgl');
+});
+
+Route::get('/activities', function () {
+    return view('frontend.activities');
+})->name('activities');
