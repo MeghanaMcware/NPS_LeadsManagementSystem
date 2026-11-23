@@ -16,7 +16,7 @@
     body {
       font-family: "Lato", Arial, sans-serif;
       color: var(--text);
-      overflow-x: hidden;
+      overflow-x: clip;
       font-size: 15px
     }
 

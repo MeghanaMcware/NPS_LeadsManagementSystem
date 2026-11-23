@@ -40,7 +40,6 @@
         * { box-sizing: border-box; }
         html {
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
 
         body {
@@ -50,7 +49,7 @@
             font-family: var(--nps-body);
             font-size: 15px;
             line-height: 1.6;
-            overflow-x: hidden;
+            overflow-x: clip;
             width: 100%;
         }
 
@@ -59,7 +58,7 @@
         .page-shell {
             min-height: 100vh;
             margin: 0 auto;
-            overflow-x: hidden;
+            overflow-x: clip;
             background: #fff;
             box-shadow: 0 0 30px rgba(0, 33, 71, 0.08);
         }
@@ -1050,7 +1049,7 @@
 
         @media (max-width: 767.98px) {
             .page-shell {
-                overflow-x: hidden;
+                overflow-x: clip;
             }
 
             .life-hero {
@@ -1293,7 +1292,7 @@
                                 Life at <span>NPS Kempegowda Layout</span>
                             </h1>
                             <p class="hero-lead">
-                                A dynamic campus culture where intellectual curiosity meets athletic passion, artistic expression, and enduring moral character. Experience how each day inspires our young learners to thrive.
+                                Guided by the founding vision of Chairman Dr. K. P. Gopalkrishna and Senior Principal Dr. Santhamma Gopalkrishna, life at NPS Kempegowda Layout is designed to bring out the best in children. Within our empowering, child-centric environment, academic rigour blends seamlessly with athletic agility, artistic expression, and enduring values to nurture versatile, future-ready global citizens.
                             </p>
                             <div class="hero-actions">
                                 <a href="{{ url('/#admission-enquiry-box') }}" class="btn-gold-action">
@@ -1388,9 +1387,9 @@
                             <div class="timeline-badge"><i data-lucide="sunrise" style="width:18px;height:18px;"></i></div>
                             <div class="timeline-card">
                                 
-                                <h3 class="timeline-title">Morning Assembly &amp; Mindful Awakening</h3>
+                                <h3 class="timeline-title">Morning Assembly &amp; Mindful Reflection</h3>
                                 <p class="timeline-desc">
-                                    The campus comes alive with solemn school anthems, student-led current affairs analyses, "Thought for the Day", and quiet mindfulness that aligns focus and values for the hours ahead.
+                                    The school day begins with the solemn school anthem, student-led thought for the day, news analyses, and mindful reflections that instill moral values, civic pride, and positive focus across the school community.
                                 </p>
                             </div>
                         </div>
@@ -1400,9 +1399,9 @@
                             <div class="timeline-badge"><i data-lucide="brain" style="width:18px;height:18px;"></i></div>
                             <div class="timeline-card">
                                 
-                                <h3 class="timeline-title">Inquiry-Driven Academic Mastery</h3>
+                                <h3 class="timeline-title">Inquiry-Driven Scholastic Learning</h3>
                                 <p class="timeline-desc">
-                                    Interactive smart classrooms ignite core concepts in Mathematics, Languages, and Social Sciences. Teachers guide collaborative problem-solving, making theoretical learning tangible and engaging.
+                                    Interactive smart classrooms bring the CBSE curriculum alive. Guided by caring faculty, students engage in 'learning by doing'—collaborative discussions, problem-solving, and concept-based mastery over rote memorization.
                                 </p>
                             </div>
                         </div>
@@ -1412,9 +1411,9 @@
                             <div class="timeline-badge"><i data-lucide="flask-conical" style="width:18px;height:18px;"></i></div>
                             <div class="timeline-card">
                                 
-                                <h3 class="timeline-title">Hands-On STEM, Robotics &amp; Laboratory Work</h3>
+                                <h3 class="timeline-title">Hands-On STEM, Robotics &amp; Experimental Labs</h3>
                                 <p class="timeline-desc">
-                                    Students transition from textbooks to discovery in composite physics, chemistry, biology, and robotics studios. They code algorithms, calibrate microscopes, and conduct real-world experiments.
+                                    Students step into dedicated physics, chemistry, biology, mathematics, and IT &amp; robotics studios to conduct experiments, explore algorithms, calibrate microscopes, and test theories empirically.
                                 </p>
                             </div>
                         </div>
@@ -1426,7 +1425,7 @@
                                
                                 <h3 class="timeline-title">Nutritious Dining &amp; Courtyard Camaraderie</h3>
                                 <p class="timeline-desc">
-                                    Wholesome, balanced meals enjoyed in our open-air courtyard cafeteria. A relaxed time for cross-grade friendships, cheerful banter, and developing healthy social etiquette.
+                                    Wholesome, hygienic meals enjoyed in our spacious courtyard cafeteria. A joyful time for informal socialization, cross-grade friendships, and developing healthy social etiquette.
                                 </p>
                             </div>
                         </div>
@@ -1438,7 +1437,7 @@
                               
                                 <h3 class="timeline-title">Performing Arts, Music &amp; Creative Studios</h3>
                                 <p class="timeline-desc">
-                                    Students unleash their creative potential across fine arts, sculpting, Indian and Western vocal music, keyboard, drums, and contemporary theatre expression.
+                                    Creative expression flourishes through vocal and instrumental music, classical Bharatanatyam, contemporary dance, theatrical expression, and visual fine arts.
                                 </p>
                             </div>
                         </div>
@@ -1447,10 +1446,10 @@
                         <div class="timeline-row">
                             <div class="timeline-badge"><i data-lucide="activity" style="width:18px;height:18px;"></i></div>
                             <div class="timeline-card">
-                               
+                                
                                 <h3 class="timeline-title">Athletic Agility, Sports &amp; Leadership Circles</h3>
                                 <p class="timeline-desc">
-                                    The day culminates on the sports courts—basketball matches, football agility, cricket net sessions, and track events—instilling sportsmanship, stamina, and team spirit.
+                                    The day culminates on our sports arenas—basketball drills, football agility, cricket net practice, and track events—instilling sportsmanship, physical stamina, and house camaraderie.
                                 </p>
                             </div>
                         </div>
@@ -1635,9 +1634,9 @@
                             <div class="col-md-4">
                                 <div class="feature-card">
                                     <div class="feature-icon-wrap red"><i data-lucide="heart-pulse"></i></div>
-                                    <h4 class="feature-title">Medical Bay &amp; Trained Nurse</h4>
+                                    <h4 class="feature-title">NPS Health Centre &amp; Nurse</h4>
                                     <p class="feature-text">
-                                        A hygienic, fully equipped first-aid infirmary with licensed nursing staff, routine health check-ups, and immediate emergency tie-ups with nearby hospitals.
+                                        A dedicated campus health center staffed with a qualified resident nurse to manage emergencies, provide immediate first-aid, promote health education, and prioritize student wellness.
                                     </p>
                                 </div>
                             </div>

@@ -49,7 +49,6 @@
         * { box-sizing: border-box; }
         html {
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
 
         body {
@@ -59,7 +58,7 @@
             font-family: var(--nps-body);
             font-size: 15px;
             line-height: 1.6;
-            overflow-x: hidden;
+            overflow-x: clip;
             width: 100%;
         }
 
@@ -68,7 +67,7 @@
         .page-shell {
             min-height: 100vh;
             margin: 0 auto;
-            overflow-x: hidden;
+            overflow-x: clip;
             background: #fff;
             box-shadow: 0 0 30px rgba(0, 33, 71, 0.08);
         }
@@ -1426,7 +1425,7 @@
 
         @media (max-width: 767.98px) {
             .page-shell {
-                overflow-x: hidden;
+                overflow-x: clip;
             }
             
             .activities-hero { 
@@ -1638,24 +1637,10 @@
                                 Activities at <span>NPS Kempegowda Layout</span>
                             </h1>
                             <p class="hero-lead">
-                                Education at NPS KGL thrives in motion, melody, scientific inquiry, and purposeful leadership. Explore our sports academies, vibrant cultural arts, cutting-edge STEM laboratories, and student-driven societies.
+                                Guided by the NPS philosophy of all-round holistic development, education at NPS Kempegowda Layout thrives in motion, melody, scientific inquiry, and purposeful leadership. We offer a vibrant spectrum of co-curricular clubs, championship sports arenas, cultural arts, and world-class STEM laboratories to help every child discover their strengths and excel.
                             </p>
 
-                            <!-- Quick Navigation Pills -->
-                            <div class="quick-nav-pills">
-                                <a href="#sports-section" class="quick-pill-btn">
-                                    <i data-lucide="trophy" style="width:16px;height:16px;"></i> Sports &amp; Athletics
-                                </a>
-                                <a href="#cultural-section" class="quick-pill-btn">
-                                    <i data-lucide="music" style="width:16px;height:16px;"></i> Cultural &amp; Fine Arts
-                                </a>
-                                <a href="#labs-section" class="quick-pill-btn">
-                                    <i data-lucide="microscope" style="width:16px;height:16px;"></i> Advanced Labs &amp; STEM
-                                </a>
-                                <a href="#clubs-section" class="quick-pill-btn">
-                                    <i data-lucide="users" style="width:16px;height:16px;"></i> Clubs &amp; Leadership
-                                </a>
-                            </div>
+                          
                         </div>
                     </div>
                 </div>
@@ -1710,7 +1695,7 @@
                                 </div>
                                 <div class="activity-card-body">
                                     <h3 class="activity-card-title">Co-curricular Activities</h3>
-                                    <p class="activity-card-desc">Enhance your learning beyond the classroom.</p>
+                                    <p class="activity-card-desc">Engage in student clubs, debate societies, and academic forums that deepen learning beyond the classroom.</p>
                                     <a href="#labs-section" class="activity-card-link">
                                         Know More <i data-lucide="arrow-right" class="arrow-icon"></i>
                                     </a>
@@ -1729,7 +1714,7 @@
                                 </div>
                                 <div class="activity-card-body">
                                     <h3 class="activity-card-title">Cultural Activities</h3>
-                                    <p class="activity-card-desc">Celebrate our traditions and showcase your talent.</p>
+                                    <p class="activity-card-desc">Celebrate vibrant traditions, theatrical expression, and festive assemblies honoring our cultural heritage.</p>
                                     <a href="#cultural-section" class="activity-card-link">
                                         Know More <i data-lucide="arrow-right" class="arrow-icon"></i>
                                     </a>
@@ -1748,7 +1733,7 @@
                                 </div>
                                 <div class="activity-card-body">
                                     <h3 class="activity-card-title">Sports and Games</h3>
-                                    <p class="activity-card-desc">Play, compete and stay fit.</p>
+                                    <p class="activity-card-desc">Develop agility, teamwork, and championship sportsmanship across basketball, football, cricket, and athletics.</p>
                                     <a href="#sports-section" class="activity-card-link">
                                         Know More <i data-lucide="arrow-right" class="arrow-icon"></i>
                                     </a>
@@ -1767,7 +1752,7 @@
                                 </div>
                                 <div class="activity-card-body">
                                     <h3 class="activity-card-title">Art, Music and Dance</h3>
-                                    <p class="activity-card-desc">Unleash your creativity.</p>
+                                    <p class="activity-card-desc">Unleash creativity through classical &amp; western vocal music, instruments, Bharatanatyam, and visual fine arts.</p>
                                     <a href="#cultural-section" class="activity-card-link">
                                         Know More <i data-lucide="arrow-right" class="arrow-icon"></i>
                                     </a>
@@ -1786,7 +1771,7 @@
                                 </div>
                                 <div class="activity-card-body">
                                     <h3 class="activity-card-title">Science and Innovation</h3>
-                                    <p class="activity-card-desc">Innovate. Experiment. Grow.</p>
+                                    <p class="activity-card-desc">Innovate, experiment, and discover in modern physics, chemistry, biology, math, and robotics laboratories.</p>
                                     <a href="#labs-section" class="activity-card-link">
                                         Know More <i data-lucide="arrow-right" class="arrow-icon"></i>
                                     </a>
@@ -1805,7 +1790,7 @@
                                 </div>
                                 <div class="activity-card-body">
                                     <h3 class="activity-card-title">Educational Trips and Excursions</h3>
-                                    <p class="activity-card-desc">Explore, Learn and Discover.</p>
+                                    <p class="activity-card-desc">Explore, learn, and discover through curated nature trails, planetarium visits, and experiential field trips.</p>
                                     <a href="#clubs-section" class="activity-card-link">
                                         Know More <i data-lucide="arrow-right" class="arrow-icon"></i>
                                     </a>
@@ -1824,7 +1809,7 @@
                                 </div>
                                 <div class="activity-card-body">
                                     <h3 class="activity-card-title">Events and Celebrations</h3>
-                                    <p class="activity-card-desc">Be a part of our joyful celebrations.</p>
+                                    <p class="activity-card-desc">Partake in joyful annual traditions, Sports Day (SPARDHA), Annual Day (AURA), and festive occasions.</p>
                                     <a href="#schedule-section" class="activity-card-link">
                                         Know More <i data-lucide="arrow-right" class="arrow-icon"></i>
                                     </a>
@@ -1845,7 +1830,7 @@
                                         </svg>
                                     </div>
                                     <h3 class="gallery-card-title">Activity Photo Gallery</h3>
-                                    <p class="gallery-card-desc">Relive the best moments at NPSKGL.</p>
+                                    <p class="gallery-card-desc">Relive the best moments and visual highlights at NPS Kempegowda Layout.</p>
                                     <a href="#gallery-section" class="btn-gallery-pill">
                                         View Gallery <i data-lucide="arrow-right" class="arrow-icon"></i>
                                     </a>

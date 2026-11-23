@@ -115,10 +115,30 @@
             });
         }
 
+        function initStickyHeader() {
+            const header = document.querySelector('.site-header');
+            if (!header) return;
+
+            function handleScroll() {
+                if (window.pageYOffset > 10 || document.documentElement.scrollTop > 10) {
+                    header.classList.add('is-scrolled');
+                } else {
+                    header.classList.remove('is-scrolled');
+                }
+            }
+
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            handleScroll();
+        }
+
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initMobileNav);
+            document.addEventListener('DOMContentLoaded', function() {
+                initMobileNav();
+                initStickyHeader();
+            });
         } else {
             initMobileNav();
+            initStickyHeader();
         }
     })();
 </script>

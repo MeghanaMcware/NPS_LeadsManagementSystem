@@ -29,7 +29,6 @@
 
         html {
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
 
         body {
@@ -39,7 +38,7 @@
             font-family: var(--nps-body);
             font-size: 14px;
             line-height: 1.5;
-            overflow-x: hidden;
+            overflow-x: clip;
             width: 100%;
         }
 
@@ -48,7 +47,7 @@
         .page-shell {
             min-height: 100vh;
             margin: 0 auto;
-            overflow-x: hidden;
+            overflow-x: clip;
             background: #fff;
             box-shadow: 0 0 26px rgb(0 33 71 / 8%);
         }
@@ -1175,7 +1174,7 @@
 
         @media (max-width: 767.98px) {
             .page-shell {
-                overflow-x: hidden;
+                overflow-x: clip;
                 width: 100%;
                 max-width: 100%;
             }
@@ -1673,11 +1672,11 @@
                 <div class="row g-3 align-items-center">
                     <div class="col-md-6">
                         <div class="about-copy">
-                            <div class="section-eyebrow">About</div>
+                            <div class="section-eyebrow">About Us</div>
                             <h2 class="section-heading">NPS Kempegowda Layout</h2>
                             <div class="heading-rule"></div>
-                            <p class="about-description">A progressive K-9 school that blends academic rigour with values, creativity and life skills, enabling every child to grow into a confident, compassionate and future-ready individual.</p>
-                            <a href="#campus-section" class="button-outline">Know More About Us <i data-lucide="arrow-right" class="icon icon-xs"></i></a>
+                            <p class="about-description">Part of the renowned National Public School network established in 1959 under the pioneering guidance of Founder Chairman Dr. K. P. Gopalkrishna and Senior Principal Dr. Santhamma Gopalkrishna. Established in collaboration with Chaitra Education Trust in Kempegowda Layout 7th Block, Bengaluru, NPS KGL delivers world-class education rooted in academic excellence, discipline, and ethical values. Within our child-centric environment, we empower students to discover their strengths, think independently, and grow into confident, compassionate global citizens.</p>
+                           
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -1698,7 +1697,7 @@
                                 <div class="feature-header">
                                     <h3 class="feature-title">Academic Excellence</h3>
                                     <div class="feature-accent"></div>
-                                    <p class="feature-description">A balanced, inquiry-driven curriculum that builds strong foundations, critical thinking and real-world readiness.</p>
+                                    <p class="feature-description">Rooted in the acclaimed NPS curriculum and aligned with CBSE, our pedagogy champions "learning by doing" over rote memorization—fostering conceptual depth, critical inquiry, and 21st-century competencies.</p>
                                 </div>
                                 <div class="mini-grid academic-grid">
                                     <div class="mini-item">
@@ -1742,7 +1741,7 @@
                                 <div class="feature-header">
                                     <h3 class="feature-title">Extra-Curricular Activities</h3>
                                     <div class="feature-accent"></div>
-                                    <p class="feature-description">A vibrant platform for students to explore talents, build confidence and develop life skills.</p>
+                                    <p class="feature-description">A vibrant co-scholastic ecosystem spanning sports championships, performing arts, robotics, student-led clubs, and leadership initiatives that build character, creativity, and teamwork.</p>
                                 </div>
                                 <div class="mini-grid activity-grid">
                                     <div class="mini-item">
@@ -1990,8 +1989,8 @@
                                     <span class="nps-facility-badge badge-col-12">12</span>
                                    
                                     <div class="nps-facility-text">
-                                        <div class="nps-facility-name">Utility &amp; Services</div>
-                                        <div class="nps-facility-sub">(Power, Water &amp; Facility Support)</div>
+                                        <div class="nps-facility-name">Health Centre &amp; Utilities</div>
+                                        <div class="nps-facility-sub">(Infirmary, Resident Nurse &amp; Facility Support)</div>
                                     </div>
                                 </div>
                             </div>
@@ -2015,11 +2014,11 @@
                                     </div>
                                 </div>
                                 <div id="eventsScroll" class="event-grid">
-                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/IMG-20261106-WA0113.jpg') }}" alt="Annual Day" class="event-image"></div><h4 class="event-title">Annual Day</h4><p class="event-description">A celebration of talent, creativity and teamwork.</p></article>
-                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/DSC_9445.jpg') }}" alt="Sports Meet" class="event-image"></div><h4 class="event-title">Sports Meet</h4><p class="event-description">Building fitness, discipline and sportsmanship.</p></article>
-                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/IMG_0447.jpg') }}" alt="Science Fair" class="event-image"></div><h4 class="event-title">Science & Innovation Fair</h4><p class="event-description">Showcasing curiosity and problem-solving.</p></article>
-                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/IMG-20261106-WA0013.jpg') }}" alt="Environment Week" class="event-image"></div><h4 class="event-title">Environment Week</h4><p class="event-description">Hands-on activities for a sustainable tomorrow.</p></article>
-                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/IMG-20261106-WA0125.jpg') }}" alt="Cultural Celebrations" class="event-image"></div><h4 class="event-title">National & Cultural Celebrations</h4><p class="event-description">Instilling pride, values and inclusivity.</p></article>
+                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/IMG-20261106-WA0113.jpg') }}" alt="Annual Day" class="event-image"></div><h4 class="event-title">Annual Day (AURA)</h4><p class="event-description">A grand celebration of performing arts, music, dance, and student talent.</p></article>
+                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/DSC_9445.jpg') }}" alt="Sports Meet" class="event-image"></div><h4 class="event-title">Sports Meet (SPARDHA)</h4><p class="event-description">Building athletic agility, discipline, teamwork, and sportsmanship.</p></article>
+                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/IMG_0447.jpg') }}" alt="Science Fair" class="event-image"></div><h4 class="event-title">Science Fair (ANVESHANA)</h4><p class="event-description">Showcasing student-led STEM experiments, prototypes, and scientific inquiry.</p></article>
+                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/IMG-20261106-WA0013.jpg') }}" alt="Environment Week" class="event-image"></div><h4 class="event-title">Environment Week</h4><p class="event-description">Eco-initiatives, green campaigns, and sustainability for a cleaner tomorrow.</p></article>
+                                    <article><div class="event-image-frame"><img src="{{ asset('images/NPS PFWEB/IMG-20261106-WA0125.jpg') }}" alt="Cultural Celebrations" class="event-image"></div><h4 class="event-title">National &amp; Cultural Celebrations</h4><p class="event-description">Celebrating unity, heritage, and values through Kannada Rajyotsava &amp; festive assemblies.</p></article>
                                 </div>
                             </section>
 
@@ -2028,11 +2027,11 @@
                                     <section class="content-panel h-100">
                                         <h3 class="panel-title mb-3">Admission Process</h3>
                                         <div class="process-row">
-                                            <div class="process-step"><span class="process-icon"><i data-lucide="file-text" class="icon"></i></span>Enquire<br>Online</div>
+                                            <div class="process-step"><span class="process-icon"><i data-lucide="file-text" class="icon"></i></span>Register<br>Online/Offline</div>
+                                            <i data-lucide="arrow-right" class="icon icon-sm process-arrow"></i>
+                                            <div class="process-step"><span class="process-icon"><i data-lucide="file-check" class="icon"></i></span>Document<br>Submission</div>
                                             <i data-lucide="arrow-right" class="icon icon-sm process-arrow"></i>
                                             <div class="process-step"><span class="process-icon"><i data-lucide="calendar" class="icon"></i></span>School<br>Interaction</div>
-                                            <i data-lucide="arrow-right" class="icon icon-sm process-arrow"></i>
-                                            <div class="process-step"><span class="process-icon"><i data-lucide="file-check" class="icon"></i></span>Application<br>Submission</div>
                                             <i data-lucide="arrow-right" class="icon icon-sm process-arrow"></i>
                                             <div class="process-step"><span class="process-icon is-complete"><i data-lucide="check-circle" class="icon"></i></span>Admission<br>Confirmation</div>
                                         </div>

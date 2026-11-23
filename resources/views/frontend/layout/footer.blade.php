@@ -15,20 +15,24 @@
                 <div class="footer-details">
                     <span class="footer-item">
                         <i data-lucide="map-pin" class="icon icon-sm" aria-hidden="true" style="width:16px;height:16px;flex:none;"></i>
-                        <span>Kempegowda Layout 7th Block, Bengaluru &#8211; 560 091, Karnataka</span>
+                        <span>7th Block, Sector 1, Bheemanakuppe, Kengeri Hobli, Bengaluru &#8211; 560 074, Karnataka</span>
                     </span>
-                    <a href="tel:+919964827788" class="footer-item">
+                    <a href="tel:+919964227788" class="footer-item">
                         <i data-lucide="phone" class="icon icon-sm" aria-hidden="true" style="width:16px;height:16px;flex:none;"></i>
-                        <span>+91 99648 27788</span>
+                        <span>+91 99642 27788 / +91 99646 42288</span>
                     </a>
-                    <a href="mailto:admissions@npskgl.com" class="footer-item">
+                    <a href="mailto:info@npskgl.com" class="footer-item">
                         <i data-lucide="mail" class="icon icon-sm" aria-hidden="true" style="width:16px;height:16px;flex:none;"></i>
-                        <span>admissions@npskgl.com</span>
+                        <span>info@npskgl.com / admissions@npskgl.com</span>
                     </a>
                     <a href="https://www.npskgl.com" target="_blank" rel="noopener noreferrer" class="footer-item">
                         <i data-lucide="globe" class="icon icon-sm" aria-hidden="true" style="width:16px;height:16px;flex:none;"></i>
                         <span>www.npskgl.com</span>
                     </a>
+                    <span class="footer-item">
+                        <i data-lucide="clock" class="icon icon-sm" aria-hidden="true" style="width:16px;height:16px;flex:none;"></i>
+                        <span>Office Hours: Mon &#8211; Fri: 8:00 AM &#8211; 4:00 PM | Sat: 8:00 AM &#8211; 2:00 PM</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -45,7 +49,7 @@
 </footer>
 
 <!-- ================= FLOATING WHATSAPP BUTTON ================= -->
-<a href="https://wa.me/919964827788?text=Hello%20National%20Public%20School%20KGL%2C%20I%20would%20like%20to%20enquire%20about%20admissions." 
+<a href="https://wa.me/919964227788?text=Hello%20National%20Public%20School%20KGL%2C%20I%20would%20like%20to%20enquire%20about%20admissions." 
    target="_blank" 
    rel="noopener noreferrer" 
    class="nps-floating-whatsapp" 
