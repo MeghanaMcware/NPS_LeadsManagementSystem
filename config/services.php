@@ -42,4 +42,11 @@ return [
         'source' => env('AISENSY_SOURCE', 'new-landing-page form'),
     ],
 
+    'brevo' => [
+        'api_key' => env('BREVO_API_KEY', ''),
+        'url' => env('BREVO_URL', 'https://api.brevo.com/v3/smtp/email'),
+        'sender_name' => env('BREVO_SENDER_NAME', 'National Public School - KGL'),
+        'sender_email' => env('BREVO_SENDER_EMAIL', 'admissions@npskgl.com'),
+    ],
+
 ];

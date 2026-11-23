@@ -2218,22 +2218,61 @@
                 return;
             }
 
-            if (window.Swal) {
-                await Swal.fire({
-                    title: 'Enquiry Submitted!',
-                    text: 'Thank you. Our admissions team will get in touch with you shortly.',
-                    icon: 'success',
-                    confirmButtonText: 'Done',
-                    confirmButtonColor: '#002d62',
-                    background: '#ffffff',
-                    color: '#002147',
-                });
-            } else {
-                window.alert('Thank you. Your enquiry has been validated.');
+            const submitBtn = enquiryForm.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
             }
 
-            enquiryForm.reset();
-            enquiryForm.classList.remove('was-validated');
+            try {
+                const formData = new FormData(enquiryForm);
+                const response = await fetch('{{ route("frontend.enquiry.submit") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Something went wrong. Please try again.');
+                }
+
+                if (window.Swal) {
+                    await Swal.fire({
+                        title: 'Enquiry Submitted!',
+                        text: 'Thank you. Our admissions team will get in touch with you shortly.',
+                        icon: 'success',
+                        confirmButtonText: 'Done',
+                        confirmButtonColor: '#002d62',
+                        background: '#ffffff',
+                        color: '#002147',
+                    });
+                } else {
+                    window.alert('Thank you. Our admissions team will get in touch with you shortly.');
+                }
+
+                enquiryForm.reset();
+                enquiryForm.classList.remove('was-validated');
+            } catch (err) {
+                if (window.Swal) {
+                    await Swal.fire({
+                        title: 'Submission Error',
+                        text: err.message || 'Could not submit your enquiry. Please check your information and try again.',
+                        icon: 'error',
+                        confirmButtonColor: '#002d62',
+                    });
+                } else {
+                    window.alert(err.message || 'Error submitting enquiry.');
+                }
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHtml;
+                }
+            }
         });
     </script>
 </body>
