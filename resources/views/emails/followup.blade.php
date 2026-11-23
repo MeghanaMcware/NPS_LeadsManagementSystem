@@ -7,7 +7,7 @@
 
     <p>Greetings from <strong>National Public School – Kempegowda Layout (NPS KGL)</strong>!</p>
 
-    <p>We are following up on your recent admission enquiry for <strong>{{ $studentName ?? $grade ?? 'your child' }}</strong>.</p>
+    <p>We are following up on your recent admission enquiry.</p>
 
     <p>We understand that choosing the right school is an important decision. Our Admissions Team would be delighted to assist you with information regarding the admission process, grade availability, school facilities, and campus visits.</p>
 

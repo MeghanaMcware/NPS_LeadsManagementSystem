@@ -25,20 +25,20 @@ class WhatsAppService
         'greeting' => [
             'campaign' => 'npskgl_welcome_greeting',
             'name' => 'Welcome Greeting – New Admission Enquiry',
-            'dynamic_variables' => ['Parent Name', 'Student Name'],
+            'dynamic_variables' => ['Parent Name', 'Grade'],
             'body' => "Hello {{1}}! 👋\n\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\n\nThank you for your interest in admissions at NPS KGL.\n\nWe have successfully received your admission enquiry for {{2}}.\n\nOur admission team will contact you shortly and guide you through the admission process.\n\nWe look forward to welcoming your child to NPS KGL!\n\nWarm regards,\nAdmissions Team\nNPS KGL",
         ],
         'followup' => [
             'campaign' => 'npskgl_followup_whatsapp',
             'name' => 'Follow-up Reminder – Admission Enquiry',
-            'dynamic_variables' => ['Parent Name', 'Student Name'],
-            'body' => "Dear {{1}},\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\nWe are following up on your admission enquiry for {{2}}.\nWe would be happy to assist you with the admission process and address any questions or concerns you may have.\nWould you like to connect with our Admissions Counsellor for further guidance?\nPlease reply to this message, and our team will be glad to assist you.\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout (NPS KGL)",
+            'dynamic_variables' => ['Parent Name'],
+            'body' => "Dear {{1}},\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\nWe are following up on your admission enquiry.\nWe would be happy to assist you with the admission process and address any questions or concerns you may have.\nWould you like to connect with our Admissions Counsellor for further guidance?\nPlease reply to this message, and our team will be glad to assist you.\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout (NPS KGL)",
         ],
         'appointment' => [
             'campaign' => 'npskgl_appointment_whatsapp',
             'name' => 'Appointment Confirmation – Campus Visit',
-            'dynamic_variables' => ['Parent Name', 'Student Name', 'Grade', 'Appointment Date', 'Appointment Time'],
-            'body' => "Dear {{1}},\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\nYour appointment for an admission enquiry regarding {{2}} has been successfully confirmed.\nAppointment Details:\n• Parent/Guardian Name: {{1}}\n• Student Name: {{2}}\n• Grade: {{3}}\n• Appointment Date: {{4}}\n• Appointment Time: {{5}}\n• Venue: NPS KGL Campus\nWe look forward to meeting you and assisting you with the admission process.\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout",
+            'dynamic_variables' => ['Parent Name', 'Appointment Date', 'Appointment Time'],
+            'body' => "Dear {{1}},\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\nYour appointment for an admission enquiry has been successfully confirmed.\nAppointment Details:\n\n• Appointment Date: {{2}}\n• Appointment Time: {{3}}\n• Venue: NPS KGL Campus\nWe look forward to meeting you and assisting you with the admission process.\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout",
         ],
         'thankyou' => [
             'campaign' => 'npskgl_thankyou_whatsapp',
@@ -128,49 +128,48 @@ class WhatsAppService
     /**
      * Send Welcome Greeting (npskgl_welcome_greeting).
      *
+     * Dynamic variables: {{1}} Parent Name, {{2}} Grade
+     *
      * @return array{success: bool, message: string, lead_message?: LeadMessage, error?: string}
      */
-    public function sendGreeting(Lead $lead, ?string $studentName = null): array
+    public function sendGreeting(Lead $lead, ?string $grade = null): array
     {
         $parentName = $lead->name ?: 'Parent';
-        $childName = $studentName ?: ($lead->interested_in ? 'Admission in '.$lead->interested_in : 'your child');
+        $admissionGrade = $grade ?: ($lead->interested_in ?: 'your chosen grade');
 
-        return $this->send($lead, 'greeting', [$parentName, $childName]);
+        return $this->send($lead, 'greeting', [$parentName, $admissionGrade]);
     }
 
     /**
      * Send Follow-up Reminder (npskgl_followup_whatsapp).
      *
+     * Dynamic variables: {{1}} Parent Name
+     *
      * @return array{success: bool, message: string, lead_message?: LeadMessage, error?: string}
      */
-    public function sendFollowup(Lead $lead, ?string $studentName = null): array
+    public function sendFollowup(Lead $lead): array
     {
         $parentName = $lead->name ?: 'Parent';
-        $childName = $studentName ?: ($lead->interested_in ? 'Admission in '.$lead->interested_in : 'your child');
 
-        return $this->send($lead, 'followup', [$parentName, $childName]);
+        return $this->send($lead, 'followup', [$parentName]);
     }
 
     /**
      * Send Appointment Confirmation (npskgl_appointment_whatsapp).
      *
+     * Dynamic variables: {{1}} Parent Name, {{2}} Appointment Date, {{3}} Appointment Time
+     *
      * @return array{success: bool, message: string, lead_message?: LeadMessage, error?: string}
      */
     public function sendAppointment(
         Lead $lead,
-        ?string $studentName,
-        ?string $grade,
         string $date,
         string $time
     ): array {
         $parentName = $lead->name ?: 'Parent';
-        $childName = $studentName ?: 'your child';
-        $admissionGrade = $grade ?: ($lead->interested_in ?: 'Grade');
 
         return $this->send($lead, 'appointment', [
             $parentName,
-            $childName,
-            $admissionGrade,
             $date,
             $time,
         ]);

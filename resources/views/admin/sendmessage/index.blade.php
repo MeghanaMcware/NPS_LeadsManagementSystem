@@ -54,6 +54,7 @@
     .sm-btn-block { width: 100%; height: 48px; }
 
     /* Selected leads */
+    .sm-lead-scroll { max-height: 290px; overflow-y: auto; padding-right: 4px; }
     .sm-lead {
         display: flex; align-items: center; gap: 14px;
         background: var(--sm-soft); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
@@ -73,11 +74,14 @@
     .sm-empty { padding: 22px 12px; text-align: center; font-size: 13.5px; color: var(--sm-muted); background: var(--sm-soft); border-radius: 12px; }
 
     /* Send via */
-    .sm-via { display: flex; flex-wrap: wrap; gap: 10px; }
+    .sm-via { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .sm-via button {
-        flex: 1 1 90px; height: 44px; border: 1px solid var(--sm-line); background: #fff; color: var(--sm-ink);
-        border-radius: 10px; font-size: 14px; cursor: pointer;
+        height: 44px; border: 1px solid var(--sm-line); background: #fff; color: var(--sm-ink);
+        border-radius: 10px; font-size: 13.5px; font-weight: 600; cursor: pointer;
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        padding: 0 6px; transition: all .15s ease;
     }
+    .sm-via button:hover:not(.is-on) { background: #f8fafc; border-color: #cbd5e1; }
     .sm-via button.is-on { background: var(--sm-tint); border-color: var(--sm-link); color: var(--sm-link); font-weight: 700; }
 
     /* Template column */
@@ -154,7 +158,7 @@
 
     /* Toast */
     .sm-toast {
-        position: fixed; right: 20px; bottom: 20px; z-index: 2100; max-width: 320px;
+        position: fixed; right: 20px; bottom: 20px; z-index: 2100; max-width: 340px;
         background: var(--sm-ink); color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 14px;
         opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s; pointer-events: none;
     }
@@ -176,7 +180,8 @@
                 </div>
                 <div class="col-12 col-sm-6">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href=""><i class="bi bi-house"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="bi bi-house"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('leads.index') }}">Leads</a></li>
                         <li class="breadcrumb-item active">Send Message</li>
                     </ol>
                 </div>
@@ -198,21 +203,21 @@
             {{-- ============ 1. SELECTED LEADS ============ --}}
             <section class="sm-card" aria-labelledby="smLeadsTitle">
                 <div class="sm-head">
-                    <h5 class="sm-title" id="smLeadsTitle">1. Selected leads (<span id="smCount">3</span>)</h5>
+                    <h5 class="sm-title" id="smLeadsTitle">1. Selected leads (<span id="smCount">0</span>)</h5>
                     <button type="button" class="sm-btn sm-btn-sm" id="smAddMore">+ Add more</button>
                 </div>
 
-                <div id="smLeadList"></div>
+                <div class="sm-lead-scroll" id="smLeadList"></div>
 
                 <h6 class="sm-label">Send via</h6>
                 <div class="sm-via" id="smVia" role="radiogroup" aria-label="Send via">
-                    <button type="button" class="is-on" role="radio" aria-checked="true" data-ch="WhatsApp">WhatsApp</button>
-                    <button type="button" role="radio" aria-checked="false" data-ch="SMS">SMS</button>
-                    <button type="button" role="radio" aria-checked="false" data-ch="Email">Email</button>
+                    <button type="button" class="is-on" role="radio" aria-checked="true" data-ch="WhatsApp"><i class="bi bi-whatsapp"></i> WhatsApp</button>
+                    <button type="button" role="radio" aria-checked="false" data-ch="SMS"><i class="bi bi-chat-dots"></i> SMS</button>
+                    <button type="button" role="radio" aria-checked="false" data-ch="Email"><i class="bi bi-envelope"></i> Email</button>
                 </div>
             </section>
 
-            {{-- ============ 2. CHOOSE TEMPLATE (changes with "Send via") ============ --}}
+            {{-- ============ 2. CHOOSE TEMPLATE ============ --}}
             <section class="sm-card" aria-labelledby="smTplTitle">
                 <h5 class="sm-title" id="smTplTitle" style="margin-bottom:16px;">2. Choose template</h5>
 
@@ -221,8 +226,27 @@
                 <div class="sm-cap" id="smTplCap">WhatsApp templates</div>
                 <div class="sm-tpls" id="smTpls" role="radiogroup" aria-label="Templates"></div>
 
+                {{-- Appointment Date & Time Picker (visible when Appointment Confirm is chosen) --}}
+                <div id="smApptBox" style="display: none; margin-top: 16px; padding: 14px 16px; background: var(--sm-soft); border-radius: 12px; border: 1px solid var(--sm-line);">
+                    <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--sm-blue); display: flex; align-items: center; gap: 6px;">
+                        <i class="bi bi-calendar-event"></i> Campus Visit Appointment Details
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-7">
+                            <label for="smApptDate" style="font-size: 11.5px; font-weight: 600; color: var(--sm-muted); margin-bottom: 3px; display: block;">Visit Date</label>
+                            <input type="date" id="smApptDate" class="form-control form-control-sm" style="border-radius: 8px;">
+                        </div>
+                        <div class="col-5">
+                            <label for="smApptTime" style="font-size: 11.5px; font-weight: 600; color: var(--sm-muted); margin-bottom: 3px; display: block;">Visit Time</label>
+                            <input type="time" id="smApptTime" class="form-control form-control-sm" value="10:30" style="border-radius: 8px;">
+                        </div>
+                    </div>
+                    <small style="display: block; font-size: 11px; color: var(--sm-muted); margin-top: 6px;">
+                        These values automatically populate the template preview and variables sent to parents.
+                    </small>
+                </div>
 
-                <button type="button" class="sm-btn sm-btn-block sm-edit" id="smEdit">Edit templates</button>
+                <a href="{{ route('leads.index') }}" class="sm-btn sm-btn-block sm-edit text-center text-decoration-none d-flex align-items-center justify-content-center" id="smEdit">Back to Leads</a>
             </section>
 
             {{-- ============ 3. PREVIEW + ACTION BUTTONS ============ --}}
@@ -230,13 +254,13 @@
                 <section class="sm-card sm-preview" id="smPreviewCard" data-ch="WhatsApp" aria-labelledby="smPrevTitle">
                     <h5 class="sm-title" id="smPrevTitle">3. Preview</h5>
                     <div class="sm-phone">
-                        <div class="sm-phone-bar" id="smPhoneBar">NPS Digital</div>
+                        <div class="sm-phone-bar" id="smPhoneBar">NPS KGL WhatsApp</div>
                         <div class="sm-bubble" id="smBubble"></div>
                     </div>
                 </section>
 
                 <div class="sm-card sm-actions">
-                    <button type="button" class="sm-btn sm-btn-primary" id="smSend">Send to 3 leads now</button>
+                    <button type="button" class="sm-btn sm-btn-primary" id="smSend">Send now</button>
                     <button type="button" class="sm-btn sm-btn-block" id="smSchedule">Schedule for later</button>
                     <p class="sm-actions-note" id="smActionNote"></p>
                 </div>
@@ -248,8 +272,14 @@
 {{-- Add more leads dialog --}}
 <div class="sm-overlay" id="smAddOverlay" aria-hidden="true">
     <div class="sm-dialog" role="dialog" aria-modal="true" aria-labelledby="smAddTitle">
-        <h5 id="smAddTitle">Add more leads</h5>
-        <p class="sm-sub">Pick the leads you want to message.</p>
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            <h5 id="smAddTitle" class="m-0">Add more leads</h5>
+            <span class="badge bg-light text-dark" id="smPoolCount">0 available</span>
+        </div>
+        <p class="sm-sub">Pick from registered leads to include in this broadcast.</p>
+        <div class="mb-3">
+            <input type="text" id="smSearchLead" class="form-control" placeholder="Search by name, mobile, or grade..." style="height:42px; border-radius:10px; font-size:13.5px;">
+        </div>
         <div class="sm-pick" id="smPick"></div>
         <div class="sm-foot">
             <button type="button" class="sm-btn sm-btn-sm" id="smAddCancel">Cancel</button>
@@ -287,112 +317,174 @@
 (function () {
     'use strict';
 
-    /* ---------------- Static data ---------------- */
-    var leads = [
-        { id: 1, name: 'Rahul Verma',  phone: '+91 98450 11223', on: true  },
-        { id: 2, name: 'Anita Desai',  phone: '+91 99001 55678', on: true  },
-        { id: 3, name: 'Mohan Kumar',  phone: '+91 96321 88470', on: true  },
-        { id: 4, name: 'Sneha Iyer',   phone: '+91 98860 77123', on: false },
-        { id: 5, name: 'Karthik R',    phone: '+91 97420 33410', on: false },
-        { id: 6, name: 'Divya Nair',   phone: '+91 90350 66412', on: false },
-        { id: 7, name: 'Suresh Babu',  phone: '+91 99720 18854', on: false },
-        { id: 8, name: 'Lakshmi Rao',  phone: '+91 98450 90017', on: false },
-        { id: 9, name: 'Imran Pasha',  phone: '+91 96320 44705', on: false }
-    ];
+    @php
+        $jsLeads = $leads->map(function ($l) use ($selectedIds) {
+            return [
+                'id' => $l->id,
+                'name' => $l->parent_name ?: 'Lead #' . $l->id,
+                'phone' => $l->mobile_number ?: 'N/A',
+                'email' => $l->email ?: 'N/A',
+                'grade' => $l->grade_applying_for ?: 'Grade 1',
+                'on' => in_array($l->id, $selectedIds, true),
+            ];
+        })->values();
+    @endphp
 
-    // Templates for each "Send via" channel. Email templates also have a subject.
-    var templates = {
-        WhatsApp: [
-            { name: 'Welcome Greeting',    body: 'Hi {name},\nThank you for your interest in NPS Digital! I\'m {owner}.\nHow can I help you today?\n\n- Team NPS' },
-            { name: 'Follow-up Reminder',  body: 'Hi {name},\nJust checking in about the {course} course. Would you like to talk this week?\n\n- {owner}, Team NPS' },
-            { name: 'Appointment Confirm', body: 'Hi {name},\nYour counselling session is confirmed. Reply YES to confirm or RESCHEDULE to change the time.\n\n- {owner}, Team NPS' },
-            { name: 'Thank You',           body: 'Hi {name},\nThank you for connecting with NPS Digital. We are happy to help you with {course}.\n\n- Team NPS' },
-            { name: 'Offer / Promotion',   body: 'Hi {name},\nGood news! Enrol in {course} this month and get a special discount.\nReply to this message to know more.\n\n- {owner}, Team NPS' }
-        ],
-        SMS: [
-            { name: 'Welcome Greeting',    body: 'Hi {name}, thanks for your interest in NPS Digital. I\'m {owner}. Call us on {phone} anytime.' },
-            { name: 'Follow-up Reminder',  body: 'Hi {name}, a quick reminder about the {course} course. Reply YES and {owner} will call you.' },
-            { name: 'Appointment Confirm', body: 'Hi {name}, your session with {owner} is confirmed. Reply 1 to confirm, 2 to reschedule.' },
-            { name: 'Offer / Promotion',   body: 'NPS Digital: {name}, enrol in {course} this month and save more. Call {owner} for details.' }
-        ],
-        Email: [
-            { name: 'Welcome Email',      subject: 'Welcome to NPS Digital, {name}', body: 'Hi {name},\n\nThank you for your interest in NPS Digital. I\'m {owner} and I will be your point of contact.\n\nPlease reply to this email or call us if you have any questions about {course}.\n\nRegards,\nTeam NPS' },
-            { name: 'Course Details',     subject: 'Details about {course}',         body: 'Hi {name},\n\nAs discussed, here are the details of the {course} course: syllabus, duration and fees.\n\nLet me know a good time to talk.\n\nRegards,\n{owner}, Team NPS' },
-            { name: 'Follow-up Reminder', subject: 'Following up, {name}',           body: 'Hi {name},\n\nI wanted to follow up on your enquiry about {course}. Are you still interested?\n\nRegards,\n{owner}, Team NPS' },
-            { name: 'Thank You',          subject: 'Thank you, {name}',              body: 'Hi {name},\n\nThank you for choosing NPS Digital. We look forward to helping you with {course}.\n\nRegards,\nTeam NPS' },
-            { name: 'Offer / Promotion',  subject: 'A special offer on {course}',    body: 'Hi {name},\n\nEnrol in {course} this month and get a special discount.\n\nReply to this email to claim it.\n\nRegards,\n{owner}, Team NPS' }
-        ]
+    var leads = @json($jsLeads);
+    var templates = @json($templates);
+    var dispatchUrl = "{{ route('messages.send.dispatch') }}";
+    var csrfToken = "{{ csrf_token() }}";
+
+    var barTitle = {
+        WhatsApp: 'NPS KGL WhatsApp',
+        SMS: 'NPS KGL SMS',
+        Email: 'NPS KGL Email'
     };
 
-    var barTitle = { WhatsApp: 'NPS Digital', SMS: 'Messages', Email: 'New email' };
-    var sample = { owner: 'Priya', course: 'Digital Marketing' };
-
-    // WhatsApp is the default channel; first template is selected by default
-    var state = { channel: 'WhatsApp', template: templates.WhatsApp[0].name, sent: false };
+    // State: WhatsApp is default channel, greeting is default template
+    var state = {
+        channel: 'WhatsApp',
+        templateKey: (templates.WhatsApp && templates.WhatsApp[0]) ? templates.WhatsApp[0].key : 'greeting',
+        sent: false
+    };
 
     var $ = function (id) { return document.getElementById(id); };
+
     function esc(s) {
-        return String(s).replace(/[&<>"']/g, function (c) {
+        return String(s || '').replace(/[&<>"']/g, function (c) {
             return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
         });
     }
-    function selected() { return leads.filter(function (l) { return l.on; }); }
-    function currentList() { return templates[state.channel]; }
+
+    function selected() {
+        return leads.filter(function (l) { return l.on; });
+    }
+
+    function currentList() {
+        return templates[state.channel] || [];
+    }
+
     function currentTemplate() {
         var list = currentList();
-        for (var i = 0; i < list.length; i++) { if (list[i].name === state.template) return list[i]; }
-        return list[0];
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].key === state.templateKey) return list[i];
+        }
+        return list[0] || { key: 'greeting', name: 'Welcome Greeting', body: '' };
     }
 
     var toastTimer;
     function toast(msg) {
         var t = $('smToast');
+        if (!t) return;
         t.textContent = msg;
         t.classList.add('is-show');
         clearTimeout(toastTimer);
         toastTimer = setTimeout(function () { t.classList.remove('is-show'); }, 2800);
     }
-    // SweetAlert2 if the layout loads it, otherwise a toast
-    function notify(title, text) {
-        if (window.Swal) Swal.fire({ icon: 'success', title: title, text: text, confirmButtonColor: '#021b45' });
-        else toast(title + ' - ' + text);
+
+    function notify(title, text, icon) {
+        if (window.Swal) {
+            Swal.fire({
+                icon: icon || 'success',
+                title: title,
+                text: text,
+                confirmButtonColor: '#021b45'
+            });
+        } else {
+            toast(title + ' - ' + text);
+        }
     }
 
-    /* ---------------- Render: template column (depends on channel) ---------------- */
+    function pad(x) { return (x < 10 ? '0' : '') + x; }
+
+    var apptDateInput = $('smApptDate');
+    var apptTimeInput = $('smApptTime');
+    if (apptDateInput) {
+        var defaultApptDate = new Date();
+        defaultApptDate.setDate(defaultApptDate.getDate() + 2);
+        apptDateInput.value = defaultApptDate.getFullYear() + '-' + pad(defaultApptDate.getMonth() + 1) + '-' + pad(defaultApptDate.getDate());
+        apptDateInput.min = (new Date()).toISOString().split('T')[0];
+        apptDateInput.addEventListener('input', function () { renderPreview(); });
+    }
+    if (apptTimeInput) {
+        apptTimeInput.addEventListener('input', function () { renderPreview(); });
+    }
+
+    function getFormattedAppointment() {
+        var rawDate = apptDateInput ? apptDateInput.value : '';
+        var rawTime = apptTimeInput ? apptTimeInput.value : '10:30';
+
+        var formattedDate = '28 Nov 2026';
+        if (rawDate) {
+            var parts = rawDate.split('-');
+            if (parts.length === 3) {
+                var dObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                formattedDate = pad(dObj.getDate()) + ' ' + months[dObj.getMonth()] + ' ' + dObj.getFullYear();
+            }
+        }
+
+        var formattedTime = '10:30 AM';
+        if (rawTime) {
+            var tParts = rawTime.split(':');
+            var hours = parseInt(tParts[0], 10);
+            var mins = tParts[1] || '00';
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            var h12 = hours % 12;
+            if (h12 === 0) h12 = 12;
+            formattedTime = (h12 < 10 ? '0' + h12 : h12) + ':' + mins + ' ' + ampm;
+        }
+
+        return { date: formattedDate, time: formattedTime };
+    }
+
+    /* ---------------- Render: template column ---------------- */
     function renderTemplates() {
         var list = currentList();
-
         $('smTplCap').textContent = state.channel + ' templates';
 
         $('smTplSelect').innerHTML = list.map(function (t) {
-            return '<option value="' + esc(t.name) + '"' + (t.name === state.template ? ' selected' : '') + '>' + esc(t.name) + '</option>';
+            return '<option value="' + esc(t.key) + '"' + (t.key === state.templateKey ? ' selected' : '') + '>' + esc(t.name) + '</option>';
         }).join('');
 
         $('smTpls').innerHTML = list.map(function (t) {
-            var on = t.name === state.template;
+            var on = t.key === state.templateKey;
             return '<button type="button" class="sm-tpl' + (on ? ' is-on' : '') + '" role="radio" aria-checked="' + on +
-                '" data-name="' + esc(t.name) + '">' + esc(t.name) + '</button>';
+                '" data-key="' + esc(t.key) + '">' + esc(t.name) + '</button>';
         }).join('');
+
+        var apptBox = $('smApptBox');
+        if (apptBox) {
+            apptBox.style.display = (state.templateKey === 'appointment') ? 'block' : 'none';
+        }
     }
 
-    /* ---------------- Render: preview (depends on channel + template + first lead) ---------------- */
+    /* ---------------- Render: preview ---------------- */
     function fill(text, lead) {
-        var name = lead ? lead.name.split(' ')[0] : 'Rahul';
-        var phone = lead ? lead.phone : '+91 98450 11223';
+        if (!text) return '';
+        var name = lead && lead.name ? lead.name : 'Parent';
+        var phone = lead && lead.phone ? lead.phone : '+91 99648 27788';
+        var grade = lead && lead.grade ? lead.grade : 'Grade 1';
+        var appt = getFormattedAppointment();
+        var academicYear = '2026-2027';
+
         return text
             .replace(/\{name\}/g, name)
             .replace(/\{phone\}/g, phone)
-            .replace(/\{owner\}/g, sample.owner)
-            .replace(/\{course\}/g, sample.course);
+            .replace(/\{grade\}/g, grade)
+            .replace(/\{visit_date\}/g, appt.date)
+            .replace(/\{visit_time\}/g, appt.time)
+            .replace(/\{academic_year\}/g, academicYear);
     }
+
     function renderPreview() {
         var t = currentTemplate();
-        var lead = selected()[0];
+        var lead = selected()[0] || (leads.length ? leads[0] : null);
         var d = new Date();
         var time = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
 
         $('smPreviewCard').setAttribute('data-ch', state.channel);
-        $('smPhoneBar').textContent = barTitle[state.channel];
+        $('smPhoneBar').textContent = barTitle[state.channel] || 'Preview';
 
         var html = '';
         if (state.channel === 'Email' && t.subject) {
@@ -403,71 +495,109 @@
         $('smBubble').innerHTML = html;
     }
 
-    /* ---------------- Render: leads + buttons + stepper ---------------- */
+    /* ---------------- Render: leads list & buttons ---------------- */
     function render() {
         var sel = selected();
         var n = sel.length;
 
         $('smCount').textContent = n;
         $('smLeadList').innerHTML = n ? sel.map(function (l) {
+            var initial = (l.name || 'L').trim().charAt(0).toUpperCase();
             return '<div class="sm-lead" data-id="' + l.id + '">' +
-                '<span class="sm-avatar" aria-hidden="true">' + esc(l.name.charAt(0)) + '</span>' +
-                '<div class="sm-lead-info"><strong>' + esc(l.name) + '</strong><small>' + esc(l.phone) + '</small></div>' +
-                '<button type="button" class="sm-remove" aria-label="Remove ' + esc(l.name) + '">x</button></div>';
-        }).join('') : '<div class="sm-empty">No leads selected. Use "Add more" to pick leads.</div>';
+                '<span class="sm-avatar" aria-hidden="true">' + esc(initial) + '</span>' +
+                '<div class="sm-lead-info"><strong>' + esc(l.name) + '</strong><small>' + esc(l.phone) + (l.grade ? ' • ' + esc(l.grade) : '') + '</small></div>' +
+                '<button type="button" class="sm-remove" aria-label="Remove ' + esc(l.name) + '">&times;</button></div>';
+        }).join('') : '<div class="sm-empty">No leads selected. Click "+ Add more" to select leads.</div>';
 
         var send = $('smSend');
         send.disabled = n === 0;
         send.textContent = n === 0 ? 'Select leads to send' : 'Send to ' + n + (n === 1 ? ' lead now' : ' leads now');
         $('smSchedule').disabled = n === 0;
-        $('smActionNote').textContent = n ? 'Via ' + state.channel + ' - ' + state.template : '';
 
-        // stepper: 1 = leads picked, 2 = template chosen, 3 = after send / schedule
-        var s1 = n > 0, s2 = s1 && !!state.template, s3 = s2 && state.sent;
+        var t = currentTemplate();
+        $('smActionNote').textContent = n ? 'Via ' + state.channel + ' — ' + t.name : '';
+
+        // Stepper: 1 = leads selected, 2 = template chosen, 3 = dispatched
+        var s1 = n > 0, s2 = s1 && !!state.templateKey, s3 = s2 && state.sent;
         [s1, s2, s3].forEach(function (on, i) {
-            document.querySelector('#smSteps [data-step="' + (i + 1) + '"]').classList.toggle('is-on', on);
+            var el = document.querySelector('#smSteps [data-step="' + (i + 1) + '"]');
+            if (el) el.classList.toggle('is-on', on);
         });
 
         renderPreview();
     }
 
+    // Remove lead from selected list
     $('smLeadList').addEventListener('click', function (e) {
         var btn = e.target.closest('.sm-remove');
         if (!btn) return;
-        var id = parseInt(btn.closest('.sm-lead').dataset.id, 10);
+        var leadEl = btn.closest('.sm-lead');
+        if (!leadEl) return;
+        var id = parseInt(leadEl.dataset.id, 10);
         leads.forEach(function (l) { if (l.id === id) l.on = false; });
         state.sent = false;
         render();
     });
 
-    /* ---------------- Add more dialog ---------------- */
+    /* ---------------- Add more leads dialog ---------------- */
     function openOverlay(el) { el.classList.add('is-open'); el.setAttribute('aria-hidden', 'false'); }
     function closeOverlay(el) { el.classList.remove('is-open'); el.setAttribute('aria-hidden', 'true'); }
     var addOv = $('smAddOverlay'), schedOv = $('smSchedOverlay');
 
-    $('smAddMore').addEventListener('click', function () {
+    function renderPicker(filterText) {
         var pool = leads.filter(function (l) { return !l.on; });
+        if (filterText) {
+            var q = filterText.toLowerCase();
+            pool = pool.filter(function (l) {
+                return (l.name && l.name.toLowerCase().indexOf(q) !== -1) ||
+                       (l.phone && l.phone.toLowerCase().indexOf(q) !== -1) ||
+                       (l.grade && l.grade.toLowerCase().indexOf(q) !== -1);
+            });
+        }
+
+        $('smPoolCount').textContent = pool.length + ' available';
+
         $('smPick').innerHTML = pool.length ? pool.map(function (l) {
             return '<label><input type="checkbox" value="' + l.id + '"> <span class="sm-lead-info"><strong>' +
-                esc(l.name) + '</strong><small>' + esc(l.phone) + '</small></span></label>';
-        }).join('') : '<div class="sm-empty">All leads are already selected.</div>';
+                esc(l.name) + '</strong><small>' + esc(l.phone) + (l.grade ? ' • ' + esc(l.grade) : '') + '</small></span></label>';
+        }).join('') : '<div class="sm-empty">' + (leads.every(function (l) { return l.on; }) ? 'All leads are already selected.' : 'No matching leads found.') + '</div>';
+    }
+
+    $('smAddMore').addEventListener('click', function () {
+        var searchInput = $('smSearchLead');
+        if (searchInput) searchInput.value = '';
+        renderPicker('');
         openOverlay(addOv);
     });
-    $('smAddCancel').addEventListener('click', function () { closeOverlay(addOv); });
-    $('smAddConfirm').addEventListener('click', function () {
-        var ids = Array.prototype.map.call($('smPick').querySelectorAll('input:checked'), function (c) { return parseInt(c.value, 10); });
-        leads.forEach(function (l) { if (ids.indexOf(l.id) !== -1) l.on = true; });
-        closeOverlay(addOv);
-        if (ids.length) { state.sent = false; render(); toast(ids.length + (ids.length === 1 ? ' lead added' : ' leads added')); }
+
+    $('smSearchLead').addEventListener('input', function () {
+        renderPicker(this.value.trim());
     });
 
-    /* ---------------- Send via: switches the template list ---------------- */
+    $('smAddCancel').addEventListener('click', function () { closeOverlay(addOv); });
+    $('smAddConfirm').addEventListener('click', function () {
+        var ids = Array.prototype.map.call($('smPick').querySelectorAll('input:checked'), function (c) {
+            return parseInt(c.value, 10);
+        });
+        leads.forEach(function (l) {
+            if (ids.indexOf(l.id) !== -1) l.on = true;
+        });
+        closeOverlay(addOv);
+        if (ids.length) {
+            state.sent = false;
+            render();
+            toast(ids.length + (ids.length === 1 ? ' lead added' : ' leads added'));
+        }
+    });
+
+    /* ---------------- Channel switcher (WhatsApp / SMS / Email) ---------------- */
     $('smVia').addEventListener('click', function (e) {
         var b = e.target.closest('button[data-ch]');
         if (!b || b.dataset.ch === state.channel) return;
 
         state.channel = b.dataset.ch;
-        state.template = currentList()[0].name;   // reset to first template of this channel
+        var list = currentList();
+        state.templateKey = list.length ? list[0].key : 'greeting';
         state.sent = false;
 
         this.querySelectorAll('button').forEach(function (x) {
@@ -480,38 +610,89 @@
         render();
     });
 
-    /* ---------------- Templates (dropdown + list stay in sync) ---------------- */
-    function setTemplate(name) {
-        state.template = name;
+    /* ---------------- Template selection ---------------- */
+    function setTemplate(key) {
+        state.templateKey = key;
         state.sent = false;
-        $('smTplSelect').value = name;
+        $('smTplSelect').value = key;
         document.querySelectorAll('#smTpls .sm-tpl').forEach(function (b) {
-            var on = b.dataset.name === name;
+            var on = b.dataset.key === key;
             b.classList.toggle('is-on', on);
             b.setAttribute('aria-checked', String(on));
         });
+        var apptBox = $('smApptBox');
+        if (apptBox) {
+            apptBox.style.display = (key === 'appointment') ? 'block' : 'none';
+        }
         render();
     }
+
     $('smTpls').addEventListener('click', function (e) {
         var b = e.target.closest('.sm-tpl');
-        if (b) setTemplate(b.dataset.name);
+        if (b && b.dataset.key) setTemplate(b.dataset.key);
     });
-    $('smTplSelect').addEventListener('change', function () { setTemplate(this.value); });
 
-    $('smEdit').addEventListener('click', function () { toast('Template editor opens here'); });
+    $('smTplSelect').addEventListener('change', function () {
+        setTemplate(this.value);
+    });
 
-    /* ---------------- Send now ---------------- */
+    /* ---------------- Real API Dispatch: Send now ---------------- */
     $('smSend').addEventListener('click', function () {
-        var btn = this, n = selected().length;
-        if (!n) return;
+        var btn = this;
+        var sel = selected();
+        var n = sel.length;
+        if (!n) {
+            toast('Please select at least one lead.');
+            return;
+        }
+
+        var leadIds = sel.map(function (l) { return l.id; });
+        var tpl = currentTemplate();
+        var appt = getFormattedAppointment();
+
         btn.disabled = true;
-        btn.textContent = 'Sending...';
-        setTimeout(function () {
-            state.sent = true;
-            render();
-            notify('Message sent', n + (n === 1 ? ' lead' : ' leads') + ' via ' + state.channel +
-                ' using "' + state.template + '".');
-        }, 1000);
+        var prevText = btn.textContent;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Sending...';
+
+        fetch(dispatchUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                channel: state.channel,
+                template_key: tpl.key,
+                lead_ids: leadIds,
+                academic_year: '2026-2027',
+                visit_date: appt.date,
+                visit_time: appt.time
+            })
+        })
+        .then(function (res) {
+            return res.json().then(function (data) {
+                return { status: res.status, ok: res.ok, body: data };
+            });
+        })
+        .then(function (response) {
+            btn.disabled = false;
+            btn.textContent = prevText;
+            var data = response.body;
+
+            if (response.ok && data.success) {
+                state.sent = true;
+                render();
+                notify('Message Dispatched', data.message || 'Messages were sent successfully.', 'success');
+            } else {
+                notify('Dispatch Error', data.message || 'Failed to dispatch messages.', 'error');
+            }
+        })
+        .catch(function (err) {
+            btn.disabled = false;
+            btn.textContent = prevText;
+            notify('Network Error', 'Could not connect to the server to send messages.', 'error');
+        });
     });
 
     /* ---------------- Schedule for later ---------------- */
@@ -522,10 +703,12 @@
         var today = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
         $('smDate').min = today;
         if (!$('smDate').value) $('smDate').value = today;
-        $('smSchedSub').textContent = n + (n === 1 ? ' lead' : ' leads') + ' via ' + state.channel + ' - ' + state.template;
+        var t = currentTemplate();
+        $('smSchedSub').textContent = n + (n === 1 ? ' lead' : ' leads') + ' via ' + state.channel + ' — ' + t.name;
         $('smSchedErr').classList.remove('is-on');
         openOverlay(schedOv);
     });
+
     $('smSchedCancel').addEventListener('click', function () { closeOverlay(schedOv); });
     $('smSchedConfirm').addEventListener('click', function () {
         var date = $('smDate').value, time = $('smTime').value;
@@ -537,10 +720,10 @@
         closeOverlay(schedOv);
         state.sent = true;
         render();
-        notify('Message scheduled', 'Will be sent on ' + when.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) + '.');
+        notify('Message Scheduled', 'Broadcast scheduled for ' + when.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) + '.', 'info');
     });
 
-    /* ---------------- Dialog dismissal ---------------- */
+    /* ---------------- Modal dismissal ---------------- */
     [addOv, schedOv].forEach(function (ov) {
         ov.addEventListener('click', function (e) { if (e.target === ov) closeOverlay(ov); });
     });
@@ -548,7 +731,7 @@
         if (e.key === 'Escape') { closeOverlay(addOv); closeOverlay(schedOv); }
     });
 
-    /* ---------------- Init (WhatsApp by default) ---------------- */
+    /* ---------------- Initial boot ---------------- */
     renderTemplates();
     render();
 })();

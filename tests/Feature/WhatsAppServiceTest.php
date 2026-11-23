@@ -52,9 +52,9 @@ class WhatsAppServiceTest extends TestCase
         $this->assertEquals('npskgl_thankyou_whatsapp', $templates['thankyou']['campaign']);
         $this->assertEquals('npskgl_admission_promotion_whatsapp', $templates['promotion']['campaign']);
 
-        $rendered = $this->service->renderText('greeting', ['Anand Kumar', 'Aryan Kumar']);
+        $rendered = $this->service->renderText('greeting', ['Anand Kumar', 'Grade 1']);
         $this->assertStringContainsString('Hello Anand Kumar! 👋', $rendered);
-        $this->assertStringContainsString('admission enquiry for Aryan Kumar', $rendered);
+        $this->assertStringContainsString('admission enquiry for Grade 1', $rendered);
     }
 
     public function test_send_greeting_success_with_http_mock(): void
@@ -68,7 +68,7 @@ class WhatsAppServiceTest extends TestCase
             ], 200),
         ]);
 
-        $result = $this->service->sendGreeting($this->lead, 'Aryan Kumar');
+        $result = $this->service->sendGreeting($this->lead, 'Grade 1');
 
         $this->assertTrue($result['success']);
         $this->assertInstanceOf(LeadMessage::class, $result['lead_message']);
@@ -95,7 +95,7 @@ class WhatsAppServiceTest extends TestCase
                 && $data['apiKey'] === 'test_key_123'
                 && $data['campaignName'] === 'npskgl_welcome_greeting'
                 && $data['destination'] === '9964827788'
-                && $data['templateParams'] === ['Anand Kumar', 'Aryan Kumar'];
+                && $data['templateParams'] === ['Anand Kumar', 'Grade 1'];
         });
     }
 
@@ -109,8 +109,6 @@ class WhatsAppServiceTest extends TestCase
 
         $result = $this->service->sendAppointment(
             $this->lead,
-            'Aryan',
-            'Grade 2',
             '25 Nov 2026',
             '10:30 AM'
         );
@@ -128,7 +126,7 @@ class WhatsAppServiceTest extends TestCase
             $data = $request->data();
 
             return $data['campaignName'] === 'npskgl_appointment_whatsapp'
-                && $data['templateParams'] === ['Anand Kumar', 'Aryan', 'Grade 2', '25 Nov 2026', '10:30 AM'];
+                && $data['templateParams'] === ['Anand Kumar', '25 Nov 2026', '10:30 AM'];
         });
     }
 

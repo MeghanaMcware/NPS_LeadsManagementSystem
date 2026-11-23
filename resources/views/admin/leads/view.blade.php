@@ -304,7 +304,7 @@
                 </div>
 
                 <div class="ld-actions">
-                    <a href="{{ route('sendmessage.index', ['lead_id' => $lead->id]) }}" class="ld-btn ld-btn-primary" id="btnSendMessage">Send message</a>
+                    <a href="{{ route('messages.send', ['lead_id' => $lead->id]) }}" class="ld-btn ld-btn-primary" id="btnSendMessage">Send message</a>
                 </div>
             </div>
         </div>
@@ -359,24 +359,22 @@
                     </div>
 
                     <ul class="ld-notes" id="notesList">
-                        <li class="ld-note">
-                            <p class="ld-note-text">Interested in weekend batch.</p>
-                            <div class="ld-note-meta"><i class="bi bi-person-circle"></i> Priya &middot; 14 Nov</div>
-                            <button type="button" class="ld-note-del" aria-label="Delete note"><i class="bi bi-trash3"></i></button>
-                        </li>
-                        <li class="ld-note">
-                            <p class="ld-note-text">Call back on Friday 4 PM.</p>
-                            <div class="ld-note-meta"><i class="bi bi-person-circle"></i> Priya &middot; 14 Nov</div>
-                            <button type="button" class="ld-note-del" aria-label="Delete note"><i class="bi bi-trash3"></i></button>
-                        </li>
-                        <li class="ld-note">
-                            <p class="ld-note-text">Budget confirmed.</p>
-                            <div class="ld-note-meta"><i class="bi bi-person-circle"></i> Priya &middot; 12 Nov</div>
-                            <button type="button" class="ld-note-del" aria-label="Delete note"><i class="bi bi-trash3"></i></button>
-                        </li>
+                        @forelse($lead->remarks ?? [] as $index => $note)
+                            <li class="ld-note" data-index="{{ $index }}">
+                                <p class="ld-note-text">{{ $note['text'] ?? '' }}</p>
+                                <div class="ld-note-meta">
+                                    <i class="bi bi-person-circle"></i> {{ $note['author'] ?? 'Admissions' }} &middot; {{ $note['date'] ?? '' }}
+                                    @if(!empty($note['type']))
+                                        <span class="badge bg-light text-dark ms-1" style="font-size:10.5px; text-transform: capitalize;">{{ $note['type'] }}</span>
+                                    @endif
+                                </div>
+                                <button type="button" class="ld-note-del" aria-label="Delete note" data-index="{{ $index }}"><i class="bi bi-trash3"></i></button>
+                            </li>
+                        @empty
+                        @endforelse
                     </ul>
 
-                    <div class="ld-empty" id="notesEmpty" hidden>
+                    <div class="ld-empty" id="notesEmpty" {{ !empty($lead->remarks) ? 'hidden' : '' }}>
                         <i class="bi bi-journal-plus"></i>
                         No notes yet. Add the first note.
                     </div>
@@ -394,32 +392,43 @@
                     </div>
 
                     <ul class="ld-timeline" id="timelineList">
+                        @forelse($lead->messages as $msg)
+                            <li class="ld-tl-item">
+                                @if($msg->channel === 'whatsapp')
+                                    <span class="ld-tl-icon t-message" style="background: #25d366; color: #fff;"><i class="bi bi-whatsapp"></i></span>
+                                @elseif($msg->channel === 'sms')
+                                    <span class="ld-tl-icon t-message" style="background: #1b5fd1; color: #fff;"><i class="bi bi-chat-text-fill"></i></span>
+                                @elseif($msg->channel === 'email')
+                                    <span class="ld-tl-icon t-message" style="background: #ea4335; color: #fff;"><i class="bi bi-envelope-fill"></i></span>
+                                @else
+                                    <span class="ld-tl-icon t-auto"><i class="bi bi-sticky-fill"></i></span>
+                                @endif
+                                <div class="ld-tl-body">
+                                    <p class="ld-tl-text">
+                                        @if($msg->channel === 'note')
+                                            Note added: {{ \Illuminate\Support\Str::limit($msg->note, 60) }}
+                                        @else
+                                            {{ ucfirst($msg->channel) }} ({{ ucwords(str_replace('_', ' ', $msg->template_type ?? 'Message')) }}) &middot; {{ ucfirst($msg->status) }}
+                                        @endif
+                                    </p>
+                                    <div class="ld-tl-sub">{{ $msg->sent_at ? $msg->sent_at->format('d M Y, h:i A') : $msg->created_at->format('d M Y, h:i A') }}</div>
+                                </div>
+                            </li>
+                        @empty
+                        @endforelse
+
                         <li class="ld-tl-item">
                             <span class="ld-tl-icon t-status"><i class="bi bi-arrow-repeat"></i></span>
                             <div class="ld-tl-body">
-                                <p class="ld-tl-text">Status changed to Contacted</p>
-                                <div class="ld-tl-sub">14 Nov</div>
-                            </div>
-                        </li>
-                        <li class="ld-tl-item">
-                            <span class="ld-tl-icon t-message"><i class="bi bi-chat-dots"></i></span>
-                            <div class="ld-tl-body">
-                                <p class="ld-tl-text">Follow-up message sent</p>
-                                <div class="ld-tl-sub">14 Nov</div>
-                            </div>
-                        </li>
-                        <li class="ld-tl-item">
-                            <span class="ld-tl-icon t-auto"><i class="bi bi-robot"></i></span>
-                            <div class="ld-tl-body">
-                                <p class="ld-tl-text">Greeting sent automatically</p>
-                                <div class="ld-tl-sub">12 Nov</div>
+                                <p class="ld-tl-text">Status: {{ ucfirst($lead->status) }}</p>
+                                <div class="ld-tl-sub">{{ $lead->last_contact_at ? $lead->last_contact_at->format('d M Y') : $lead->created_at->format('d M Y') }}</div>
                             </div>
                         </li>
                         <li class="ld-tl-item">
                             <span class="ld-tl-icon t-import"><i class="bi bi-box-arrow-in-down"></i></span>
                             <div class="ld-tl-body">
-                                <p class="ld-tl-text">Lead imported</p>
-                                <div class="ld-tl-sub">12 Nov</div>
+                                <p class="ld-tl-text">Lead created via {{ $lead->source }}</p>
+                                <div class="ld-tl-sub">{{ $lead->created_at->format('d M Y, h:i A') }}</div>
                             </div>
                         </li>
                     </ul>
@@ -572,10 +581,53 @@
             toast('Write something first');
             return;
         }
-        addNote(value);
-        addTimeline('note', 'Note added');
-        closeForm();
-        toast('Note added');
+
+        var saveBtn = $('btnNoteSave');
+        saveBtn.disabled = true;
+
+        fetch('{{ route("leads.notes.store", $lead->id) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ note: value })
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            saveBtn.disabled = false;
+            if (data.success) {
+                var newIdx = notesList.querySelectorAll('.ld-note').length;
+                var li = el('li', 'ld-note');
+                li.dataset.index = newIdx;
+                li.appendChild(el('p', 'ld-note-text', data.note.text));
+
+                var meta = el('div', 'ld-note-meta');
+                meta.appendChild(icon('bi-person-circle'));
+                meta.appendChild(document.createTextNode(' ' + data.note.author + ' \u00b7 ' + data.note.date));
+                li.appendChild(meta);
+
+                var del = el('button', 'ld-note-del');
+                del.type = 'button';
+                del.dataset.index = newIdx;
+                del.setAttribute('aria-label', 'Delete note');
+                del.appendChild(icon('bi-trash3'));
+                li.appendChild(del);
+
+                notesList.insertBefore(li, notesList.firstChild);
+                syncNotes();
+                addTimeline('note', 'Note added: ' + value.substring(0, 40));
+                closeForm();
+                toast('Note saved');
+            } else {
+                toast(data.message || 'Failed to save note');
+            }
+        })
+        .catch(function () {
+            saveBtn.disabled = false;
+            toast('Network error saving note');
+        });
     }
 
     $('btnNoteSave').addEventListener('click', saveNote);
@@ -591,9 +643,29 @@
     notesList.addEventListener('click', function (e) {
         var btn = e.target.closest('.ld-note-del');
         if (!btn) return;
-        btn.closest('.ld-note').remove();
-        syncNotes();
-        toast('Note deleted');
+        var noteEl = btn.closest('.ld-note');
+        var index = btn.dataset.index || noteEl.dataset.index;
+
+        btn.disabled = true;
+        fetch('{{ url("/leads/{$lead->id}/notes") }}/' + index, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                noteEl.remove();
+                syncNotes();
+                toast('Note deleted');
+            }
+        })
+        .catch(function () {
+            btn.disabled = false;
+            toast('Failed to delete note');
+        });
     });
 
     // ---------- Init ----------

@@ -53,8 +53,8 @@ class FrontendEnquiryController extends Controller
 
         // Send WhatsApp Welcome Greeting (npskgl_welcome_greeting)
         try {
-            $childInfo = $lead->interested_in ? $lead->interested_in : 'your child';
-            $whatsAppService->sendGreeting($lead, $childInfo);
+            $grade = $lead->interested_in ?: 'your chosen grade';
+            $whatsAppService->sendGreeting($lead, $grade);
         } catch (Throwable) {
             // Silently continue if WhatsApp service fails so parent submission succeeds
         }
@@ -62,7 +62,7 @@ class FrontendEnquiryController extends Controller
         // Send Welcome Greeting Email (npskgl_welcome_email) via EmailService if email provided
         if (! empty($lead->email)) {
             try {
-                $emailService->sendGreeting($lead);
+                $emailService->sendGreeting($lead, $lead->interested_in);
             } catch (Throwable) {
                 // Silently continue if Email service fails so parent submission succeeds
             }

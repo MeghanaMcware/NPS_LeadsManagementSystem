@@ -222,9 +222,11 @@
 
             <select class="ls-control ls-select" id="lsSource" aria-label="Filter by source">
                 <option value="all">Source: All</option>
-                <option value="Google Form">Source: Google Form</option>
+                <option value="Meta Leads">Source: Meta Leads</option>
                 <option value="WhatsApp">Source: WhatsApp</option>
                 <option value="WhatsApp Chatbot">Source: WhatsApp Chatbot</option>
+                <option value="Call Leads">Source: Call Leads</option>
+                <option value="Google Form">Source: Google Form</option>
                 <option value="Website">Source: Website</option>
                 <option value="Facebook">Source: Facebook</option>
                 <option value="Walk-in">Source: Walk-in</option>
@@ -243,7 +245,7 @@
         {{-- Selection bar --}}
         <div class="ls-selbar" id="lsSelbar">
             <span class="ls-count" id="lsCount">0 leads selected</span>
-            <a href="{{ route('sendmessage.index') }}" class="ls-btn ls-btn-primary d-flex align-items-center justify-content-center">Send automatic message</a>
+            <a href="{{ route('messages.send') }}" id="lsSendMsgBtn" class="ls-btn ls-btn-primary d-flex align-items-center justify-content-center">Send automatic message</a>
             <div class="ls-menu-wrap">
                 <button type="button" class="ls-btn" id="lsChangeBtn" aria-haspopup="true" aria-expanded="false">Change status</button>
                 <div class="ls-menu" id="lsChangeMenu" role="menu">
@@ -361,6 +363,8 @@
                 var f = state.source.toLowerCase();
                 if (f === 'whatsapp') {
                     if (s !== 'whatsapp' && s !== 'whatsapp chatbot') return false;
+                } else if (f === 'facebook' || f === 'meta leads') {
+                    if (s !== 'facebook' && s !== 'meta leads') return false;
                 } else if (s !== f) {
                     return false;
                 }
@@ -404,7 +408,7 @@
                     '<button type="button" class="ls-kebab" aria-label="Actions for ' + esc(l.name) + '" aria-haspopup="true">&hellip;</button>' +
                     '<div class="ls-menu ls-row-menu" role="menu">' +
                         '<button type="button" role="menuitem" data-act="view" data-url="{{ url('/leads/view') }}/' + l.id + '">View lead</button>' +
-                        '<button type="button" role="menuitem" data-act="message" data-url="{{ route('sendmessage.index') }}?lead_id=' + l.id + '">Send message</button>' +
+                        '<button type="button" role="menuitem" data-act="message" data-url="{{ route('messages.send') }}?lead_id=' + l.id + '">Send message</button>' +
                     '</div></div></td>' +
             '</tr>';
         }).join('');
@@ -419,6 +423,12 @@
         $('lsSelbar').classList.toggle('is-open', n > 0);
         $('lsCount').textContent = n + (n === 1 ? ' lead selected' : ' leads selected');
         if (n === 0) closeMenus();
+
+        var msgBtn = $('lsSendMsgBtn');
+        if (msgBtn) {
+            var selectedIds = Object.keys(selected).filter(function (id) { return selected[id]; });
+            msgBtn.href = "{{ route('messages.send') }}" + (selectedIds.length ? '?lead_ids=' + selectedIds.join(',') : '');
+        }
 
         // header checkbox reflects the rows on the current page
         var all = $('lsAll');

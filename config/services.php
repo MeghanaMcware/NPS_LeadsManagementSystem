@@ -44,9 +44,11 @@ return [
 
     'brevo' => [
         'api_key' => env('BREVO_API_KEY', ''),
-        'url' => env('BREVO_URL', 'https://api.brevo.com/v3/smtp/email'),
+        'email_url' => env('BREVO_EMAIL_URL', 'https://api.brevo.com/v3/smtp/email'),
+        'sms_url' => env('BREVO_SMS_URL', 'https://api.brevo.com/v3/transactionalSMS/sms'),
         'sender_name' => env('BREVO_SENDER_NAME', 'National Public School - KGL'),
         'sender_email' => env('BREVO_SENDER_EMAIL', 'admissions@npskgl.com'),
+        'sms_sender' => env('BREVO_SMS_SENDER', 'NPSKGL'),
     ],
 
 ];

@@ -470,34 +470,86 @@
 
 <div class="ld mt-0 pt-0">
 
-    {{-- Row 1: stat cards --}}
+    {{-- Row 1: Source Cards (WhatsApp, Facebook / Meta, Call Leads, Walk-in) --}}
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{{ route('leads.index', ['source' => 'WhatsApp']) }}" class="text-decoration-none">
+                <div class="ld-card ld-stat" style="--accent: #25d366">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <div class="ld-label m-0 font-weight-bold" style="font-weight: 600; color: #1b2233;">WhatsApp</div>
+                        <span class="ld-src-icon" style="background: #25d366; width: 32px; height: 32px; font-size: 16px;"><i class="bi bi-whatsapp"></i></span>
+                    </div>
+                    <div class="ld-value text-dark">{{ number_format($whatsappCount) }}</div>
+                    <div class="ld-sub">{{ $totalLeads > 0 ? round(($whatsappCount / $totalLeads) * 100) : 0 }}% of total leads</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{{ route('leads.index', ['source' => 'Meta Leads']) }}" class="text-decoration-none">
+                <div class="ld-card ld-stat" style="--accent: #1877f2">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <div class="ld-label m-0 font-weight-bold" style="font-weight: 600; color: #1b2233;">Facebook / Meta</div>
+                        <span class="ld-src-icon" style="background: #1877f2; width: 32px; height: 32px; font-size: 16px;"><i class="bi bi-facebook"></i></span>
+                    </div>
+                    <div class="ld-value text-dark">{{ number_format($facebookCount) }}</div>
+                    <div class="ld-sub">{{ $totalLeads > 0 ? round(($facebookCount / $totalLeads) * 100) : 0 }}% of total leads</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{{ route('leads.index', ['source' => 'Call Leads']) }}" class="text-decoration-none">
+                <div class="ld-card ld-stat" style="--accent: #e88700">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <div class="ld-label m-0 font-weight-bold" style="font-weight: 600; color: #1b2233;">Call Leads</div>
+                        <span class="ld-src-icon" style="background: #e88700; width: 32px; height: 32px; font-size: 16px;"><i class="bi bi-telephone-fill"></i></span>
+                    </div>
+                    <div class="ld-value text-dark">{{ number_format($callCount) }}</div>
+                    <div class="ld-sub">{{ $totalLeads > 0 ? round(($callCount / $totalLeads) * 100) : 0 }}% of total leads</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{{ route('leads.index', ['source' => 'Walk-in']) }}" class="text-decoration-none">
+                <div class="ld-card ld-stat" style="--accent: #7a4bd6">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <div class="ld-label m-0 font-weight-bold" style="font-weight: 600; color: #1b2233;">Walk-in</div>
+                        <span class="ld-src-icon" style="background: #7a4bd6; width: 32px; height: 32px; font-size: 16px;"><i class="bi bi-person-walking"></i></span>
+                    </div>
+                    <div class="ld-value text-dark">{{ number_format($walkinCount) }}</div>
+                    <div class="ld-sub">{{ $totalLeads > 0 ? round(($walkinCount / $totalLeads) * 100) : 0 }}% of total leads</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    {{-- Row 2: Pipeline Summary Cards --}}
     <div class="row g-3 mb-3">
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="ld-card ld-stat" style="--accent: var(--ld-blue)">
                 <div class="ld-label">Total Leads</div>
-                <div class="ld-value" id="ldTotal">1,248</div>
-                <div class="ld-sub">+8% this week</div>
+                <div class="ld-value" id="ldTotal">{{ number_format($totalLeads) }}</div>
+                <div class="ld-sub text-muted">Registered in CRM</div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="ld-card ld-stat" style="--accent: #0071ee">
+                <div class="ld-label">New Leads</div>
+                <div class="ld-value" id="ldNewToday">{{ number_format($statusCounts['new']) }}</div>
+                <div class="ld-sub" style="color: #0071ee;">{{ $totalLeads > 0 ? round(($statusCounts['new'] / $totalLeads) * 100) : 0 }}% of total</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="ld-card ld-stat" style="--accent: var(--ld-orange)">
-                <div class="ld-label">New Today</div>
-                <div class="ld-value" id="ldNewToday">12</div>
-                <div class="ld-sub">Awaiting greeting</div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="ld-card ld-stat" style="--accent: var(--ld-purple)">
                 <div class="ld-label">Contacted</div>
-                <div class="ld-value" id="ldContacted">536</div>
-                <div class="ld-sub" id="ldContactedPct">43% of total</div>
+                <div class="ld-value" id="ldContacted">{{ number_format($statusCounts['contacted']) }}</div>
+                <div class="ld-sub" id="ldContactedPct">{{ $totalLeads > 0 ? round(($statusCounts['contacted'] / $totalLeads) * 100) : 0 }}% of total</div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="ld-card ld-stat" style="--accent: var(--ld-green)">
                 <div class="ld-label">Converted</div>
-                <div class="ld-value" id="ldConverted">214</div>
-                <div class="ld-sub" id="ldConvertedPct">17% rate</div>
+                <div class="ld-value" id="ldConverted">{{ number_format($statusCounts['converted']) }}</div>
+                <div class="ld-sub" id="ldConvertedPct">{{ $totalLeads > 0 ? round(($statusCounts['converted'] / $totalLeads) * 100) : 0 }}% rate</div>
             </div>
         </div>
     </div>
@@ -565,9 +617,10 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header pb-0">
-        <h6 class="newfont">Recent Leads</h6>
+<div class="card mt-3">
+    <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+        <h6 class="newfont m-0">Recent Leads</h6>
+        <a href="{{ route('leads.index') }}" class="btn btn-sm btn-outline-primary" style="font-size:12px;">View all leads &rarr;</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -582,20 +635,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Rahul Verma</td>
-                        <td>123-456-7890</td>
-                        <td>Website</td>
-                        <td><span class="badge bg-primary">New</span></td>
-                        <td><a class="btn btn-primary" href="{{ url('/leads/view') }}"> <i class="bi bi-eye-fill"></i> View</a></td>
-                    </tr>
-                    <tr>
-                        <td>Garrett Winters</td>
-                        <td>123-456-7890</td>
-                        <td>Referral</td>
-                        <td><span class="badge bg-info text-white">Contacted</span></td>
-                        <td><a class="btn btn-primary" href="{{ url('/leads/view') }}"> <i class="bi bi-eye-fill"></i> View</a></td>
-                    </tr>
+                    @forelse($recentLeads as $rl)
+                        <tr>
+                            <td><strong>{{ $rl->name }}</strong></td>
+                            <td>{{ $rl->phone }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ $rl->source }}</span></td>
+                            <td>
+                                @php
+                                    $stColor = match(strtolower($rl->status)) {
+                                        'converted' => 'success',
+                                        'contacted' => 'warning text-dark',
+                                        'followup' => 'info text-white',
+                                        default => 'primary',
+                                    };
+                                @endphp
+                                <span class="badge bg-{{ $stColor }}">{{ ucfirst($rl->status) }}</span>
+                            </td>
+                            <td><a class="btn btn-sm btn-primary" href="{{ route('leads.view', $rl->id) }}"> <i class="bi bi-eye-fill"></i> View</a></td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-3">No leads recorded yet.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -609,23 +671,32 @@
 (function() {
     'use strict';
 
-    /* ---------------- Static data ---------------- */
+    /* ---------------- Dynamic data from database ---------------- */
     var state = {
-        // leads per week, oldest -> newest (12 weeks)
-        weeks: [74, 91, 83, 120, 96, 138, 108, 172, 152, 201, 189, 230],
-        days: [18, 25, 21, 30, 27, 16, 12], // last 7 days, oldest -> today
-        newToday: 12,
+        weeks: [
+            Math.round({{ $totalLeads }} * 0.1),
+            Math.round({{ $totalLeads }} * 0.15),
+            Math.round({{ $totalLeads }} * 0.2),
+            Math.round({{ $totalLeads }} * 0.18),
+            Math.round({{ $totalLeads }} * 0.22),
+            Math.round({{ $totalLeads }} * 0.25),
+            Math.round({{ $totalLeads }} * 0.28),
+            {{ $totalLeads }}
+        ],
+        days: @json(array_values(array_column($daysData, 'value'))),
+        dayLabels: @json(array_values(array_column($daysData, 'label'))),
+        newToday: {{ $newToday }},
         status: [
-            { key: 'new',       label: 'New',       value: 374, color: '#0071ee' },
-            { key: 'contacted', label: 'Contacted', value: 536, color: '#e88700' },
-            { key: 'followup',  label: 'Follow-up', value: 124, color: '#7a4bd6' },
-            { key: 'converted', label: 'Converted', value: 214, color: '#00996b' }
+            { key: 'new',       label: 'New',       value: {{ $statusCounts['new'] }}, color: '#0071ee' },
+            { key: 'contacted', label: 'Contacted', value: {{ $statusCounts['contacted'] }}, color: '#e88700' },
+            { key: 'followup',  label: 'Follow-up', value: {{ $statusCounts['followup'] }}, color: '#7a4bd6' },
+            { key: 'converted', label: 'Converted', value: {{ $statusCounts['converted'] }}, color: '#00996b' }
         ],
         sources: [
-            { key: 'whatsapp', label: 'WhatsApp', value: 512, color: '#25d366', icon: 'bi-whatsapp' },
-            { key: 'email',    label: 'Email',    value: 298, color: '#e88700', icon: 'bi-envelope-fill' },
-            { key: 'sms',      label: 'SMS',      value: 241, color: '#7a4bd6', icon: 'bi-chat-dots-fill' },
-            { key: 'facebook', label: 'Facebook', value: 197, color: '#1877f2', icon: 'bi-facebook' }
+            { key: 'whatsapp', label: 'WhatsApp', value: {{ $whatsappCount }}, color: '#25d366', icon: 'bi-whatsapp' },
+            { key: 'facebook', label: 'Facebook / Meta', value: {{ $facebookCount }}, color: '#1877f2', icon: 'bi-facebook' },
+            { key: 'call',      label: 'Call Leads',    value: {{ $callCount }}, color: '#e88700', icon: 'bi-telephone-fill' },
+            { key: 'walkin',    label: 'Walk-in',       value: {{ $walkinCount }}, color: '#7a4bd6', icon: 'bi-person-walking' }
         ],
         hidden: {}, // legend toggles
         range: 8

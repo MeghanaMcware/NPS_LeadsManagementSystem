@@ -44,7 +44,7 @@
                     </li>
 
                     <li class="sidebar-list">
-                        <a class="sidebar-link link-nav {{ request()->is('sendmessage/*') ? 'active' : '' }}" href="{{ url('/sendmessage/index') }}">
+                        <a class="sidebar-link link-nav {{ request()->is('messages*') || request()->is('sendmessage*') ? 'active' : '' }}" href="{{ route('messages.send') }}">
                             <i class="bi bi-chat-dots-fill"></i>
                             <span>Send Message</span>
                         </a>

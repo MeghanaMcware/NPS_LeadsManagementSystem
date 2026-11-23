@@ -12,14 +12,6 @@
     <div class="details-box">
         <div class="details-title">Enquiry Details</div>
         <div class="detail-row">
-            <span class="detail-label">• Parent/Guardian Name:</span>
-            <span class="detail-val">{{ $parentName ?? 'N/A' }}</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-label">• Student Name:</span>
-            <span class="detail-val">{{ $studentName ?? 'N/A' }}</span>
-        </div>
-        <div class="detail-row">
             <span class="detail-label">• Grade Applied For:</span>
             <span class="detail-val">{{ $grade ?? 'N/A' }}</span>
         </div>

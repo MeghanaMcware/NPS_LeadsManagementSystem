@@ -71,7 +71,7 @@ class EmailService
 
     public function getApiUrl(): string
     {
-        return $this->apiUrl ?? (string) config('services.brevo.url', 'https://api.brevo.com/v3/smtp/email');
+        return $this->apiUrl ?? (string) config('services.brevo.email_url', config('services.brevo.url', 'https://api.brevo.com/v3/smtp/email'));
     }
 
     public function getSenderName(): string
@@ -246,14 +246,15 @@ class EmailService
     /**
      * Send Welcome Greeting Email (npskgl_welcome_email).
      *
+     * Dynamic variables: {{1}} Parent Name, {{2}} Grade, {{3}} Academic Year
+     *
      * @return array{success: bool, message: string, lead_message?: LeadMessage, error?: string}
      */
-    public function sendGreeting(Lead $lead, ?string $studentName = null, ?string $academicYear = '2027-28'): array
+    public function sendGreeting(Lead $lead, ?string $grade = null, ?string $academicYear = '2027-28'): array
     {
         return $this->send($lead, 'greeting', [
             'parentName' => $lead->name,
-            'studentName' => $studentName ?: $lead->name,
-            'grade' => $lead->interested_in,
+            'grade' => $grade ?: $lead->interested_in,
             'academicYear' => $academicYear ?: '2027-28',
         ]);
     }
@@ -261,31 +262,32 @@ class EmailService
     /**
      * Send Follow-up Email (npskgl_followup_email).
      *
+     * Dynamic variables: {{1}} Parent Name
+     *
      * @return array{success: bool, message: string, lead_message?: LeadMessage, error?: string}
      */
-    public function sendFollowup(Lead $lead, ?string $studentName = null): array
+    public function sendFollowup(Lead $lead): array
     {
         return $this->send($lead, 'followup', [
             'parentName' => $lead->name,
-            'studentName' => $studentName ?: ($lead->interested_in ? 'Admission in '.$lead->interested_in : 'your child'),
         ]);
     }
 
     /**
      * Send Appointment Confirmation Email (npskgl_appointment_email).
      *
+     * Dynamic variables: {{1}} Parent Name, {{2}} Grade, {{3}} Visit Date, {{4}} Visit Time
+     *
      * @return array{success: bool, message: string, lead_message?: LeadMessage, error?: string}
      */
     public function sendAppointment(
         Lead $lead,
-        ?string $studentName,
         ?string $grade,
         string $date,
         string $time
     ): array {
         return $this->send($lead, 'appointment', [
             'parentName' => $lead->name,
-            'studentName' => $studentName ?: $lead->name,
             'grade' => $grade ?: $lead->interested_in,
             'appointmentDate' => $date,
             'appointmentTime' => $time,

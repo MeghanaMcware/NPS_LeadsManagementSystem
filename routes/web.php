@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontendEnquiryController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\LeadImportController;
-use App\Models\Lead;
+use App\Http\Controllers\SendMessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/login', function () {
@@ -19,20 +20,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/leads/index', [LeadController::class, 'index'])->name('leads.index');
-
-    Route::get('/leads/view/{lead?}', function (?Lead $lead = null) {
-        $lead = $lead ?? Lead::query()->latest('id')->first();
-        if (! $lead) {
-            return redirect()->route('leads.index');
-        }
-
-        return view('admin.leads.view', compact('lead'));
-    })->name('leads.view');
+    Route::get('/leads/view/{lead?}', [LeadController::class, 'show'])->name('leads.view');
+    Route::post('/leads/{lead}/notes', [LeadController::class, 'storeNote'])->name('leads.notes.store');
+    Route::delete('/leads/{lead}/notes/{index}', [LeadController::class, 'deleteNote'])->name('leads.notes.destroy');
+    Route::post('/leads/{lead}/status', [LeadController::class, 'updateStatus'])->name('leads.status.update');
 
     // Add & Bulk Import routes
     Route::get('/leadsimport/index', [LeadImportController::class, 'index'])->name('leadsimport.index');
@@ -41,9 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/leadsimport/process', [LeadImportController::class, 'process'])->name('leadsimport.process');
     Route::post('/leadsimport/single', [LeadImportController::class, 'storeSingle'])->name('leadsimport.single');
 
-    Route::get('/sendmessage/index', function () {
-        return view('admin.sendmessage.index');
-    })->name('sendmessage.index');
+    // Send Message / Communication routes
+    Route::get('/messages/send', [SendMessageController::class, 'index'])->name('messages.send');
+    Route::post('/messages/send', [SendMessageController::class, 'send'])->name('messages.send.dispatch');
+    Route::get('/messages', fn () => redirect()->route('messages.send'))->name('messages.index');
+    Route::get('/sendmessage/index', fn () => redirect()->route('messages.send', request()->query()))->name('sendmessage.index');
 });
 
 Route::get('/', function () {

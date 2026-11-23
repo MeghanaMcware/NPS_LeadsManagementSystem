@@ -92,7 +92,6 @@ class EmailServiceTest extends TestCase
 
         $result = $this->service->sendAppointment(
             $this->lead,
-            'Priyansh Raina',
             'Grade 3',
             '30 Nov 2026',
             '10:00 AM'
@@ -114,7 +113,7 @@ class EmailServiceTest extends TestCase
                 && $request->header('api-key')[0] === 'real_live_brevo_key_abc123'
                 && $data['to'][0]['email'] === 'suresh@example.com'
                 && $data['subject'] === 'Campus Visit Appointment Confirmed – NPS KGL'
-                && str_contains($data['htmlContent'], 'Priyansh Raina');
+                && str_contains($data['htmlContent'], 'Grade 3');
         });
     }
 
