@@ -15,8 +15,8 @@
         --sm-bg: #ffffff;
         --sm-soft: #eef2f8;
         --sm-green: #00996b;
-        --sm-green-soft: #eaf7f0;
-        --sm-green-line: #bfe6d1;
+        --sm-sms: #1b5fd1;
+        --sm-mail: #c4452d;
         color: var(--sm-ink);
     }
 
@@ -31,12 +31,13 @@
     .sm-step.is-on b { background: var(--sm-blue); }
 
     /* Layout */
-    .sm-grid { display: grid; grid-template-columns: 1.15fr 1fr .95fr; gap: 18px; align-items: start; }
+    .sm-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; align-items: start; }
     .sm-card { background: var(--sm-bg); border: 1px solid var(--sm-line); border-radius: 16px; padding: 22px; }
     .sm-title { margin: 0; font-size: 17px; font-weight: 700; }
     .sm-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
     .sm-label { margin: 22px 0 10px; font-size: 14px; font-weight: 700; }
     .sm-cap { margin: 20px 0 10px; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--sm-muted); }
+    .sm-side { display: grid; gap: 18px; }
 
     .sm-btn {
         border: 1px solid var(--sm-line); background: #fff; color: var(--sm-ink);
@@ -44,8 +45,8 @@
         cursor: pointer; white-space: nowrap; transition: background .15s, opacity .15s;
     }
     .sm-btn:hover:not(:disabled) { background: #f3f6fb; }
-    .sm-btn:focus-visible, .sm-tpl:focus-visible, .sm-chip:focus-visible, .sm-via button:focus-visible,
-    .sm-remove:focus-visible, .sm-switch:focus-visible { outline: 3px solid rgba(2,27,69,.28); outline-offset: 2px; }
+    .sm-btn:focus-visible, .sm-tpl:focus-visible, .sm-via button:focus-visible,
+    .sm-remove:focus-visible { outline: 3px solid rgba(2,27,69,.28); outline-offset: 2px; }
     .sm-btn:disabled { opacity: .5; cursor: not-allowed; }
     .sm-btn-sm { height: 38px; padding: 0 16px; font-size: 13px; }
     .sm-btn-primary { background: var(--sm-blue); border-color: var(--sm-blue); color: #fff; width: 100%; height: 50px; }
@@ -79,25 +80,6 @@
     }
     .sm-via button.is-on { background: var(--sm-tint); border-color: var(--sm-link); color: var(--sm-link); font-weight: 700; }
 
-    /* Auto-greeting box */
-    .sm-auto { margin-top: 22px; padding: 16px 18px; background: var(--sm-green-soft); border: 1px solid var(--sm-green-line); border-radius: 12px; }
-    .sm-auto h6 { margin: 0 0 6px; font-size: 14.5px; font-weight: 700; color: var(--sm-green); }
-    .sm-auto p { margin: 0 0 14px; max-width: 280px; font-size: 12.5px; color: var(--sm-muted); }
-    .sm-auto-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .sm-auto-row strong { font-size: 13.5px; }
-    .sm-switch {
-        position: relative; width: 62px; height: 34px; border: 0; border-radius: 999px; padding: 0;
-        background: #b9c3d3; cursor: pointer; transition: background .2s;
-    }
-    .sm-switch::after {
-        content: ""; position: absolute; top: 4px; left: 4px; width: 26px; height: 26px; border-radius: 50%;
-        background: #fff; transition: transform .2s;
-    }
-    .sm-switch[aria-checked="true"] { background: var(--sm-green); }
-    .sm-switch[aria-checked="true"]::after { transform: translateX(28px); }
-
-    .sm-actions { display: grid; gap: 12px; margin-top: 26px; }
-
     /* Template column */
     .sm-select {
         width: 100%; height: 48px; padding: 0 40px 0 16px; border: 1px solid var(--sm-line); border-radius: 10px;
@@ -114,32 +96,36 @@
     }
     .sm-tpl:hover { background: #fafbfd; }
     .sm-tpl.is-on { background: var(--sm-tint); border-color: var(--sm-link); color: var(--sm-link); font-weight: 700; }
-    .sm-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .sm-chip {
-        height: 40px; border: 0; border-radius: 999px; background: var(--sm-soft);
-        color: var(--sm-link); font-weight: 700; font-size: 12.5px; cursor: pointer;
-    }
-    .sm-chip:hover { background: #e1e8f3; }
     .sm-edit { margin-top: 26px; }
 
-    /* Preview column (static design) */
-    .sm-preview { background: #e4efe6; border-color: #d3e4d7; text-align: center; }
+    /* Preview */
+    .sm-preview { background: #e4efe6; border-color: #d3e4d7; text-align: center; transition: background .2s, border-color .2s; }
+    .sm-preview[data-ch="SMS"]   { background: #e6eefb; border-color: #d2def3; }
+    .sm-preview[data-ch="Email"] { background: #fbece8; border-color: #f0d6cf; }
     .sm-preview .sm-title { margin-bottom: 16px; }
     .sm-phone {
         background: #fff; border: 2px solid #c3ccd9; border-radius: 26px 26px 34px 34px;
-        padding: 0 0 22px; min-height: 420px; overflow: hidden; text-align: left;
+        padding: 0 0 22px; min-height: 380px; overflow: hidden; text-align: left;
     }
     .sm-phone-bar {
         margin: 0 -2px; padding: 15px 10px; background: var(--sm-green); color: #fff;
         text-align: center; font-size: 14px; font-weight: 700; border-radius: 24px;
     }
+    .sm-preview[data-ch="SMS"]   .sm-phone-bar { background: var(--sm-sms); }
+    .sm-preview[data-ch="Email"] .sm-phone-bar { background: var(--sm-mail); }
     .sm-bubble {
         margin: 24px 14px 0; padding: 14px 16px 8px; background: #d0f5c8; border-radius: 14px;
-        font-size: 13px; line-height: 1.55; color: #111b21;
+        font-size: 13px; line-height: 1.55; color: #111b21; word-break: break-word;
     }
-    .sm-bubble p { margin: 0 0 14px; }
-    .sm-bubble p:last-of-type { margin-bottom: 4px; }
-    .sm-time { display: block; text-align: right; font-size: 10.5px; color: #6b7a90; }
+    .sm-preview[data-ch="SMS"]   .sm-bubble { background: #dce8fb; }
+    .sm-preview[data-ch="Email"] .sm-bubble { background: #f6f7f9; border: 1px solid #e3e7ee; }
+    .sm-bubble .sm-subject { display: block; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e3e7ee; font-weight: 700; }
+    .sm-bubble p { margin: 0 0 4px; }
+    .sm-time { display: block; text-align: right; font-size: 10.5px; color: #6b7a90; margin-top: 6px; }
+
+    /* Actions (under preview) */
+    .sm-actions { display: grid; gap: 12px; }
+    .sm-actions-note { margin: 0; font-size: 12.5px; color: var(--sm-muted); text-align: center; }
 
     /* Dialogs */
     .sm-overlay {
@@ -163,6 +149,8 @@
     .sm-field input:focus { outline: 3px solid rgba(2,27,69,.16); border-color: var(--sm-blue); }
     .sm-err { display: none; font-size: 12.5px; color: #c62828; margin: -4px 0 10px; }
     .sm-err.is-on { display: block; }
+    .sm-btn-dark { background: #021b45; border-color: #021b45; color: #fff; }
+    .sm-btn-dark:hover:not(:disabled) { background: #0a2d68; }
 
     /* Toast */
     .sm-toast {
@@ -172,9 +160,9 @@
     }
     .sm-toast.is-show { opacity: 1; transform: none; }
 
-    @media (max-width: 1199.98px) { .sm-grid { grid-template-columns: 1fr 1fr; } .sm-preview { grid-column: 1 / -1; } }
+    @media (max-width: 1199.98px) { .sm-grid { grid-template-columns: 1fr 1fr; } .sm-side { grid-column: 1 / -1; } }
     @media (max-width: 767.98px) { .sm-grid { grid-template-columns: 1fr; } .sm-steps { gap: 12px 24px; } }
-    @media (prefers-reduced-motion: reduce) { .sm-toast, .sm-switch, .sm-switch::after { transition: none; } }
+    @media (prefers-reduced-motion: reduce) { .sm-toast, .sm-preview { transition: none; } }
 </style>
 @endsection
 
@@ -222,69 +210,37 @@
                     <button type="button" role="radio" aria-checked="false" data-ch="SMS">SMS</button>
                     <button type="button" role="radio" aria-checked="false" data-ch="Email">Email</button>
                 </div>
-
-                <div class="sm-auto">
-                    <h6>Automatic greeting for new leads</h6>
-                    <p>Send the welcome message instantly when a new lead is added or imported.</p>
-                    <div class="sm-auto-row">
-                        <strong id="smAutoLabel">Auto-send: ON</strong>
-                        <button type="button" class="sm-switch" id="smAuto" role="switch" aria-checked="true" aria-label="Automatic greeting for new leads"></button>
-                    </div>
-                </div>
-
-                <div class="sm-actions">
-                    <button type="button" class="sm-btn sm-btn-primary" id="smSend">Send to 3 leads now</button>
-                    <button type="button" class="sm-btn sm-btn-block" id="smSchedule">Schedule for later</button>
-                </div>
             </section>
 
-            {{-- ============ 2. CHOOSE TEMPLATE ============ --}}
+            {{-- ============ 2. CHOOSE TEMPLATE (changes with "Send via") ============ --}}
             <section class="sm-card" aria-labelledby="smTplTitle">
                 <h5 class="sm-title" id="smTplTitle" style="margin-bottom:16px;">2. Choose template</h5>
 
-                <select class="sm-select" id="smTplSelect" aria-label="Template">
-                    <option>Welcome Greeting</option>
-                    <option>Follow-up Reminder</option>
-                    <option>Appointment Confirm</option>
-                    <option>Thank You</option>
-                    <option>Offer / Promotion</option>
-                </select>
+                <select class="sm-select" id="smTplSelect" aria-label="Template"></select>
 
-                <div class="sm-cap">Templates</div>
-                <div class="sm-tpls" id="smTpls" role="radiogroup" aria-label="Templates">
-                    <button type="button" class="sm-tpl is-on" role="radio" aria-checked="true">Welcome Greeting</button>
-                    <button type="button" class="sm-tpl" role="radio" aria-checked="false">Follow-up Reminder</button>
-                    <button type="button" class="sm-tpl" role="radio" aria-checked="false">Appointment Confirm</button>
-                    <button type="button" class="sm-tpl" role="radio" aria-checked="false">Thank You</button>
-                    <button type="button" class="sm-tpl" role="radio" aria-checked="false">Offer / Promotion</button>
-                </div>
+                <div class="sm-cap" id="smTplCap">WhatsApp templates</div>
+                <div class="sm-tpls" id="smTpls" role="radiogroup" aria-label="Templates"></div>
 
-                <h6 class="sm-label" style="margin-top:24px;">Personalise with variables</h6>
-                <div class="sm-chips" id="smChips">
-                    <button type="button" class="sm-chip" data-var="{name}">{name}</button>
-                    <button type="button" class="sm-chip" data-var="{phone}">{phone}</button>
-                    <button type="button" class="sm-chip" data-var="{owner}">{owner}</button>
-                    <button type="button" class="sm-chip" data-var="{course}">{course}</button>
-                </div>
 
                 <button type="button" class="sm-btn sm-btn-block sm-edit" id="smEdit">Edit templates</button>
             </section>
 
-            {{-- ============ 3. PREVIEW (static design) ============ --}}
-            <section class="sm-card sm-preview" aria-labelledby="smPrevTitle">
-                <h5 class="sm-title" id="smPrevTitle">3. Preview</h5>
-                <div class="sm-phone">
-                    <div class="sm-phone-bar">NPS Digital</div>
-                    <div class="sm-bubble">
-                        <p><strong>Hi Rahul,</strong><br>
-                        Thank you for your interest<br>
-                        in NPS Digital! I'm Priya.<br>
-                        How can I help you today?</p>
-                        <p>- Team NPS</p>
-                        <span class="sm-time">10:42</span>
+            {{-- ============ 3. PREVIEW + ACTION BUTTONS ============ --}}
+            <div class="sm-side">
+                <section class="sm-card sm-preview" id="smPreviewCard" data-ch="WhatsApp" aria-labelledby="smPrevTitle">
+                    <h5 class="sm-title" id="smPrevTitle">3. Preview</h5>
+                    <div class="sm-phone">
+                        <div class="sm-phone-bar" id="smPhoneBar">NPS Digital</div>
+                        <div class="sm-bubble" id="smBubble"></div>
                     </div>
+                </section>
+
+                <div class="sm-card sm-actions">
+                    <button type="button" class="sm-btn sm-btn-primary" id="smSend">Send to 3 leads now</button>
+                    <button type="button" class="sm-btn sm-btn-block" id="smSchedule">Schedule for later</button>
+                    <p class="sm-actions-note" id="smActionNote"></p>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
 </div>
@@ -297,7 +253,7 @@
         <div class="sm-pick" id="smPick"></div>
         <div class="sm-foot">
             <button type="button" class="sm-btn sm-btn-sm" id="smAddCancel">Cancel</button>
-            <button type="button" class="sm-btn sm-btn-sm" id="smAddConfirm" style="background:#021b45;border-color:#021b45;color:#fff;">Add selected</button>
+            <button type="button" class="sm-btn sm-btn-sm sm-btn-dark" id="smAddConfirm">Add selected</button>
         </div>
     </div>
 </div>
@@ -318,7 +274,7 @@
         <div class="sm-err" id="smSchedErr" role="alert">Choose a date and time in the future.</div>
         <div class="sm-foot">
             <button type="button" class="sm-btn sm-btn-sm" id="smSchedCancel">Cancel</button>
-            <button type="button" class="sm-btn sm-btn-sm" id="smSchedConfirm" style="background:#021b45;border-color:#021b45;color:#fff;">Schedule</button>
+            <button type="button" class="sm-btn sm-btn-sm sm-btn-dark" id="smSchedConfirm">Schedule</button>
         </div>
     </div>
 </div>
@@ -343,7 +299,36 @@
         { id: 8, name: 'Lakshmi Rao',  phone: '+91 98450 90017', on: false },
         { id: 9, name: 'Imran Pasha',  phone: '+91 96320 44705', on: false }
     ];
-    var state = { channel: 'WhatsApp', template: 'Welcome Greeting', auto: true, sent: false };
+
+    // Templates for each "Send via" channel. Email templates also have a subject.
+    var templates = {
+        WhatsApp: [
+            { name: 'Welcome Greeting',    body: 'Hi {name},\nThank you for your interest in NPS Digital! I\'m {owner}.\nHow can I help you today?\n\n- Team NPS' },
+            { name: 'Follow-up Reminder',  body: 'Hi {name},\nJust checking in about the {course} course. Would you like to talk this week?\n\n- {owner}, Team NPS' },
+            { name: 'Appointment Confirm', body: 'Hi {name},\nYour counselling session is confirmed. Reply YES to confirm or RESCHEDULE to change the time.\n\n- {owner}, Team NPS' },
+            { name: 'Thank You',           body: 'Hi {name},\nThank you for connecting with NPS Digital. We are happy to help you with {course}.\n\n- Team NPS' },
+            { name: 'Offer / Promotion',   body: 'Hi {name},\nGood news! Enrol in {course} this month and get a special discount.\nReply to this message to know more.\n\n- {owner}, Team NPS' }
+        ],
+        SMS: [
+            { name: 'Welcome Greeting',    body: 'Hi {name}, thanks for your interest in NPS Digital. I\'m {owner}. Call us on {phone} anytime.' },
+            { name: 'Follow-up Reminder',  body: 'Hi {name}, a quick reminder about the {course} course. Reply YES and {owner} will call you.' },
+            { name: 'Appointment Confirm', body: 'Hi {name}, your session with {owner} is confirmed. Reply 1 to confirm, 2 to reschedule.' },
+            { name: 'Offer / Promotion',   body: 'NPS Digital: {name}, enrol in {course} this month and save more. Call {owner} for details.' }
+        ],
+        Email: [
+            { name: 'Welcome Email',      subject: 'Welcome to NPS Digital, {name}', body: 'Hi {name},\n\nThank you for your interest in NPS Digital. I\'m {owner} and I will be your point of contact.\n\nPlease reply to this email or call us if you have any questions about {course}.\n\nRegards,\nTeam NPS' },
+            { name: 'Course Details',     subject: 'Details about {course}',         body: 'Hi {name},\n\nAs discussed, here are the details of the {course} course: syllabus, duration and fees.\n\nLet me know a good time to talk.\n\nRegards,\n{owner}, Team NPS' },
+            { name: 'Follow-up Reminder', subject: 'Following up, {name}',           body: 'Hi {name},\n\nI wanted to follow up on your enquiry about {course}. Are you still interested?\n\nRegards,\n{owner}, Team NPS' },
+            { name: 'Thank You',          subject: 'Thank you, {name}',              body: 'Hi {name},\n\nThank you for choosing NPS Digital. We look forward to helping you with {course}.\n\nRegards,\nTeam NPS' },
+            { name: 'Offer / Promotion',  subject: 'A special offer on {course}',    body: 'Hi {name},\n\nEnrol in {course} this month and get a special discount.\n\nReply to this email to claim it.\n\nRegards,\n{owner}, Team NPS' }
+        ]
+    };
+
+    var barTitle = { WhatsApp: 'NPS Digital', SMS: 'Messages', Email: 'New email' };
+    var sample = { owner: 'Priya', course: 'Digital Marketing' };
+
+    // WhatsApp is the default channel; first template is selected by default
+    var state = { channel: 'WhatsApp', template: templates.WhatsApp[0].name, sent: false };
 
     var $ = function (id) { return document.getElementById(id); };
     function esc(s) {
@@ -352,6 +337,12 @@
         });
     }
     function selected() { return leads.filter(function (l) { return l.on; }); }
+    function currentList() { return templates[state.channel]; }
+    function currentTemplate() {
+        var list = currentList();
+        for (var i = 0; i < list.length; i++) { if (list[i].name === state.template) return list[i]; }
+        return list[0];
+    }
 
     var toastTimer;
     function toast(msg) {
@@ -365,6 +356,51 @@
     function notify(title, text) {
         if (window.Swal) Swal.fire({ icon: 'success', title: title, text: text, confirmButtonColor: '#021b45' });
         else toast(title + ' - ' + text);
+    }
+
+    /* ---------------- Render: template column (depends on channel) ---------------- */
+    function renderTemplates() {
+        var list = currentList();
+
+        $('smTplCap').textContent = state.channel + ' templates';
+
+        $('smTplSelect').innerHTML = list.map(function (t) {
+            return '<option value="' + esc(t.name) + '"' + (t.name === state.template ? ' selected' : '') + '>' + esc(t.name) + '</option>';
+        }).join('');
+
+        $('smTpls').innerHTML = list.map(function (t) {
+            var on = t.name === state.template;
+            return '<button type="button" class="sm-tpl' + (on ? ' is-on' : '') + '" role="radio" aria-checked="' + on +
+                '" data-name="' + esc(t.name) + '">' + esc(t.name) + '</button>';
+        }).join('');
+    }
+
+    /* ---------------- Render: preview (depends on channel + template + first lead) ---------------- */
+    function fill(text, lead) {
+        var name = lead ? lead.name.split(' ')[0] : 'Rahul';
+        var phone = lead ? lead.phone : '+91 98450 11223';
+        return text
+            .replace(/\{name\}/g, name)
+            .replace(/\{phone\}/g, phone)
+            .replace(/\{owner\}/g, sample.owner)
+            .replace(/\{course\}/g, sample.course);
+    }
+    function renderPreview() {
+        var t = currentTemplate();
+        var lead = selected()[0];
+        var d = new Date();
+        var time = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+
+        $('smPreviewCard').setAttribute('data-ch', state.channel);
+        $('smPhoneBar').textContent = barTitle[state.channel];
+
+        var html = '';
+        if (state.channel === 'Email' && t.subject) {
+            html += '<span class="sm-subject">' + esc(fill(t.subject, lead)) + '</span>';
+        }
+        html += '<p>' + esc(fill(t.body, lead)).replace(/\n/g, '<br>') + '</p>';
+        html += '<span class="sm-time">' + time + '</span>';
+        $('smBubble').innerHTML = html;
     }
 
     /* ---------------- Render: leads + buttons + stepper ---------------- */
@@ -384,12 +420,15 @@
         send.disabled = n === 0;
         send.textContent = n === 0 ? 'Select leads to send' : 'Send to ' + n + (n === 1 ? ' lead now' : ' leads now');
         $('smSchedule').disabled = n === 0;
+        $('smActionNote').textContent = n ? 'Via ' + state.channel + ' - ' + state.template : '';
 
         // stepper: 1 = leads picked, 2 = template chosen, 3 = after send / schedule
         var s1 = n > 0, s2 = s1 && !!state.template, s3 = s2 && state.sent;
         [s1, s2, s3].forEach(function (on, i) {
             document.querySelector('#smSteps [data-step="' + (i + 1) + '"]').classList.toggle('is-on', on);
         });
+
+        renderPreview();
     }
 
     $('smLeadList').addEventListener('click', function (e) {
@@ -422,32 +461,32 @@
         if (ids.length) { state.sent = false; render(); toast(ids.length + (ids.length === 1 ? ' lead added' : ' leads added')); }
     });
 
-    /* ---------------- Send via ---------------- */
+    /* ---------------- Send via: switches the template list ---------------- */
     $('smVia').addEventListener('click', function (e) {
         var b = e.target.closest('button[data-ch]');
-        if (!b) return;
+        if (!b || b.dataset.ch === state.channel) return;
+
         state.channel = b.dataset.ch;
+        state.template = currentList()[0].name;   // reset to first template of this channel
+        state.sent = false;
+
         this.querySelectorAll('button').forEach(function (x) {
             var on = x === b;
             x.classList.toggle('is-on', on);
             x.setAttribute('aria-checked', String(on));
         });
-    });
 
-    /* ---------------- Auto-greeting toggle ---------------- */
-    $('smAuto').addEventListener('click', function () {
-        state.auto = !state.auto;
-        this.setAttribute('aria-checked', String(state.auto));
-        $('smAutoLabel').textContent = 'Auto-send: ' + (state.auto ? 'ON' : 'OFF');
-        toast('Automatic greeting turned ' + (state.auto ? 'on' : 'off'));
+        renderTemplates();
+        render();
     });
 
     /* ---------------- Templates (dropdown + list stay in sync) ---------------- */
     function setTemplate(name) {
         state.template = name;
+        state.sent = false;
         $('smTplSelect').value = name;
         document.querySelectorAll('#smTpls .sm-tpl').forEach(function (b) {
-            var on = b.textContent.trim() === name;
+            var on = b.dataset.name === name;
             b.classList.toggle('is-on', on);
             b.setAttribute('aria-checked', String(on));
         });
@@ -455,25 +494,9 @@
     }
     $('smTpls').addEventListener('click', function (e) {
         var b = e.target.closest('.sm-tpl');
-        if (b) setTemplate(b.textContent.trim());
+        if (b) setTemplate(b.dataset.name);
     });
     $('smTplSelect').addEventListener('change', function () { setTemplate(this.value); });
-
-    /* ---------------- Variable chips: copy to clipboard ---------------- */
-    $('smChips').addEventListener('click', function (e) {
-        var chip = e.target.closest('.sm-chip');
-        if (!chip) return;
-        var v = chip.dataset.var;
-        var done = function () { toast(v + ' copied. Paste it into a template.'); };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(v).then(done, done);
-        } else {
-            var ta = document.createElement('textarea');
-            ta.value = v; document.body.appendChild(ta); ta.select();
-            try { document.execCommand('copy'); } catch (err) {}
-            document.body.removeChild(ta); done();
-        }
-    });
 
     $('smEdit').addEventListener('click', function () { toast('Template editor opens here'); });
 
@@ -525,7 +548,8 @@
         if (e.key === 'Escape') { closeOverlay(addOv); closeOverlay(schedOv); }
     });
 
-    /* ---------------- Init ---------------- */
+    /* ---------------- Init (WhatsApp by default) ---------------- */
+    renderTemplates();
     render();
 })();
 </script>
