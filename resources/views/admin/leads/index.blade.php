@@ -224,6 +224,7 @@
                 <option value="all">Source: All</option>
                 <option value="Google Form">Source: Google Form</option>
                 <option value="WhatsApp">Source: WhatsApp</option>
+                <option value="WhatsApp Chatbot">Source: WhatsApp Chatbot</option>
                 <option value="Website">Source: Website</option>
                 <option value="Facebook">Source: Facebook</option>
                 <option value="Walk-in">Source: Walk-in</option>
@@ -355,7 +356,15 @@
         var q = state.q.trim().toLowerCase();
         return leads.filter(function (l) {
             if (state.status !== 'all' && l.status !== state.status) return false;
-            if (state.source !== 'all' && (l.source || '').toLowerCase() !== state.source.toLowerCase()) return false;
+            if (state.source !== 'all') {
+                var s = (l.source || '').toLowerCase();
+                var f = state.source.toLowerCase();
+                if (f === 'whatsapp') {
+                    if (s !== 'whatsapp' && s !== 'whatsapp chatbot') return false;
+                } else if (s !== f) {
+                    return false;
+                }
+            }
             if (state.date !== 'all' && l.created > parseInt(state.date, 10)) return false;
             if (q && (l.name + ' ' + l.phone).toLowerCase().indexOf(q) === -1) return false;
             return true;

@@ -2,20 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable([
-    'lead_id',
-    'channel',
-    'template_type',
-    'note',
-    'status',
-    'sent_at',
-])]
 class LeadMessage extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'lead_id',
+        'channel',
+        'template_type',
+        'note',
+        'status',
+        'sent_at',
+    ];
+
     /**
      * The attributes that should be cast.
      *
