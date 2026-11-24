@@ -891,6 +891,14 @@
         .quote-author { color: #334155; font-size: 12px; font-weight: 800; }
         .parent-photo { width: 62px; height: 62px; flex: 0 0 62px; overflow: hidden; border: 2px solid #fde68a; border-radius: 50%; }
         .parent-photo img { width: 100%; height: 100%; object-fit: cover; }
+        .testimonial-slider-container { position: relative; overflow: hidden; width: 100%; }
+        .testimonial-track { display: flex; width: 100%; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); will-change: transform; }
+        .testimonial-slide { flex: 0 0 100%; width: 100%; min-width: 100%; box-sizing: border-box; }
+        .testimonial-dots { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
+        .testimonial-dot { width: 6px; height: 6px; border-radius: 999px; background: #cbd5e1; border: none; padding: 0; cursor: pointer; transition: all 0.3s ease; }
+        .testimonial-dot:hover { background: #94a3b8; }
+        .testimonial-dot.is-active { width: 18px; background: var(--nps-navy); }
+        .event-control:hover { background: var(--nps-navy); color: #fff; border-color: var(--nps-navy); }
 
         .enquiry-column { display: flex; }
 
@@ -2038,16 +2046,68 @@
                                     </section>
                                 </div>
                                 <div class="col-md-6">
-                                    <section class="content-panel h-100">
-                                        <h3 class="panel-title mb-2">Hear from Our Parents</h3>
-                                        <div class="testimonial">
-                                            <div class="testimonial-copy">
-                                                <div class="quote-mark">“</div>
-                                                <p class="quote-text">Since joining NPS, Kempegowda Layout, Rishikesh has grown more confident, responsible, and expressive. We truly appreciate the school’s focus on leadership, values, and overall development.
-</p>
-                                                <div class="quote-author">— Parent, Grade 5</div>
+                                    <section class="content-panel h-100 d-flex flex-column justify-content-between">
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <h3 class="panel-title">Hear from Our Parents</h3>
+                                            <div class="event-controls">
+                                                <button type="button" class="event-control" id="prevTestimonial" aria-label="Previous testimonial"><i data-lucide="chevron-left" class="icon icon-sm"></i></button>
+                                                <button type="button" class="event-control" id="nextTestimonial" aria-label="Next testimonial"><i data-lucide="chevron-right" class="icon icon-sm"></i></button>
                                             </div>
-                                            <div class="parent-photo"><img src="{{ asset('images/parent-student-portrait.jpg') }}" alt="Parent and Student" onerror="this.src='{{ asset('images/parent-student-portrait.png') }}'"></div>
+                                        </div>
+                                        <div class="testimonial-slider-container" id="testimonialSliderContainer" aria-label="Parent Testimonials Carousel">
+                                            <div class="testimonial-track" id="testimonialTrack">
+                                                <div class="testimonial-slide">
+                                                    <div class="testimonial">
+                                                        <div class="testimonial-copy">
+                                                            <div class="quote-mark">“</div>
+                                                            <p class="quote-text">Since joining NPS, Kempegowda Layout, Rishikesh has grown more confident, responsible, and expressive. We truly appreciate the school’s focus on leadership, values, and overall development.</p>
+                                                            <div class="quote-author">— Parent, Grade 5</div>
+                                                        </div>
+                                                        <div class="parent-photo"><img src="{{ asset('images/parent-student-portrait.jpg') }}" alt="Parent and Student" onerror="this.src='{{ asset('images/parent-student-portrait.png') }}'"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="testimonial-slide">
+                                                    <div class="testimonial">
+                                                        <div class="testimonial-copy">
+                                                            <div class="quote-mark">“</div>
+                                                            <p class="quote-text">As parents of Parthiv, we are delighted with his experience at NPS, Kempegowda Layout. The caring teachers, personal attention, and positive environment have helped him grow in confidence and enthusiasm for learning.</p>
+                                                            <div class="quote-author">— Mr. Shrikanth & Mrs. Anusha, Parents of Parthiv</div>
+                                                        </div>
+                                                        <div class="parent-photo"><img src="{{ asset('images/parent-student.png') }}" alt="Parent and Student" onerror="this.src='{{ asset('images/parent-student-portrait.jpg') }}'"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="testimonial-slide">
+                                                    <div class="testimonial">
+                                                        <div class="testimonial-copy">
+                                                            <div class="quote-mark">“</div>
+                                                            <p class="quote-text">We always wished our son Raghav to study at NPS, and that dream has come true at NPS Kempegowda Layout. We are extremely happy and grateful to see him grow and learn in such a wonderful environment.</p>
+                                                            <div class="quote-author">— Mr. Praveen & Mrs. Anupama, Parents of Raghav</div>
+                                                        </div>
+                                                        <div class="parent-photo"><img src="{{ asset('images/parent-student-portrait.jpg') }}" alt="Parent and Student" onerror="this.src='{{ asset('images/parent-student-portrait.png') }}'"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="testimonial-slide">
+                                                    <div class="testimonial">
+                                                        <div class="testimonial-copy">
+                                                            <div class="quote-mark">“</div>
+                                                            <p class="quote-text">I wanted to sincerely thank all the teachers for their amazing impact on Aadhira. Her communication, logical thinking, and active participation in class have blossomed under their warm encouragement.</p>
+                                                            <div class="quote-author">— Aadhira's Mother, Parent</div>
+                                                        </div>
+                                                        <div class="parent-photo"><img src="{{ asset('images/parent-student.png') }}" alt="Parent and Student" onerror="this.src='{{ asset('images/parent-student-portrait.jpg') }}'"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="testimonial-slide">
+                                                    <div class="testimonial">
+                                                        <div class="testimonial-copy">
+                                                            <div class="quote-mark">“</div>
+                                                            <p class="quote-text">Thank you for nurturing our child's love for learning. The dedication of teachers is commendable—they develop both strong academic foundations, social interaction, and joyful confidence.</p>
+                                                            <div class="quote-author">— Parent of Dhrithi, Grade 3</div>
+                                                        </div>
+                                                        <div class="parent-photo"><img src="{{ asset('images/parent-student-portrait.jpg') }}" alt="Parent and Student" onerror="this.src='{{ asset('images/parent-student-portrait.png') }}'"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="testimonial-dots" id="testimonialDots"></div>
                                         </div>
                                     </section>
                                 </div>
@@ -2118,6 +2178,127 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
     <script>
         lucide.createIcons();
+
+        // Testimonials Auto-Scroller
+        const testimonialTrack = document.getElementById('testimonialTrack');
+        const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+        const prevTestimonialBtn = document.getElementById('prevTestimonial');
+        const nextTestimonialBtn = document.getElementById('nextTestimonial');
+        const testimonialDots = document.getElementById('testimonialDots');
+        const testimonialContainer = document.getElementById('testimonialSliderContainer');
+
+        if (testimonialTrack && testimonialSlides.length > 1) {
+            let currentTestimonialIndex = 0;
+            const totalTestimonials = testimonialSlides.length;
+            const scrollDuration = 4500;
+            let autoScrollInterval = null;
+
+            if (testimonialDots) {
+                testimonialDots.innerHTML = '';
+                testimonialSlides.forEach((_, index) => {
+                    const dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = `testimonial-dot ${index === 0 ? 'is-active' : ''}`;
+                    dot.setAttribute('aria-label', `Testimonial slide ${index + 1}`);
+                    dot.addEventListener('click', () => {
+                        goToTestimonial(index);
+                        restartAutoScroll();
+                    });
+                    testimonialDots.appendChild(dot);
+                });
+            }
+
+            const updateDots = () => {
+                if (!testimonialDots) return;
+                const dots = testimonialDots.querySelectorAll('.testimonial-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('is-active', index === currentTestimonialIndex);
+                });
+            };
+
+            const goToTestimonial = (index) => {
+                if (index < 0) {
+                    currentTestimonialIndex = totalTestimonials - 1;
+                } else if (index >= totalTestimonials) {
+                    currentTestimonialIndex = 0;
+                } else {
+                    currentTestimonialIndex = index;
+                }
+                testimonialTrack.style.transform = `translateX(-${currentTestimonialIndex * 100}%)`;
+                updateDots();
+            };
+
+            const nextTestimonial = () => goToTestimonial(currentTestimonialIndex + 1);
+            const prevTestimonial = () => goToTestimonial(currentTestimonialIndex - 1);
+
+            if (nextTestimonialBtn) {
+                nextTestimonialBtn.addEventListener('click', () => {
+                    nextTestimonial();
+                    restartAutoScroll();
+                });
+            }
+
+            if (prevTestimonialBtn) {
+                prevTestimonialBtn.addEventListener('click', () => {
+                    prevTestimonial();
+                    restartAutoScroll();
+                });
+            }
+
+            const startAutoScroll = () => {
+                if (!autoScrollInterval) {
+                    autoScrollInterval = setInterval(nextTestimonial, scrollDuration);
+                }
+            };
+
+            const stopAutoScroll = () => {
+                if (autoScrollInterval) {
+                    clearInterval(autoScrollInterval);
+                    autoScrollInterval = null;
+                }
+            };
+
+            const restartAutoScroll = () => {
+                stopAutoScroll();
+                startAutoScroll();
+            };
+
+            if (testimonialContainer) {
+                testimonialContainer.addEventListener('mouseenter', stopAutoScroll);
+                testimonialContainer.addEventListener('mouseleave', startAutoScroll);
+
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                testimonialContainer.addEventListener('touchstart', (e) => {
+                    stopAutoScroll();
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+
+                testimonialContainer.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    const diff = touchStartX - touchEndX;
+                    if (Math.abs(diff) > 40) {
+                        if (diff > 0) {
+                            nextTestimonial();
+                        } else {
+                            prevTestimonial();
+                        }
+                    }
+                    startAutoScroll();
+                }, { passive: true });
+            }
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoScroll();
+                } else {
+                    startAutoScroll();
+                }
+            });
+
+            startAutoScroll();
+        }
 
         const videoModal = document.getElementById('videoModal');
         const videoIframe = document.getElementById('videoIframe');
