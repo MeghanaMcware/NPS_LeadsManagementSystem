@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class LeadTest extends TestCase
@@ -172,5 +173,41 @@ class LeadTest extends TestCase
         $lead->refresh();
         $this->assertEquals('contacted', $lead->status);
         $this->assertNotNull($lead->last_contact_at);
+    }
+
+    public function test_authenticated_user_can_view_lead_with_raw_string_remarks(): void
+    {
+        $user = User::create([
+            'name' => 'AdminUser',
+            'email' => 'admin@gmail.com',
+            'password' => '123456',
+            'mobile_number' => '1234567890',
+            'role' => 'admin',
+        ]);
+
+        $lead = Lead::create([
+            'name' => 'Raw Remark Lead',
+            'phone' => '9888877777',
+            'source' => 'Meta Leads',
+            'status' => 'new',
+            'remarks' => 'Parent called and visited campus on Monday.',
+        ]);
+
+        // Even if raw DB column was directly set as raw string
+        DB::table('leads')
+            ->where('id', $lead->id)
+            ->update(['remarks' => 'Raw unformatted string remark from legacy DB']);
+
+        $lead = Lead::find($lead->id);
+
+        $this->assertIsArray($lead->remarks);
+        $this->assertCount(1, $lead->remarks);
+        $this->assertEquals('Raw unformatted string remark from legacy DB', $lead->remarks[0]['text']);
+
+        $response = $this->actingAs($user)->get(route('leads.view', $lead->id));
+
+        $response->assertStatus(200);
+        $response->assertSee('Raw Remark Lead');
+        $response->assertSee('Raw unformatted string remark from legacy DB');
     }
 }

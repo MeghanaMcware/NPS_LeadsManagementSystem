@@ -36,12 +36,98 @@ class Lead extends Model
     protected function casts(): array
     {
         return [
-            'remarks' => 'array',
             'last_contact_at' => 'datetime',
             'whatsapp_sent_at' => 'datetime',
             'sms_sent_at' => 'datetime',
             'email_sent_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Accessor for remarks: always returns an array of structured notes,
+     * even if stored as a plain string, JSON, or null.
+     *
+     * @param  mixed  $value
+     * @return array<int, array<string, mixed>>
+     */
+    public function getRemarksAttribute($value): array
+    {
+        if (is_array($value)) {
+            $notes = $value;
+        } elseif (empty($value)) {
+            return [];
+        } elseif (is_string($value)) {
+            $trimmed = trim($value);
+            $decoded = json_decode($trimmed, true);
+            if (is_array($decoded)) {
+                $notes = $decoded;
+            } elseif ($trimmed !== '') {
+                return [[
+                    'text' => trim($trimmed, '"'),
+                    'author' => 'Admissions Team',
+                    'date' => $this->created_at ? $this->created_at->format('d M Y, h:i A') : '',
+                    'type' => 'note',
+                ]];
+            } else {
+                return [];
+            }
+        } else {
+            return [];
+        }
+
+        // Normalize each item so it's always an array with expected keys
+        $normalized = [];
+        foreach ($notes as $item) {
+            if (is_array($item)) {
+                $normalized[] = [
+                    'text' => (string) ($item['text'] ?? ($item['note'] ?? '')),
+                    'author' => (string) ($item['author'] ?? 'Admissions Team'),
+                    'date' => (string) ($item['date'] ?? ($this->created_at ? $this->created_at->format('d M Y, h:i A') : '')),
+                    'type' => (string) ($item['type'] ?? 'note'),
+                ];
+            } elseif (is_string($item) && trim($item) !== '') {
+                $normalized[] = [
+                    'text' => trim($item),
+                    'author' => 'Admissions Team',
+                    'date' => $this->created_at ? $this->created_at->format('d M Y, h:i A') : '',
+                    'type' => 'note',
+                ];
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Mutator for remarks: stores as JSON string.
+     *
+     * @param  mixed  $value
+     */
+    public function setRemarksAttribute($value): void
+    {
+        if (is_array($value)) {
+            $this->attributes['remarks'] = json_encode(array_values($value));
+        } elseif (is_string($value)) {
+            $trimmed = trim($value);
+            if ($trimmed === '') {
+                $this->attributes['remarks'] = null;
+
+                return;
+            }
+            $decoded = json_decode($trimmed, true);
+            if (is_array($decoded)) {
+                $this->attributes['remarks'] = json_encode(array_values($decoded));
+            } else {
+                $this->attributes['remarks'] = json_encode([[
+                    'text' => $trimmed,
+                    'author' => 'Admissions Team',
+                    'date' => now()->format('d M Y, h:i A'),
+                    'type' => 'note',
+                ]]);
+            }
+        } else {
+            $this->attributes['remarks'] = null;
+        }
     }
 
     /**

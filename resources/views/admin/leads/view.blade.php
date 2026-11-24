@@ -358,14 +358,28 @@
                         </div>
                     </div>
 
+                    @php
+                        $leadNotes = is_array($lead->remarks) ? $lead->remarks : [];
+                        if (is_string($lead->remarks) && trim($lead->remarks) !== '') {
+                            $decoded = json_decode($lead->remarks, true);
+                            $leadNotes = is_array($decoded) ? $decoded : [['text' => trim($lead->remarks, '"'), 'author' => 'Admissions Team', 'date' => $lead->created_at ? $lead->created_at->format('d M Y, h:i A') : '']];
+                        }
+                    @endphp
+
                     <ul class="ld-notes" id="notesList">
-                        @forelse($lead->remarks ?? [] as $index => $note)
+                        @forelse($leadNotes as $index => $note)
+                            @php
+                                $noteText = is_array($note) ? ($note['text'] ?? ($note['note'] ?? '')) : (string) $note;
+                                $noteAuthor = is_array($note) ? ($note['author'] ?? 'Admissions') : 'Admissions';
+                                $noteDate = is_array($note) ? ($note['date'] ?? '') : '';
+                                $noteType = is_array($note) ? ($note['type'] ?? 'note') : 'note';
+                            @endphp
                             <li class="ld-note" data-index="{{ $index }}">
-                                <p class="ld-note-text">{{ $note['text'] ?? '' }}</p>
+                                <p class="ld-note-text">{{ $noteText }}</p>
                                 <div class="ld-note-meta">
-                                    <i class="bi bi-person-circle"></i> {{ $note['author'] ?? 'Admissions' }} &middot; {{ $note['date'] ?? '' }}
-                                    @if(!empty($note['type']))
-                                        <span class="badge bg-light text-dark ms-1" style="font-size:10.5px; text-transform: capitalize;">{{ $note['type'] }}</span>
+                                    <i class="bi bi-person-circle"></i> {{ $noteAuthor }} &middot; {{ $noteDate }}
+                                    @if(!empty($noteType))
+                                        <span class="badge bg-light text-dark ms-1" style="font-size:10.5px; text-transform: capitalize;">{{ $noteType }}</span>
                                     @endif
                                 </div>
                                 <button type="button" class="ld-note-del" aria-label="Delete note" data-index="{{ $index }}"><i class="bi bi-trash3"></i></button>
@@ -374,7 +388,7 @@
                         @endforelse
                     </ul>
 
-                    <div class="ld-empty" id="notesEmpty" {{ !empty($lead->remarks) ? 'hidden' : '' }}>
+                    <div class="ld-empty" id="notesEmpty" {{ !empty($leadNotes) ? 'hidden' : '' }}>
                         <i class="bi bi-journal-plus"></i>
                         No notes yet. Add the first note.
                     </div>
