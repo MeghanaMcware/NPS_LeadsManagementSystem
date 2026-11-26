@@ -46,9 +46,9 @@ class WhatsAppServiceTest extends TestCase
         $this->assertArrayHasKey('thankyou', $templates);
         $this->assertArrayHasKey('promotion', $templates);
 
-        $this->assertEquals('npskgl_welcome_greeting', $templates['greeting']['campaign']);
-        $this->assertEquals('npskgl_followup_whatsapp', $templates['followup']['campaign']);
-        $this->assertEquals('npskgl_appointment_whatsapp', $templates['appointment']['campaign']);
+        $this->assertEquals('npskgl_welcome_greeting_final', $templates['greeting']['campaign']);
+        $this->assertEquals('npskgl_followup_whatsapp_final', $templates['followup']['campaign']);
+        $this->assertEquals('npskgl_appointment_whatsapp_final', $templates['appointment']['campaign']);
         $this->assertEquals('npskgl_thankyou_whatsapp', $templates['thankyou']['campaign']);
         $this->assertEquals('npskgl_admission_promotion_whatsapp', $templates['promotion']['campaign']);
 
@@ -93,7 +93,7 @@ class WhatsAppServiceTest extends TestCase
 
             return $request->url() === 'https://backend.api-wa.co/campaign/mcware/api/v2'
                 && $data['apiKey'] === 'test_key_123'
-                && $data['campaignName'] === 'npskgl_welcome_greeting'
+                && $data['campaignName'] === 'npskgl_welcome_greeting_final'
                 && $data['destination'] === '9964827788'
                 && $data['templateParams'] === ['Anand Kumar', 'Grade 1'];
         });
@@ -125,7 +125,7 @@ class WhatsAppServiceTest extends TestCase
         Http::assertSent(function ($request) {
             $data = $request->data();
 
-            return $data['campaignName'] === 'npskgl_appointment_whatsapp'
+            return $data['campaignName'] === 'npskgl_appointment_whatsapp_final'
                 && $data['templateParams'] === ['Anand Kumar', '25 Nov 2026', '10:30 AM'];
         });
     }

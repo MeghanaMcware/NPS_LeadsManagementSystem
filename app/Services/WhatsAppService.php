@@ -23,28 +23,28 @@ class WhatsAppService
      */
     public const TEMPLATES = [
         'greeting' => [
-            'campaign' => 'npskgl_welcome_greeting',
+            'campaign' => 'npskgl_welcome_greeting_final',
             'name' => 'Welcome Greeting – New Admission Enquiry',
             'dynamic_variables' => ['Parent Name', 'Grade'],
             'body' => "Hello {{1}}! 👋\n\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\n\nThank you for your interest in admissions at NPS KGL.\n\nWe have successfully received your admission enquiry for {{2}}.\n\nOur admission team will contact you shortly and guide you through the admission process.\n\nWe look forward to welcoming your child to NPS KGL!\n\nWarm regards,\nAdmissions Team\nNPS KGL",
         ],
         'followup' => [
-            'campaign' => 'npskgl_followup_whatsapp',
+            'campaign' => 'npskgl_followup_whatsapp_final',
             'name' => 'Follow-up Reminder – Admission Enquiry',
             'dynamic_variables' => ['Parent Name'],
-            'body' => "Dear {{1}},\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\nWe are following up on your admission enquiry.\nWe would be happy to assist you with the admission process and address any questions or concerns you may have.\nWould you like to connect with our Admissions Counsellor for further guidance?\nPlease reply to this message, and our team will be glad to assist you.\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout (NPS KGL)",
+            'body' => "Dear {{1}},\n\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\n\nWe are following up on your admission enquiry.\n\nWe would be happy to assist you with the admission process and address any questions or concerns you may have.\n\nWould you like to connect with our Admissions Counsellor for further guidance?\n\nPlease reply to this message, and our team will be glad to assist you.\n\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout (NPS KGL)",
         ],
         'appointment' => [
-            'campaign' => 'npskgl_appointment_whatsapp',
+            'campaign' => 'npskgl_appointment_whatsapp_final',
             'name' => 'Appointment Confirmation – Campus Visit',
             'dynamic_variables' => ['Parent Name', 'Appointment Date', 'Appointment Time'],
-            'body' => "Dear {{1}},\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\nYour appointment for an admission enquiry has been successfully confirmed.\nAppointment Details:\n\n• Appointment Date: {{2}}\n• Appointment Time: {{3}}\n• Venue: NPS KGL Campus\nWe look forward to meeting you and assisting you with the admission process.\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout",
+            'body' => "Dear {{1}},\n\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\n\nYour appointment for an admission enquiry has been successfully confirmed.\n\nAppointment Details:\n• Appointment Date: {{2}}\n• Appointment Time: {{3}}\n• Venue: NPS KGL Campus\n\nWe look forward to meeting you and assisting you with the admission process.\n\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout",
         ],
         'thankyou' => [
             'campaign' => 'npskgl_thankyou_whatsapp',
             'name' => 'Thank You – After Campus Visit',
             'dynamic_variables' => ['Parent Name'],
-            'body' => "Dear {{1}},\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\nThank you for visiting our campus and taking the time to explore our facilities and academic environment.\nWe hope your visit gave you a better understanding of our school and the learning opportunities we offer.\nWe look forward to the opportunity of welcoming your child to NPS KGL.\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout",
+            'body' => "Dear {{1}},\n\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\n\nThank you for visiting our campus and taking the time to explore our facilities and academic environment.\n\nWe hope your visit gave you a better understanding of our school and the learning opportunities we offer.\n\nWe look forward to the opportunity of welcoming your child to NPS KGL.\n\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout",
         ],
         'promotion' => [
             'campaign' => 'npskgl_admission_promotion_whatsapp',

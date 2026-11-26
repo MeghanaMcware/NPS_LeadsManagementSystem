@@ -159,7 +159,7 @@ class SendMessageController extends Controller
                 [
                     'key' => 'promotion',
                     'name' => 'Offer / Promotion',
-                    'body' => "Dear {name},\n\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\n\nAdmissions are now open for the Academic Year {academic_year} from Early Years to Senior Grades.\n\nAt NPS KGL, we offer a comprehensive academic curriculum designed to foster academic excellence, critical thinking, values, and holistic development in a state-of-the-art campus environment.\n\nLimited seats are available across grades. We invite you to begin your child's journey with NPS KGL today.\n\nTo know more about the admission process, visit our campus or contact our Admissions Team.\n\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout",
+                    'body' => "🎓 Admissions Open at NPS KGL!\n\nDear {name},\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\nWe are pleased to announce that admissions are now open for the Academic Year {academic_year}.\nGive your child the opportunity to learn, grow, and excel in a supportive and enriching educational environment.\nOur Admissions Team is happy to assist you with information about available grades, the admission process, and campus visits.\nFor admission enquiries or further details, please contact our Admissions Team.\nWe look forward to welcoming you NPS KGL!\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout",
                 ],
             ],
             'SMS' => [
@@ -186,7 +186,7 @@ class SendMessageController extends Controller
                 [
                     'key' => 'promotion',
                     'name' => 'Offer / Promotion',
-                    'body' => 'Admissions Open for {academic_year} at National Public School – Kempegowda Layout (NPS KGL). Explore world-class education for your child. Limited seats available. Contact Admissions today: admissions@npskgl.com.',
+                    'body' => 'Admissions Open at National Public School – Kempegowda Layout (NPS KGL).Explore admission opportunities for the upcoming academic year. Contact our admission team for details and campus visit information. – NPS KGL',
                 ],
             ],
             'Email' => [
@@ -217,8 +217,8 @@ class SendMessageController extends Controller
                 [
                     'key' => 'promotion',
                     'name' => 'Offer / Promotion',
-                    'subject' => 'Admissions Open {academic_year} – NPS KGL',
-                    'body' => "Dear {name},\n\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\n\nWe are pleased to announce that admissions are now open for the Academic Year {academic_year} across all grades from Early Years to Senior School.\n\nWhy Choose NPS KGL?\n• Academic Excellence rooted in proven pedagogical methods\n• Holistic Development spanning sports, arts, and innovation\n• Modern Infrastructure & Safe Campus\n• Dedicated & Experienced Faculty\n\nAdmissions are strictly on a first-come, first-served basis subject to seat availability. We encourage you to secure your child's seat early.\n\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout (NPS KGL)",
+                    'subject' => 'Admissions Open – National Public School KGL',
+                    'body' => "Dear Parent/Guardian,\n\nGreetings from National Public School – Kempegowda Layout (NPS KGL)!\n\nWe are delighted to announce that admissions are now open for the Academic Year {academic_year}.\n\nAt NPS KGL, we strive to provide students with a supportive learning environment that encourages academic excellence, personal growth, creativity, and holistic development.\n\nWhy Choose NPS KGL?\n• Quality education and academic excellence.\n• A supportive and engaging learning environment.\n• Opportunities for overall development.\n• Well-equipped campus facilities.\n\nOur Admissions Team would be happy to guide you through the admission process and provide further information about grade availability and campus visits.\n\nTo learn more or enquire about admissions, please get in touch with our team.\n\nWarm regards,\nAdmissions Team\nNational Public School – Kempegowda Layout (NPS KGL)",
                 ],
             ],
         ];
